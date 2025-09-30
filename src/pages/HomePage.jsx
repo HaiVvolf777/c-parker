@@ -163,10 +163,10 @@ const HomePage = () => {
         <div className="container mx-auto h-full relative z-[10]">
           <div className="grid grid-cols-1 md:grid-cols-2 h-full items-center gap-8 md:gap-10 py-10 md:py-0">
             <div>
-              <h1 className="text-white font-bold text-[36px] leading-[42px] md:text-[72px] md:leading-[70px]">
+              <h1 className="text-white hero-heading font-bold text-[36px] leading-[42px] md:text-[72px] md:leading-[70px]">
                 Earn at the <br /> Speed of Parker
               </h1>
-              <p className="text-white text-[18px] md:text-[26px] my-[20px] md:my-[30px]">
+              <p className="text-white hero-desc text-[18px] md:text-[26px] my-[20px] md:my-[30px]">
                 Decentralized Orbit A & Orbit B plans powered by <br />
                 Carbon Credit Token (CCT). Instant payouts, <br />
                 secured on-chain.
@@ -422,7 +422,7 @@ const HomePage = () => {
 
               <button className="relative rounded-xl p-[2px] my-[20px]">
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-                <div className="relative rounded-xl bg-[#00000e] px-5 sm:px-7 py-3 sm:py-4 text-white font-bold text-sm sm:text-base">
+                <div className="relative rounded-xl bg-[#00000e] px-5 sm:px-7 py-3 sm:py-4 text-white keep-white font-bold text-sm sm:text-base">
                   View All Announcements
                 </div>
               </button>
@@ -675,7 +675,7 @@ const HomePage = () => {
             <div className="flex items-center justify-center">
               <div className="relative inline-flex rounded-[12px] text-white text-center p-[1px] mt-8 mx-auto">
                 <div className="absolute inset-0 rounded-[12px] bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-                <div className="relative rounded-[12px] bg-[#00000e] px-[24px] md:px-[48px] py-[13px] text-[14px] md:text-[16px]">
+                <div className="relative rounded-[12px] bg-[#00000e] px-[24px] md:px-[48px] py-[13px] text-[14px] md:text-[16px] text-white keep-white">
                   View Pool on Explorer
                 </div>
               </div>
