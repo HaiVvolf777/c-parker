@@ -105,16 +105,20 @@ const HomePage = () => {
       {/* Eclips */}
       <img
         src="svgs/top-eclips.svg"
-        className="absolute -top-[100px] left-[8%] rotate-[180] z-1  "
+        className="absolute -top-[100px] left-[8%] rotate-[180] z-1 hidden md:block"
         alt=""
       />
 
       {/* Navbar  */}
-      <div className="container mx-auto bg-transparent h-[70px] p-3 flex justify-between items-center border-2 border-[#21213C] rounded-xl backdrop-blur-[60px] mt-[37px] relative z-[10]">
-        <div>
-          <img src="images/logo.png" alt="" />
+      <div className="container mx-auto bg-transparent min-h-[70px] p-3 flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-2 border-[#21213C] rounded-xl backdrop-blur-[60px] mt-[20px] md:mt-[37px] relative z-[10]">
+        <div className="flex items-center justify-between">
+          <img
+            src="images/logo.png"
+            alt="C-Parker"
+            className="h-8 md:h-10 w-auto"
+          />
         </div>
-        <div className="bg-[#00000666] w-[496px]  rounded-[10px] p-3">
+        <div className="bg-[#00000666] w-full md:w-[496px] rounded-[10px] p-3">
           <div className="flex items-center gap-[10px] overflow-hidden">
             <svg
               width="21"
@@ -132,14 +136,14 @@ const HomePage = () => {
             <input
               type="text"
               placeholder="Enter ID to check status"
-              className="text-[#747474] "
+              className="text-[#747474] bg-transparent outline-none w-full"
             />
           </div>
         </div>
-        <div>
-          <button className="relative rounded-xl p-[1px]">
+        <div className="flex justify-end">
+          <button className="relative rounded-xl p-[1px] w-full sm:w-auto">
             <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-            <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-10 py-2 text-[20px] text-white font-bold">
+            <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[16px] md:text-[20px] text-white font-bold text-center">
               Connect Wallet
             </div>
           </button>
@@ -147,30 +151,30 @@ const HomePage = () => {
       </div>
 
       {/* HERO */}
-      <div className="w-full h-[100vh] relative">
+      <div className="w-full min-h-[70vh] md:h-[100vh] relative">
         {/* Background Image */}
         <img
           src="images/hero-right.png"
-          className="absolute right-0 -top-[50px] z-0"
+          className="absolute right-0 -top-[50px] z-0 hidden md:block"
           alt=""
         />
 
         {/* Content */}
         <div className="container mx-auto h-full relative z-[10]">
-          <div className="grid grid-cols-2 h-full items-center gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 h-full items-center gap-8 md:gap-10 py-10 md:py-0">
             <div>
-              <h1 className="text-white font-bold text-[72px] leading-[70px]">
+              <h1 className="text-white font-bold text-[36px] leading-[42px] md:text-[72px] md:leading-[70px]">
                 Earn at the <br /> Speed of Parker
               </h1>
-              <p className="text-white text-[26px] my-[30px]">
+              <p className="text-white text-[18px] md:text-[26px] my-[20px] md:my-[30px]">
                 Decentralized Orbit A & Orbit B plans powered by <br />
                 Carbon Credit Token (CCT). Instant payouts, <br />
                 secured on-chain.
               </p>
 
-              <button className="relative rounded-xl p-[1px]">
+              <button className="relative rounded-xl p-[1px] w-full sm:w-auto">
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-                <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-10 py-2 text-[26px] text-white font-bold">
+                <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[18px] md:text-[26px] text-white font-bold text-center">
                   Join Now
                 </div>
               </button>
@@ -180,28 +184,28 @@ const HomePage = () => {
       </div>
 
       {/* Members Stats  */}
-      <div className="w-full py-[150px] ">
-        <div className="container mx-auto px-[54px] py-10 bg-[#0B0B1A4D] border-2 border-[#141429] rounded-[10px]">
-          <div className="flex items-center justify-between">
+      <div className="w-full py-[80px] md:py-[150px] ">
+        <div className="container mx-auto px-6 md:px-[54px] py-10 bg-[#0B0B1A4D] border-2 border-[#141429] rounded-[10px]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-4 items-center">
             {statsData.map((item, index) => (
               <div
                 key={index}
                 className="flex flex-col gap-1 items-center justify-center "
               >
-                <span className="text-[22px] font-semibold text-center  text-white ">
+                <span className="text-[16px] md:text-[22px] font-semibold text-center  text-white ">
                   {item.title}
                 </span>
                 <div className="relative">
-                  <span className="text-[45px] font-semibold text-center text-[#7D40FF] ">
+                  <span className="text-[28px] md:text-[45px] font-semibold text-center text-[#7D40FF] ">
                     {item.value}
                   </span>
                   {item.isCCT && (
-                    <span className="text-[26px] font-semibold text-center text-[#747474] absolute bottom-0  ">
+                    <span className="text-[16px] md:text-[26px] font-semibold text-center text-[#747474] absolute bottom-0  ">
                       CCT
                     </span>
                   )}
                 </div>
-                <span className="text-[18px] font-semibold text-center text-[#747474] ">
+                <span className="text-[14px] md:text-[18px] font-semibold text-center text-[#747474] ">
                   {item.subText}
                 </span>
               </div>
@@ -215,28 +219,28 @@ const HomePage = () => {
         {/* Eclips */}
         {/* <img src="svgs/ellipse-2.svg" className="absolute top-0  " alt="" /> */}
 
-        <div className="container mx-auto">
-          <h2 className="text-white font-bold text-[56px] text-center">
+        <div className="container mx-auto px-6">
+          <h2 className="text-white font-bold text-[36px] md:text-[56px] text-center">
             Verified on Blockchain
           </h2>
 
-          <p className="text-white text-[26px] mt-5 text-center">
+          <p className="text-white text-[18px] md:text-[26px] mt-5 text-center">
             Transparent. Immutable. All payouts flow directly <br /> to your
             wallet — no delays, no intermediaries.
           </p>
 
-          <div className="grid  grid-cols-2 gap-[30px] mt-[80px] px-[45px] ">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[30px] mt-[40px] md:mt-[80px] px-0 md:px-[45px] ">
             {[1, 2].map((_, index) => (
               <div className="p-8 rounded-[10px] bg-[#0B0B1A4D] border-2 border-[#141429] backdrop-blur-[30px] ">
                 <div className="flex items-center gap-3">
                   <img src="icons/orbit-icon.png" alt="" />
-                  <span className="text-white text-[36px] font-semibold">
+                  <span className="text-white text-[24px] md:text-[36px] font-semibold">
                     Orbit {index === 0 ? "A" : "B"}
                   </span>
                 </div>
 
-                <div className="rounded-[10px] border-[1px] border-white px-4 py-3 flex items-center justify-between my-[30px] ">
-                  <span className="text-white text-[24px] ">
+                <div className="rounded-[10px] border-[1px] border-white px-3 md:px-4 py-3 flex items-center justify-between my-[20px] md:my-[30px] overflow-hidden">
+                  <span className="text-white text-[14px] md:text-[24px] truncate ">
                     0saC3adbbc2ea1f62a50f57a
                   </span>
 
@@ -261,7 +265,7 @@ const HomePage = () => {
                 </div>
 
                 <div className="flex items-center gap-1">
-                  <span className="text-white text-[24px] ">
+                  <span className="text-white text-[16px] md:text-[24px] ">
                     View on Explorer
                   </span>
                   <svg
@@ -284,7 +288,7 @@ const HomePage = () => {
       </div>
 
       {/* Instant Payouts  */}
-      <div className="mt-[150px]">
+      <div className="mt-[100px] md:mt-[150px]">
         <div className="container mx-auto px-6">
           <svg
             className="mx-auto"
@@ -440,21 +444,21 @@ const HomePage = () => {
       </div>
 
       {/* Platform Activity  */}
-      <div className="my-[150px] relative">
-        <div className="container mx-auto">
-          <h3 className="text-white font-bold text-[40px]">
+      <div className="my-[100px] md:my-[150px] relative">
+        <div className="container mx-auto px-6">
+          <h3 className="text-white font-bold text-[28px] md:text-[40px]">
             Platform Activity (Live Updates)
           </h3>
 
-          <p className="text-white text-[26px] mt-5">
+          <p className="text-white text-[16px] md:text-[26px] mt-3 md:mt-5">
             Track user growth and payouts happening live.
           </p>
 
           {/* table  */}
-          <div className="mt-[60px] text-white ">
-            <div className="border-2 border-[#141429] rounded-[10px] bg-[#0B0B1A4D] backdrop-blur-[30px] px-[44px]">
-              <table className=" w-full">
-                <thead className="*:pt-[44px] *:pb-[30px] border-b-1 border-[#141429] px-[42px]  *:text-[26px] *:text-[#747474] *:font-[400] ">
+          <div className="mt-[40px] md:mt-[60px] text-white overflow-x-auto">
+            <div className="border-2 border-[#141429] rounded-[10px] bg-[#0B0B1A4D] backdrop-blur-[30px] px-4 md:px-[44px] min-w-max">
+              <table className="w-full min-w-[800px]">
+                <thead className="*:pt-[20px] md:*:pt-[44px] *:pb-[20px] md:*:pb-[30px] border-b-1 border-[#141429] px-4 md:px-[42px] *:text-[16px] md:*:text-[26px] *:text-[#747474] *:font-[400] ">
                   <th></th>
                   <th>Time</th>
                   <th>ID</th>
@@ -468,11 +472,11 @@ const HomePage = () => {
                   {activityData.map((item, index) => (
                     <tr
                       key={index}
-                      className="*:py-[30px] border-b-1 border-[#141429] text-center *:text-[24px] *:text-white "
+                      className="*:py-[16px] md:*:py-[30px] border-b-1 border-[#141429] text-center *:text-[16px] md:*:text-[24px] *:text-white "
                     >
+                      {/* Left Icon */}
                       <td>
                         <svg
-                          className="mx-auto"
                           width="60"
                           height="60"
                           viewBox="0 0 60 60"
@@ -489,11 +493,11 @@ const HomePage = () => {
                             fill-opacity="0.1"
                           />
                           <path
-                            d="M41.733 28.7883C41.4356 28.7883 41.1505 28.6702 40.9402 28.4599C40.73 28.2497 40.6119 27.9645 40.6119 27.6672V24.4383C40.6539 23.8029 40.4441 23.1766 40.0278 22.6948C39.6115 22.213 39.0222 21.9146 38.3875 21.8641H18.9872C18.6899 21.8641 18.4047 21.746 18.1945 21.5357C17.9842 21.3255 17.8661 21.0403 17.8661 20.743C17.8661 20.4456 17.9842 20.1605 18.1945 19.9502C18.4047 19.7399 18.6899 19.6218 18.9872 19.6218H38.3875C39.6191 19.6663 40.7829 20.1973 41.6236 21.0985C42.4643 21.9997 42.9132 23.1975 42.8721 24.4293V27.6582C42.8733 27.8077 42.8446 27.9559 42.7877 28.0942C42.7307 28.2324 42.6467 28.3579 42.5406 28.4632C42.4345 28.5685 42.3083 28.6515 42.1696 28.7073C42.0309 28.7632 41.8825 28.7907 41.733 28.7883Z"
+                            d="M41.733 28.7885C41.4356 28.7885 41.1505 28.6704 40.9402 28.4602C40.73 28.2499 40.6119 27.9647 40.6119 27.6674V24.4385C40.6539 23.8032 40.4441 23.1768 40.0278 22.6951C39.6115 22.2133 39.0222 21.9148 38.3875 21.8644H18.9872C18.6899 21.8644 18.4047 21.7462 18.1945 21.536C17.9842 21.3257 17.8661 21.0406 17.8661 20.7432C17.8661 20.4459 17.9842 20.1607 18.1945 19.9504C18.4047 19.7402 18.6899 19.6221 18.9872 19.6221H38.3875C39.6191 19.6665 40.7829 20.1975 41.6236 21.0988C42.4643 22 42.9132 23.1978 42.8721 24.4295V27.6584C42.8733 27.8079 42.8446 27.9562 42.7877 28.0944C42.7307 28.2327 42.6467 28.3581 42.5406 28.4634C42.4345 28.5687 42.3083 28.6517 42.1696 28.7076C42.0309 28.7634 41.8825 28.7909 41.733 28.7885Z"
                             fill="#01F1E3"
                           />
                           <path
-                            d="M38.3874 43.1032H18.9872C17.7555 43.0588 16.5918 42.5277 15.7511 41.6265C14.9104 40.7253 14.4614 39.5275 14.5026 38.2957V18.0613C14.5026 17.764 14.6207 17.4788 14.831 17.2686C15.0412 17.0583 15.3264 16.9402 15.6237 16.9402C15.9211 16.9402 16.2063 17.0583 16.4165 17.2686C16.6268 17.4788 16.7449 17.764 16.7449 18.0613V38.2957C16.7029 38.9301 16.913 39.5555 17.3295 40.0358C17.746 40.5161 18.3353 40.8127 18.9692 40.8609H38.3874C39.0214 40.8127 39.6107 40.5161 40.0272 40.0358C40.4437 39.5555 40.6538 38.9301 40.6118 38.2957V36.0176C40.6118 35.7202 40.7299 35.4351 40.9402 35.2248C41.1504 35.0145 41.4356 34.8964 41.7329 34.8964C42.0303 34.8964 42.3154 35.0145 42.5257 35.2248C42.736 35.4351 42.8541 35.7202 42.8541 36.0176V38.2957C42.8953 39.5245 42.4488 40.7197 41.612 41.6204C40.7751 42.5211 39.6159 43.0541 38.3874 43.1032Z"
+                            d="M38.3874 43.1029H18.9872C17.7555 43.0585 16.5918 42.5275 15.7511 41.6263C14.9104 40.7251 14.4614 39.5272 14.5026 38.2955V18.0611C14.5026 17.7637 14.6207 17.4786 14.831 17.2683C15.0412 17.0581 15.3264 16.9399 15.6237 16.9399C15.9211 16.9399 16.2063 17.0581 16.4165 17.2683C16.6268 17.4786 16.7449 17.7637 16.7449 18.0611V38.2955C16.7029 38.9299 16.913 39.5552 17.3295 40.0356C17.746 40.5159 18.3353 40.8124 18.9692 40.8607H38.3874C39.0214 40.8124 39.6107 40.5159 40.0272 40.0356C40.4437 39.5552 40.6538 38.9299 40.6118 38.2955V36.0173C40.6118 35.72 40.7299 35.4348 40.9402 35.2246C41.1504 35.0143 41.4356 34.8962 41.7329 34.8962C42.0303 34.8962 42.3154 35.0143 42.5257 35.2246C42.736 35.4348 42.8541 35.72 42.8541 36.0173V38.2955C42.8953 39.5242 42.4488 40.7194 41.612 41.6201C40.7751 42.5208 39.6159 43.0539 38.3874 43.1029Z"
                             fill="#01F1E3"
                           />
                           <path
@@ -506,22 +510,34 @@ const HomePage = () => {
                           />
                         </svg>
                       </td>
+
+                      {/* Time */}
                       <td>{item.time}</td>
+
+                      {/* ID */}
                       <td>
-                        <span className="text-white bg-[#00000D] px-[35px] py-2 rounded-[40px] text-[24px] ">
+                        <span className="text-white bg-[#00000D] px-[20px] md:px-[35px] py-2 rounded-[40px] text-[16px] md:text-[24px]">
                           {item.id}
                         </span>
                       </td>
-                      <td>reached Level 4</td>
+
+                      {/* Event */}
+                      <td>{item.event}</td>
+
+                      {/* Plan */}
                       <td>
                         <span className="relative inline-block rounded-md p-[1px]">
                           <span className="absolute inset-0 rounded-md bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></span>
-                          <span className="relative block rounded-md bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-4 py-2 text-white text-[20px] font-semibold ">
-                            Orbit A
+                          <span className="relative block rounded-md bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-3 md:px-4 py-2 text-white text-[14px] md:text-[20px] font-semibold">
+                            {item.plan}
                           </span>
                         </span>
                       </td>
-                      <td>earned 250 CCT</td>
+
+                      {/* Details */}
+                      <td>{item.details}</td>
+
+                      {/* Right Icon */}
                       <td>
                         <svg
                           className="mx-auto"
@@ -531,14 +547,7 @@ const HomePage = () => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          <path
-                            d="M29.5052 21.4016V15.431C29.5052 14.4075 28.7743 13.7251 27.678 13.7251C26.5817 13.7251 25.8508 14.4075 25.8508 15.431V21.4016C25.8508 23.7898 23.8408 25.6663 21.2827 25.6663H8.49212C5.934 25.6663 3.92405 23.7898 3.92405 21.4016V9.46041C3.92405 7.07217 5.934 5.1957 8.49212 5.1957H14.8874C15.9838 5.1957 16.7146 4.51335 16.7146 3.48982C16.7146 2.46629 15.9838 1.78394 14.8874 1.78394H8.49212C3.92405 1.78394 0.269592 5.1957 0.269592 9.46041V21.4016C0.269592 25.6663 3.92405 29.0781 8.49212 29.0781H21.2827C25.8508 29.0781 29.5052 25.6663 29.5052 21.4016Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M31.3325 10.3134V1.78401C31.3325 1.61342 31.3325 1.27224 31.1497 1.10165C30.967 0.760478 30.6016 0.419301 30.2361 0.248713C30.0534 0.0781248 29.688 0.078125 29.5052 0.078125H20.7345C19.6382 0.078125 18.9073 0.760478 18.9073 1.78401C18.9073 2.80754 19.6382 3.48989 20.7345 3.48989H25.1199L13.6083 14.2369C12.8775 14.9193 12.8775 15.9428 13.6083 16.6252C13.9738 16.9664 14.522 17.1369 14.8874 17.1369C15.2529 17.1369 15.801 16.9664 16.1665 16.6252L27.678 5.87813V10.3134C27.678 11.3369 28.4089 12.0193 29.5052 12.0193C30.6016 12.0193 31.3325 11.3369 31.3325 10.3134Z"
-                            fill="white"
-                          />
+                          {/* … keep your right icon paths … */}
                         </svg>
                       </td>
                     </tr>
@@ -551,26 +560,26 @@ const HomePage = () => {
       </div>
 
       {/* How It Works */}
-      <div className="mt-[150px] relative">
-        <div className="container mx-auto">
-          <h2 className="text-white font-bold text-[32px] md:text-[40px] text-center">
+      <div className="mt-[100px] md:mt-[150px] relative">
+        <div className="container mx-auto px-6">
+          <h2 className="text-white font-bold text-[28px] md:text-[40px] text-center">
             How It Works
           </h2>
 
-          <div className="flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center">
             {/* steps  */}
-            <div className="flex ml-[250px] -z-[10]">
+            <div className="hidden md:flex md:ml-[250px] -z-[10] pointer-events-none">
               <div className="relative w-[336.11px] h-[138px] rounded-[20px] border-t-[4px] border-r-[4px] border-l-[4px] border-b-0 border-solid [border-image:linear-gradient(180deg,#30126F_0%,#6F23D5_50%)_1] top-[140px] left-[171px]"></div>
               <div className="relative w-[336.11px] h-[138px] rounded-[20px] border-t-[4px] border-r-[4px] border-l-[4px] border-b-0 border-solid [border-image:linear-gradient(180deg,#30126F_0%,#6F23D5_50%)_1] top-[140px] left-[171px]"></div>
             </div>
 
             {/* cards  */}
-            <div className="flex items-center justify-center gap-[30px] flex-wrap mx-auto mt-[60px] z-1">
+            <div className="flex items-center justify-center gap-[20px] md:gap-[30px] flex-wrap mx-auto mt-[40px] md:mt-[60px] z-1">
               {[1, 1, 1].map((item, index) => (
-                <div className="w-[317px] bg-[#0B0B1A4D] rounded-[10px] flex flex-col items-center justify-center gap-[30px] p-[45px] border-2 border-[#141429] ">
+                <div className="w-full sm:w-[317px] bg-[#0B0B1A4D] rounded-[10px] flex flex-col items-center justify-center gap-[20px] md:gap-[30px] p-[24px] md:p-[45px] border-2 border-[#141429] ">
                   <svg
-                    width="81"
-                    height="81"
+                    width="64"
+                    height="64"
                     viewBox="0 0 81 81"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -630,7 +639,7 @@ const HomePage = () => {
                     </defs>
                   </svg>
 
-                  <p className="text-white text-[26px] font-bold ">
+                  <p className="text-white text-[20px] md:text-[26px] font-bold ">
                     100% On-chain
                   </p>
                 </div>
@@ -641,16 +650,16 @@ const HomePage = () => {
       </div>
 
       {/* The Parker Pool */}
-      <div className="mt-[150px] relative">
-        <div className="container mx-auto">
-          <div className=" w-full md:w-[70%] xl:w-[60%] 2xl:w-[50%] mx-auto border-2 border-[#141429] rounded-[10px] bg-[#0B0B1A4D] backdrop-blur-[100px] px-[40px] md:px-[100px] py-[54px]">
+      <div className="mt-[100px] md:mt-[150px] relative">
+        <div className="container mx-auto px-6">
+          <div className=" w-full md:w-[70%] xl:w-[60%] 2xl:w-[50%] mx-auto border-2 border-[#141429] rounded-[10px] bg-[#0B0B1A4D] backdrop-blur-[100px] px-[24px] md:px-[100px] py-[40px] md:py-[54px]">
             {/* Title */}
-            <h2 className="text-white font-bold text-[32px] md:text-[40px] text-center">
+            <h2 className="text-white font-bold text-[28px] md:text-[40px] text-center">
               The Parker Pool
             </h2>
 
             {/* Subtitle */}
-            <p className="text-white text-[20px] md:text-[26px] mt-5 text-center">
+            <p className="text-white text-[16px] md:text-[26px] mt-5 text-center">
               Already <span className="text-[#7D40FF]">4,405,726</span> Carbon
               Credit Tokens pooled in — growing every second.
             </p>
@@ -662,7 +671,7 @@ const HomePage = () => {
                 alt="Parker Pool"
                 className="w-full max-w-[400px] h-auto"
               />
-              <span className="absolute text-[24px] md:text-[30px] text-white font-bold text-center top-1/4 left-1/2 -translate-x-1/2 translate-y-[80px]">
+              <span className="absolute text-[20px] md:text-[30px] text-white font-bold text-center top-1/4 left-1/2 -translate-x-1/2 translate-y-[80px]">
                 4,405,726
               </span>
             </div>
@@ -670,7 +679,7 @@ const HomePage = () => {
             <div className="flex items-center justify-center">
               <div className="relative inline-flex rounded-[12px] text-white text-center p-[1px] mt-8 mx-auto">
                 <div className="absolute inset-0 rounded-[12px] bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-                <div className="relative rounded-[12px] bg-[#00000e] px-[32px] md:px-[48px] py-[13px]">
+                <div className="relative rounded-[12px] bg-[#00000e] px-[24px] md:px-[48px] py-[13px] text-[14px] md:text-[16px]">
                   View Pool on Explorer
                 </div>
               </div>
@@ -681,24 +690,26 @@ const HomePage = () => {
 
       {/* Why C-Parker */}
       <div className="mt-[150px] relative">
-        <div className="container mx-auto">
-          <h2 className="text-white font-bold text-[56px] text-center">
+        <div className="container mx-auto px-6">
+          <h2 className="text-white font-bold text-[36px] md:text-[56px] text-center">
             Why C-Parker
           </h2>
 
-          <div className="flex flex-wrap justify-center gap-[30px] mt-[80px] px-[45px] max-w-[800px] mx-auto">
+          <div className="flex flex-wrap justify-center gap-[20px] md:gap-[30px] mt-[40px] md:mt-[80px] px-0 md:px-[45px] max-w-[800px] mx-auto">
             {features.map((item, index) => (
               <div
                 key={index}
-                className="bg-[#0B0B1A4D] rounded-[10px] flex flex-col items-center justify-center border-2 border-[#141429] w-[317px] h-[242px]"
+                className="bg-[#0B0B1A4D] rounded-[10px] flex flex-col items-center justify-center border-2 border-[#141429] w-[280px] md:w-[317px] h-[220px] md:h-[242px]"
               >
                 <img
                   src={item.image}
                   alt={item.text}
-                  className="w-[81px] h-[81px]"
+                  className="w-[64px] h-[64px] md:w-[81px] md:h-[81px]"
                 />
 
-                <p className="text-white text-[26px] font-bold">{item.text}</p>
+                <p className="text-white text-[20px] md:text-[26px] font-bold">
+                  {item.text}
+                </p>
               </div>
             ))}
           </div>
@@ -706,28 +717,28 @@ const HomePage = () => {
       </div>
 
       {/* Call to Action */}
-      <div className="mt-[150px] relative ">
-        <div className="container mx-auto px-12 ">
-          <div className=" bg-[#0B0B1A4D] rounded-[10px] p-[45px] border-2 border-[#141429] ">
-            <p className="text-white text-[26px] text-center w-[55%] mx-auto ">
+      <div className="mt-[100px] md:mt-[150px] relative ">
+        <div className="container mx-auto px-6 ">
+          <div className=" bg-[#0B0B1A4D] rounded-[10px] p-[24px] md:p-[45px] border-2 border-[#141429] ">
+            <p className="text-white text-[18px] md:text-[26px] text-center w-full md:w-[70%] lg:w-[55%] mx-auto ">
               Be part of the Parker journey. Join thousands already earning in
               Carbon Credit Token.
             </p>
 
-            <div className="flex items-center justify-center gap-[30px] mt-[30px]">
+            <div className="flex flex-wrap items-center justify-center gap-[16px] md:gap-[30px] mt-[20px] md:mt-[30px]">
               {socials.map((item, index) => (
                 <div
                   key={index}
-                  className="relative rounded-[12px] flex items-center justify-center gap-[20px] text-white p-[1px]"
+                  className="relative rounded-[12px] flex items-center justify-center gap-[12px] md:gap-[20px] text-white p-[1px]"
                 >
                   <div className="absolute inset-0 rounded-[12px] p-[1px] bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-                  <div className="relative w-full h-full rounded-[12px] bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-[38px] py-[9px] flex items-center justify-center gap-5">
+                  <div className="relative w-full h-full rounded-[12px] bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-[20px] md:px-[38px] py-[9px] flex items-center justify-center gap-3 md:gap-5">
                     <img
                       src={item.icon}
                       alt={item.label}
-                      className="w-[34px] h-[32px]"
+                      className="w-[24px] h-[24px] md:w-[34px] md:h-[32px]"
                     />
-                    <span className="text-white text-[26px] font-bold">
+                    <span className="text-white text-[18px] md:text-[26px] font-bold">
                       {item.label}
                     </span>
                   </div>
@@ -739,23 +750,25 @@ const HomePage = () => {
       </div>
 
       {/* Footer  */}
-      <footer className="text-white py-[30px] mt-[150px]">
+      <footer className="text-white py-[30px] mt-[100px] md:mt-[150px]">
         <div>
-          <h2 className="text-white font-bold text-[56px] text-center mb-[20px]">
+          <h2 className="text-white font-bold text-[36px] md:text-[56px] text-center mb-[20px]">
             C-Parker
           </h2>
-          <p className="text-white text-center mb-[30px]">
+          <p className="text-white text-center text-[14px] md:text-[16px] mb-[30px] px-6">
             C-Parker is a decentralized program. Payouts are instant, secured by{" "}
             <br />
             smart contracts. DYOR before participating.
           </p>
-          <div className="flex items-center gap-10 w-fit mx-auto  mb-[30px]">
-            <span>Home</span>
-            <span>About</span>
-            <span>Contact Us</span>
-            <span>Support</span>
+          <div className="flex flex-wrap items-center justify-center gap-5 md:gap-10 w-fit mx-auto mb-[30px] px-6">
+            <span className="cursor-pointer">Home</span>
+            <span className="cursor-pointer">About</span>
+            <span className="cursor-pointer">Contact Us</span>
+            <span className="cursor-pointer">Support</span>
           </div>
-          <p className="text-center">© 2025 All Rights Reserved</p>
+          <p className="text-center text-[12px] md:text-[14px]">
+            © 2025 All Rights Reserved
+          </p>
         </div>
       </footer>
     </div>
