@@ -9,34 +9,12 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-/* Brand color variable */
-:root { --brand: #4B158E; }
-
-/* Utility to force white text where needed (e.g., on dark gradients) */
-.keep-white { color: #ffffff !important; }
-
-/* Automatic light mode via system preference */
-@media (prefers-color-scheme: light) {
-  body { background-color: #ffffff; color: var(--brand); }
-  /* Make existing text-white utilities use brand purple for readability */
-  .text-white { color: var(--brand) !important; }
-  /* Hero-specific colors */
-  .hero-heading { color: var(--brand) !important; }
-  .hero-desc { color: #4A4A4A !important; }
-  /* Paragraphs default to neutral gray in light mode */
-  p.text-white { color: #4A4A4A !important; }
-  /* Navbar search + containers colors */
-  [class*="bg-[#00000666]"] { background-color: #F1F5F9 !important; color: #6B7280 !important; }
-  [class*="border-[#21213C]"] { border-color: #E5E7EB !important; }
-  [class*="border-[#141429]"] { border-color: #E5E7EB !important; }
-  [class*="bg-[#0B0B1A4D]"] { background-color: #F8FAFF !important; }
-  /* Table header/body subtle grays */
-  thead [class*="text-[#747474]"] { color: #6B7280 !important; }
-  /* Placeholder color */
-  input::placeholder { color: #9CA3AF; }
-  /* Buttons keep white text in light mode */
-  button, button * { color: #FFFFFF !important; }
-}
-
 /* Optional: smooth transition when toggling */
 html, body, #root { transition: background-color 0.2s ease, color 0.2s ease; }
+
+/* Theme helpers */
+:root.dark .text-white { color: #ffffff !important; }
+:root:not(.dark) .text-white:not(.keep-white) { color: #0a0a0a !important; }
+
+/* Utility: placeholder white (used in search input) */
+.placeholder-white::placeholder { color: #ffffff; }

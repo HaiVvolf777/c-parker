@@ -1,6 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const HomePage = () => {
+  // Sync with system theme by toggling `dark` on <html>
+  useEffect(() => {
+    const m = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = () => {
+      if (m.matches) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    };
+    apply();
+    try {
+      m.addEventListener('change', apply);
+      return () => m.removeEventListener('change', apply);
+    } catch (_) {
+      m.addListener(apply);
+      return () => m.removeListener(apply);
+    }
+  }, []);
   const statsData = [
     {
       title: "Total Members",
@@ -101,7 +120,7 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="h-auto w-full relative">
+    <div className="h-auto w-full relative bg-white text-[#0a0a0a] dark:bg-[#00000e] dark:text-white">
       {/* Eclips */}
       <img
         src="svgs/top-eclips.svg"
@@ -136,8 +155,9 @@ const HomePage = () => {
             <input
               type="text"
               placeholder="Enter ID to check status"
-              className="text-[#747474] bg-transparent outline-none w-full"
+              className="placeholder-white text-[#747474] bg-transparent outline-none w-full"
             />
+
           </div>
         </div>
         <div className="flex items-center justify-end gap-2">
@@ -504,7 +524,7 @@ const HomePage = () => {
 
                       {/* ID */}
                       <td>
-                        <span className="text-white bg-[#00000D] px-[20px] md:px-[35px] py-2 rounded-[40px] text-[16px] md:text-[24px]">
+                        <span className="text-white bg-[#00000D] keep-white px-[20px] md:px-[35px] py-2 rounded-[40px] text-[16px] md:text-[24px]">
                           {item.id}
                         </span>
                       </td>
@@ -667,7 +687,7 @@ const HomePage = () => {
                 alt="Parker Pool"
                 className="w-full max-w-[400px] h-auto"
               />
-              <span className="absolute text-[20px] md:text-[30px] text-white font-bold text-center top-1/4 left-1/2 -translate-x-1/2 translate-y-[80px]">
+              <span className="absolute text-[20px] md:text-[30px] text-white keep-white font-bold text-center top-1/4 left-1/2 -translate-x-1/2 translate-y-[80px]">
                 4,405,726
               </span>
             </div>
