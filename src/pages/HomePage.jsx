@@ -140,10 +140,10 @@ const HomePage = () => {
             />
           </div>
         </div>
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-2">
           <button className="relative rounded-xl p-[1px] w-full sm:w-auto">
             <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-            <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[16px] md:text-[20px] text-white font-bold text-center">
+            <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[16px] md:text-[20px] text-white keep-white font-bold text-center">
               Connect Wallet
             </div>
           </button>
@@ -174,7 +174,7 @@ const HomePage = () => {
 
               <button className="relative rounded-xl p-[1px] w-full sm:w-auto">
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-                <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[18px] md:text-[26px] text-white font-bold text-center">
+                <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[18px] md:text-[26px] text-white keep-white font-bold text-center">
                   Join Now
                 </div>
               </button>
@@ -516,7 +516,7 @@ const HomePage = () => {
                       <td>
                         <span className="relative inline-block rounded-md p-[1px]">
                           <span className="absolute inset-0 rounded-md bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></span>
-                          <span className="relative block rounded-md bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-3 md:px-4 py-2 text-white text-[14px] md:text-[20px] font-semibold">
+                          <span className="relative block rounded-md bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-3 md:px-4 py-2 text-white keep-white text-[14px] md:text-[20px] font-semibold">
                             {item.plan}
                           </span>
                         </span>
@@ -734,7 +734,7 @@ const HomePage = () => {
                       alt={item.label}
                       className="w-[24px] h-[24px] md:w-[34px] md:h-[32px]"
                     />
-                    <span className="text-white text-[18px] md:text-[26px] font-bold">
+                    <span className="text-white keep-white text-[18px] md:text-[26px] font-bold">
                       {item.label}
                     </span>
                   </div>

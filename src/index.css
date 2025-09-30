@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import 'tailwindcss';
 
-
 body {
   background-color: #00000e;
 }
@@ -9,3 +8,19 @@ body {
 * {
   font-family: 'Open Sans', sans-serif;
 }
+
+/* Brand color variable */
+:root { --brand: #4B158E; }
+
+/* Utility to force white text where needed (e.g., on dark gradients) */
+.keep-white { color: #ffffff !important; }
+
+/* Automatic light mode via system preference */
+@media (prefers-color-scheme: light) {
+  body { background-color: #ffffff; color: var(--brand); }
+  /* Make existing text-white utilities use brand purple for readability */
+  .text-white { color: var(--brand) !important; }
+}
+
+/* Optional: smooth transition when toggling */
+html, body, #root { transition: background-color 0.2s ease, color 0.2s ease; }
