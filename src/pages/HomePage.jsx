@@ -1,68 +1,102 @@
-import React from 'react';
+import React from "react";
 
 const HomePage = () => {
   const statsData = [
     {
-      title: 'Total Members',
-      value: '12,345',
-      subText: '+340 today',
+      title: "Total Members",
+      value: "12,345",
+      subText: "+340 today",
       isCCT: false,
     },
     {
-      title: 'New Members (24h)',
-      value: '245',
-      subText: 'joined today',
+      title: "New Members (24h)",
+      value: "245",
+      subText: "joined today",
       isCCT: false,
     },
     {
-      title: 'CCT Earned (24hr)',
-      value: '8,920',
-      subText: 'in Orbit A & B',
+      title: "CCT Earned (24hr)",
+      value: "8,920",
+      subText: "in Orbit A & B",
       isCCT: true,
     },
     {
-      title: 'Total CCT Earned',
-      value: '1,245,000',
-      subText: 'across all users',
+      title: "Total CCT Earned",
+      value: "1,245,000",
+      subText: "across all users",
       isCCT: false,
     },
   ];
 
   const activityData = [
     {
-      time: '1min',
-      id: '#1023',
-      event: 'reached Level 4',
-      plan: 'Orbit A',
-      details: 'earned 250 CCT',
+      time: "1min",
+      id: "#1023",
+      event: "reached Level 4",
+      plan: "Orbit A",
+      details: "earned 250 CCT",
     },
     {
-      time: '2min',
-      id: '#876',
-      event: 'joined',
-      plan: 'Orbit B',
-      details: 'instant payout',
+      time: "2min",
+      id: "#876",
+      event: "joined",
+      plan: "Orbit B",
+      details: "instant payout",
     },
     {
-      time: '1min',
-      id: '#1023',
-      event: 'reached Level 4',
-      plan: 'Orbit A',
-      details: 'earned 250 CCT',
+      time: "1min",
+      id: "#1023",
+      event: "reached Level 4",
+      plan: "Orbit A",
+      details: "earned 250 CCT",
     },
     {
-      time: '2min',
-      id: '#876',
-      event: 'joined',
-      plan: 'Orbit B',
-      details: 'instant payout',
+      time: "2min",
+      id: "#876",
+      event: "joined",
+      plan: "Orbit B",
+      details: "instant payout",
     },
     {
-      time: '2min',
-      id: '#876',
-      event: 'joined',
-      plan: 'Orbit B',
-      details: 'instant payout',
+      time: "2min",
+      id: "#876",
+      event: "joined",
+      plan: "Orbit B",
+      details: "instant payout",
+    },
+  ];
+
+  const features = [
+    {
+      image: "svgs/onchain.svg",
+      text: "100% On-chain",
+    },
+    {
+      image: "svgs/star.svg",
+      text: "High Security",
+    },
+    {
+      image: "svgs/wallet.svg",
+      text: "Fast Transactions",
+    },
+    {
+      image: "svgs/rocket.svg",
+      text: "Strong Community",
+    },
+  ];
+
+  const socials = [
+    {
+      label: "Telegram",
+      icon: "svgs/telegram.svg",
+    },
+    {
+      label: "Discord",
+      icon: "svgs/discord.svg",
+    },
+    {
+      label: "Twitter",
+      icon: "svgs/twitter.svg",
     },
   ];
 
@@ -196,8 +230,8 @@ const HomePage = () => {
               <div className="p-8 rounded-[10px] bg-[#0B0B1A4D] border-2 border-[#141429] backdrop-blur-[30px] ">
                 <div className="flex items-center gap-3">
                   <img src="icons/orbit-icon.png" alt="" />
-                  <span className="text-white text-[36px] font-semibold  ">
-                    Orbit A
+                  <span className="text-white text-[36px] font-semibold">
+                    Orbit {index === 0 ? "A" : "B"}
                   </span>
                 </div>
 
@@ -652,71 +686,19 @@ const HomePage = () => {
             Why C-Parker
           </h2>
 
-          <div className="flex items-center justify-center gap-[30px] flex-wrap w-[50%] mx-auto mt-[60px]">
-            {[1, 1, 1, 1].map((item, index) => (
-              <div className=" bg-[#0B0B1A4D] rounded-[10px] flex flex-col items-center justify-center gap-[30px] p-[45px] border-2 border-[#141429] ">
-                <svg
-                  width="81"
-                  height="81"
-                  viewBox="0 0 81 81"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect
-                    x="1"
-                    y="0.578125"
-                    width="79"
-                    height="79"
-                    rx="11.5"
-                    fill="#150F3E"
-                  />
-                  <rect
-                    x="1"
-                    y="0.578125"
-                    width="79"
-                    height="79"
-                    rx="11.5"
-                    stroke="url(#paint0_linear_11_1952)"
-                  />
-                  <mask
-                    id="mask0_11_1952"
-                    // style="mask-type:luminance"
-                    maskUnits="userSpaceOnUse"
-                    x="16"
-                    y="15"
-                    width="49"
-                    height="50"
-                  >
-                    <path d="M65 15.5781H16V64.5781H65V15.5781Z" fill="white" />
-                  </mask>
-                  <g mask="url(#mask0_11_1952)">
-                    <path
-                      d="M39.853 51.819L40.3583 51.2173C40.9149 50.5542 41.9049 50.4677 42.5679 51.0243L43.7715 52.0342C44.4345 52.5908 44.521 53.5807 43.9652 54.2438L43.4599 54.8455L38.9205 60.2478C37.4306 62.0195 35.2271 63.0469 32.9142 63.0469C31.0721 63.0469 29.2843 62.3961 27.8725 61.2125L21.867 56.1708C20.0953 54.6809 19.0678 52.4782 19.0678 50.1569C19.0678 48.3148 19.7186 46.5347 20.9107 45.1236L29.9818 34.3191C29.9818 34.3115 29.9818 34.3115 29.9818 34.3115C31.4717 32.5398 33.6752 31.52 35.9881 31.52C37.8302 31.52 39.618 32.1708 41.029 33.3552L44.0004 35.8481L44.5968 36.3511C45.2591 36.9085 45.3448 37.9 44.7882 38.563L43.7853 39.7589C43.2294 40.4219 42.2395 40.5085 41.5764 39.9526L40.9747 39.4473L38.0025 36.9537C37.4382 36.4836 36.7247 36.2248 35.9881 36.2248C35.0625 36.2248 34.1843 36.6321 33.5887 37.338L24.5091 48.1502C24.039 48.7144 23.7726 49.428 23.7726 50.1653C23.7726 51.0902 24.1876 51.9683 24.8935 52.564L30.899 57.6056C31.4641 58.0841 32.1776 58.3429 32.9142 58.3429C33.8398 58.3429 34.718 57.9348 35.3136 57.2213L39.853 51.819Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M41.1477 28.3373L40.6424 28.939C40.0866 29.6021 39.0966 29.6886 38.4336 29.132L37.2292 28.1221C36.5662 27.5655 36.4797 26.5756 37.0363 25.9125L37.5416 25.3108L42.081 19.9085C43.5709 18.1368 45.7736 17.1094 48.0866 17.1094C49.9294 17.1094 51.7172 17.7602 53.1282 18.9438L59.1338 23.9855C60.9062 25.4754 61.9329 27.6781 61.9329 29.9994C61.9329 31.8415 61.2821 33.6216 60.0908 35.0327L51.0189 45.8372C51.0189 45.8448 51.0189 45.8448 51.0189 45.8448C49.529 47.6165 47.3263 48.6363 45.0133 48.6363C43.1705 48.6363 41.3828 47.9855 39.9717 46.8011L37.0003 44.3082L36.4039 43.8052C35.7424 43.2478 35.6566 42.2563 36.2125 41.5933L37.2155 40.3974C37.7721 39.7344 38.7613 39.6478 39.4243 40.2037L40.0268 40.709L42.9982 43.2026C43.5625 43.6727 44.2761 43.9315 45.0133 43.9315C45.9382 43.9315 46.8164 43.5242 47.4128 42.8183L56.4916 32.0061C56.9625 31.4419 57.2289 30.7283 57.2289 29.991C57.2289 29.0661 56.8132 28.188 56.1073 27.5923L50.1017 22.5507C49.5374 22.0722 48.8239 21.8134 48.0866 21.8134C47.1617 21.8134 46.2835 22.2215 45.6879 22.935L41.1477 28.3373Z"
-                      fill="white"
-                    />
-                  </g>
-                  <defs>
-                    <linearGradient
-                      id="paint0_linear_11_1952"
-                      x1="0.5"
-                      y1="40.0781"
-                      x2="80.5"
-                      y2="40.0781"
-                      gradientUnits="userSpaceOnUse"
-                    >
-                      <stop stop-color="#324AB9" />
-                      <stop offset="1" stop-color="#4B158E" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+          <div className="flex flex-wrap justify-center gap-[30px] mt-[80px] px-[45px] max-w-[800px] mx-auto">
+            {features.map((item, index) => (
+              <div
+                key={index}
+                className="bg-[#0B0B1A4D] rounded-[10px] flex flex-col items-center justify-center border-2 border-[#141429] w-[317px] h-[242px]"
+              >
+                <img
+                  src={item.image}
+                  alt={item.text}
+                  className="w-[81px] h-[81px]"
+                />
 
-                <p className="text-white text-[26px] font-bold ">
-                  100% On-chain
-                </p>
+                <p className="text-white text-[26px] font-bold">{item.text}</p>
               </div>
             ))}
           </div>
@@ -733,24 +715,20 @@ const HomePage = () => {
             </p>
 
             <div className="flex items-center justify-center gap-[30px] mt-[30px]">
-              {[1, 1, 1].map((item, index) => (
-                <div className="relative rounded-[12px] flex items-center justify-center gap-[20px] text-white p-[1px]">
+              {socials.map((item, index) => (
+                <div
+                  key={index}
+                  className="relative rounded-[12px] flex items-center justify-center gap-[20px] text-white p-[1px]"
+                >
                   <div className="absolute inset-0 rounded-[12px] p-[1px] bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-                  <div className="relative w-full h-full rounded-[12px] bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-[38px] py-[9px] flex items-center justify-center gap-5 ">
-                    <svg
-                      width="34"
-                      height="32"
-                      viewBox="0 0 34 32"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M32.8645 0.808899C32.4244 0.44347 31.8934 0.203973 31.3278 0.115896C30.7623 0.0278188 30.1834 0.0944568 29.6527 0.308719L1.95607 11.4712C1.36376 11.7144 0.859568 12.1318 0.510415 12.6678C0.161262 13.2038 -0.0163398 13.8331 0.00118225 14.4722C0.0187043 15.1113 0.230522 15.73 0.60852 16.2461C0.986518 16.7623 1.51282 17.1514 2.11757 17.362L7.71999 19.307L10.8427 29.6152C10.8851 29.7529 10.9467 29.884 11.0256 30.0046C11.0376 30.0231 11.0545 30.0369 11.0672 30.0549C11.1584 30.1819 11.2686 30.2942 11.394 30.3878C11.4296 30.4149 11.4638 30.4403 11.5019 30.4644C11.6486 30.5616 11.8111 30.6326 11.9821 30.6744L12.0004 30.6759L12.0108 30.6804C12.1136 30.7013 12.2183 30.7119 12.3232 30.712C12.3333 30.712 12.3423 30.7072 12.3523 30.707C12.5106 30.7043 12.6676 30.677 12.8176 30.6263C12.8525 30.6144 12.8824 30.5946 12.9163 30.5803C13.0281 30.534 13.1341 30.4747 13.232 30.4035C13.3104 30.3376 13.3888 30.2717 13.4673 30.2058L17.6434 25.6031L23.8722 30.4197C24.4206 30.8459 25.0955 31.0776 25.7905 31.0781C26.5187 31.0772 27.2244 30.8264 27.7894 30.3677C28.3544 29.9091 28.7442 29.2705 28.8936 28.5591L33.936 3.84924C34.0503 3.2931 34.011 2.71642 33.8222 2.18088C33.6335 1.64534 33.3024 1.1711 32.8645 0.808899ZM12.936 19.7982C12.7217 20.0113 12.5753 20.2828 12.515 20.5786L12.0366 22.8989L10.8248 18.8984L17.1077 15.6325L12.936 19.7982ZM25.7664 27.9805L18.4056 22.2886C18.0977 22.051 17.7114 21.938 17.3237 21.9721C16.936 22.0061 16.5754 22.1848 16.3138 22.4724L14.9763 23.946L15.449 21.6528L26.3957 10.7254C26.657 10.4649 26.8162 10.1196 26.8445 9.75206C26.8727 9.38452 26.7682 9.01903 26.5498 8.72179C26.3314 8.42455 26.0136 8.21522 25.6539 8.13171C25.2942 8.0482 24.9165 8.09605 24.5891 8.26657L8.87873 16.4319L3.12275 14.3292L30.9084 3.233L25.7664 27.9805Z"
-                        fill="white"
-                      />
-                    </svg>
-                    <span className="text-white text-[26px] font-bold ">
-                      Telegram
+                  <div className="relative w-full h-full rounded-[12px] bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-[38px] py-[9px] flex items-center justify-center gap-5">
+                    <img
+                      src={item.icon}
+                      alt={item.label}
+                      className="w-[34px] h-[32px]"
+                    />
+                    <span className="text-white text-[26px] font-bold">
+                      {item.label}
                     </span>
                   </div>
                 </div>
@@ -767,7 +745,7 @@ const HomePage = () => {
             C-Parker
           </h2>
           <p className="text-white text-center mb-[30px]">
-            C-Parker is a decentralized program. Payouts are instant, secured by{' '}
+            C-Parker is a decentralized program. Payouts are instant, secured by{" "}
             <br />
             smart contracts. DYOR before participating.
           </p>
