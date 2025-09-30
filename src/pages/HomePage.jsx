@@ -364,77 +364,65 @@ const HomePage = () => {
       </div>
 
       {/* Video & Announcements */}
-      <div className="mt-[150px] relative">
-        <div className="container mx-auto">
-          <h2 className="text-white font-bold text-[56px] text-center">
+      <div className="mt-[100px] md:mt-[150px] relative">
+        <div className="container mx-auto px-4 sm:px-6 md:px-8">
+          <h2 className="text-white font-bold text-[28px] sm:text-[40px] md:text-[56px] text-center">
             Video & Announcements
           </h2>
 
-          <p className="text-white text-[26px] mt-5 text-center">
-            Stay updated with the latest news and learn more about <br /> how
-            C-Parker works.
+          <p className="text-white text-[16px] sm:text-[20px] md:text-[26px] mt-5 text-center leading-relaxed">
+            Stay updated with the latest news and learn more about{" "}
+            <br className="hidden md:block" />
+            how C-Parker works.
           </p>
 
-          <div className="grid grid-cols-2 gap-[60px] mt-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-[30px] md:gap-[60px] mt-10 md:mt-20">
+            {/* Left: Video */}
             <div>
-              <div className="relative inline-block mb-[30px]">
-                {/* Background Image */}
+              <div className="relative inline-block mb-[20px] md:mb-[30px] w-full">
                 <img
                   src="images/video-thumbnail.png"
                   alt="Video Thumbnail"
-                  className="block w-full h-auto"
+                  className="block w-full h-auto rounded-lg"
                 />
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-[#00000099] border border-[#141429] flex items-center justify-center">
+                <div className="absolute inset-0 bg-[#00000099] border border-[#141429] flex items-center justify-center rounded-lg">
                   <img
                     src="icons/play.svg"
                     alt="Play Icon"
-                    className="w-16 h-16"
+                    className="w-12 h-12 sm:w-16 sm:h-16"
                   />
                 </div>
               </div>
 
-              <p className="text-white text-[30px] leading-[50px] font-bold">
+              <p className="text-white text-[20px] sm:text-[24px] md:text-[30px] leading-[32px] sm:leading-[40px] md:leading-[50px] font-bold">
                 Watch: How to get started with Orbit A & Orbit B
               </p>
             </div>
 
+            {/* Right: Announcements */}
             <div>
-              <div className="mb-[10px] ">
-                <span className="text-[#7D40FF] ">08/01</span>
-                <p className="text-white w-[60%] text-[20px] my-[10px]">
-                  Orbit B Update – Faster payout cycle enabled.
-                </p>
-                <hr className="text-[#7474744D]" />
-              </div>
+              {[
+                "Orbit B Update – Faster payout cycle enabled.",
+                "Community AMA – Join us on Telegram.",
+                "Parker Pool milestone: 5,000,000 CCT pooled!",
+                "UI improvements - Performance updates & more",
+              ].map((item, idx) => (
+                <div key={idx} className="mb-[15px]">
+                  <span className="text-[#7D40FF] text-sm sm:text-base">
+                    08/01
+                  </span>
+                  <p className="text-white w-full md:w-[60%] text-[16px] sm:text-[18px] md:text-[20px] my-[8px]">
+                    {item}
+                  </p>
+                  {idx < 3 && <hr className="text-[#7474744D]" />}
+                </div>
+              ))}
 
-              <div className="mb-[10px] ">
-                <span className="text-[#7D40FF] ">08/01</span>
-                <p className="text-white w-[60%] text-[20px] my-[10px]">
-                  Community AMA – Join us on Telegram.
-                </p>
-                <hr className="text-[#7474744D]" />
-              </div>
-
-              <div className="mb-[10px] ">
-                <span className="text-[#7D40FF] ">08/01</span>
-                <p className="text-white w-[60%] text-[20px] my-[10px]">
-                  Parker Pool milestone: 5,000,000 CCT pooled!
-                </p>
-                <hr className="text-[#7474744D]" />
-              </div>
-
-              <div className="mb-[10px] ">
-                <span className="text-[#7D40FF] ">08/01</span>
-                <p className="text-white w-[60%] text-[20px] my-[10px]">
-                  UI improvements - Performance updates & more
-                </p>
-              </div>
-
-              <button className="relative rounded-xl p-[2px] my-[22px]">
+              <button className="relative rounded-xl p-[2px] my-[20px]">
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-                <div className="relative rounded-xl bg-[#00000e] px-7 py-4 text-white font-bold">
+                <div className="relative rounded-xl bg-[#00000e] px-5 sm:px-7 py-3 sm:py-4 text-white font-bold text-sm sm:text-base">
                   View All Announcements
                 </div>
               </button>
