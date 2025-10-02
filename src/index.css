@@ -15,6 +15,7 @@ body {
 
 /* Optional: smooth transition when toggling */
 html, body, #root { transition: background-color 0.2s ease, color 0.2s ease; }
+html, body { overflow-x: hidden; }
 
 /* Theme helpers */
 :root.dark .text-white { color: #ffffff !important; }

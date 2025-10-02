@@ -129,7 +129,7 @@ const HomePage = () => {
       />
 
       {/* Navbar  */}
-      <div className="container mx-auto bg-transparent min-h-[70px] p-3 flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-2 border-[#21213C] rounded-xl backdrop-blur-[60px] mt-[20px] md:mt-[37px] relative z-[10]">
+        <div className="container mx-auto bg-transparent min-h-[70px] p-3 flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-2 border-[#21213C] rounded-xl backdrop-blur-[60px] mt-[20px] md:mt-[37px] relative z-[10]">
         <div className="flex items-center justify-between">
           {/* Light mode logo */}
           <img
@@ -162,7 +162,7 @@ const HomePage = () => {
             <input
               type="text"
               placeholder="Enter ID to check status"
-              className="placeholder-white text-[#747474] bg-transparent outline-none w-full"
+              className="placeholder-white text-[#747474] bg-transparent outline-none w-full min-w-0"
             />
 
           </div>
@@ -178,11 +178,11 @@ const HomePage = () => {
       </div>
 
       {/* HERO */}
-      <div className="w-full min-h-[70vh] md:h-[100vh] relative">
+      <div className="w-full min-h-[70vh] md:h-[100vh] relative overflow-hidden">
         {/* Background Image */}
         <img
           src="images/hero-right.png"
-          className="absolute right-0 -top-[50px] z-0 hidden md:block"
+          className="absolute right-0 -top-[50px] z-0 hidden lg:block"
           alt=""
         />
 
@@ -459,7 +459,7 @@ const HomePage = () => {
       </div>
 
       {/* Platform Activity  */}
-      <div className="my-[100px] md:my-[150px] relative">
+      <div className="my-[100px] md:my-[150px] relative overflow-x-auto">
         <div className="container mx-auto px-6">
           <h3 className="text-white font-bold text-[28px] md:text-[40px]">
             Platform Activity (Live Updates)
@@ -472,7 +472,7 @@ const HomePage = () => {
           {/* table  */}
           <div className="mt-[40px] md:mt-[60px] text-white overflow-x-auto">
             <div className="border-2 border-[#141429] rounded-[10px] bg-[#0B0B1A4D] backdrop-blur-[30px] px-4 md:px-[44px] min-w-max">
-              <table className="w-full min-w-[800px]">
+              <table className="w-full min-w-[640px] md:min-w-[800px]">
                 <thead className="*:pt-[20px] md:*:pt-[44px] *:pb-[20px] md:*:pb-[30px] border-b-1 border-[#141429] px-4 md:px-[42px] *:text-[16px] md:*:text-[26px] *:text-[#747474] *:font-[400] ">
                   <th></th>
                   <th>Time</th>
@@ -616,11 +616,11 @@ const HomePage = () => {
       <div className="mt-[100px] md:mt-[150px] relative">
         {/* Decorative background bubbles behind the section */}
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <img src="images/Bubble-1.png" alt="" className="absolute w-[160px] sm:w-[220px] md:w-[360px] -top-20 -left-20 sm:-top-24 sm:-left-24 opacity-20 dark:opacity-60" />
-          <img src="images/Bubble-1.png" alt="" className="absolute w-[120px] sm:w-[180px] md:w-[240px] top-[5%] -right-10 sm:top-[10%] sm:-right-16 opacity-15 dark:opacity-50" />
-          <img src="images/Bubble-1.png" alt="" className="absolute w-[140px] sm:w-[200px] md:w-[260px] -bottom-10 left-[8%] sm:-bottom-16 sm:left-[12%] opacity-15 dark:opacity-40" />
-          <img src="images/Bubble-1.png" alt="" className="absolute w-[160px] sm:w-[220px] md:w-[300px] -bottom-24 right-[10%] sm:-bottom-28 sm:right-[15%] opacity-15 dark:opacity-45" />
-          <img src="images/Bubble-1.png" alt="" className="absolute w-[100px] sm:w-[140px] md:w-[200px] top-[30%] left-1/2 -translate-x-1/2 opacity-10 dark:opacity-35" />
+          <img src="images/Bubble-1.png" alt="" className="hidden sm:block absolute w-[220px] md:w-[360px] -top-24 -left-24 opacity-20 dark:opacity-60" />
+          <img src="images/Bubble-1.png" alt="" className="hidden sm:block absolute w-[180px] md:w-[240px] top-[10%] -right-16 opacity-15 dark:opacity-50" />
+          <img src="images/Bubble-1.png" alt="" className="hidden sm:block absolute w-[200px] md:w-[260px] -bottom-16 left-[12%] opacity-15 dark:opacity-40" />
+          <img src="images/Bubble-1.png" alt="" className="hidden sm:block absolute w-[220px] md:w-[300px] -bottom-28 right-[15%] opacity-15 dark:opacity-45" />
+          <img src="images/Bubble-1.png" alt="" className="hidden sm:block absolute w-[140px] md:w-[200px] top-[30%] left-1/2 -translate-x-1/2 opacity-10 dark:opacity-35" />
         </div>
         <div className="container mx-auto px-6">
           <div className=" w-full md:w-[70%] xl:w-[60%] 2xl:w-[50%] mx-auto border-2 border-[#141429] rounded-[10px] bg-[#0B0B1A4D] backdrop-blur-[100px] px-[24px] md:px-[100px] py-[40px] md:py-[54px] relative overflow-hidden">
