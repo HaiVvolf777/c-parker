@@ -131,13 +131,20 @@ const HomePage = () => {
       {/* Navbar  */}
       <div className="container mx-auto bg-transparent min-h-[70px] p-3 flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-2 border-[#21213C] rounded-xl backdrop-blur-[60px] mt-[20px] md:mt-[37px] relative z-[10]">
         <div className="flex items-center justify-between">
+          {/* Light mode logo */}
+          <img
+            src="images/logo-light.png"
+            alt="C-Parker"
+            className="h-8 md:h-10 w-auto block dark:hidden"
+          />
+          {/* Dark mode logo */}
           <img
             src="images/logo.png"
             alt="C-Parker"
-            className="h-8 md:h-10 w-auto"
+            className="h-8 md:h-10 w-auto hidden dark:block"
           />
         </div>
-        <div className="bg-[#00000666] w-full md:w-[496px] rounded-[10px] p-3">
+        <div className="w-full md:w-[496px] rounded-[10px] p-3 bg-white dark:bg-[#00000666]">
           <div className="flex items-center gap-[10px] overflow-hidden">
             <svg
               width="21"
@@ -567,8 +574,8 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* How It Works */}
-      <div className="mt-[100px] md:mt-[150px] relative">
+       {/* How It Works */}
+       <div className="mt-[100px] md:mt-[150px] relative">
         <div className="container mx-auto px-6 relative">
           <h2 className="text-white font-bold text-[28px] md:text-[40px] text-center">
             How It Works
