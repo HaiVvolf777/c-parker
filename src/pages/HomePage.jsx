@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   // Sync with system theme by toggling `dark` on <html>
@@ -735,7 +736,8 @@ const HomePage = () => {
             <span className="cursor-pointer">Home</span>
             <span className="cursor-pointer">About</span>
             <span className="cursor-pointer">Contact Us</span>
-            <span className="cursor-pointer">Support</span>
+             <span className="cursor-pointer">Support</span>
+            <Link to='/dashboard' className="cursor-pointer">Dashboard</Link>
           </div>
           <p className="text-center text-[12px] md:text-[14px]">
             © 2025 All Rights Reserved
