@@ -5,19 +5,19 @@ const EarningOverviewCard = ({ className }) => {
     {
       id: 1,
       title: 'Top 300 Leaders',
-      icon: 'icons/rules/crown.svg',
+      icon: 'icons/crown.svg',
       total: 2,
     },
     {
       id: 2,
-      title: 'Top 300 Leaders',
-      icon: 'icons/rules/crown.svg',
+      title: 'Unconditional Passives',
+      icon: 'icons/chain.svg',
       total: 2,
     },
     {
       id: 3,
-      title: 'Top 300 Leaders',
-      icon: 'icons/rules/crown.svg',
+      title: 'Active users',
+      icon: 'icons/user.svg',
       total: 2,
     },
   ];
