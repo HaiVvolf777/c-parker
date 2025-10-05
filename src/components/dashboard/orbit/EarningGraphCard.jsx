@@ -70,7 +70,9 @@ const EarningGraphCard = () => {
                 <div
                   className={`w-[100%] h-[40%] rounded-[100px] bg-[#FF04B4] z-10 absolute bottom-0`}
                 ></div>
-                {item.value}
+                <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs text-white opacity-70">
+                  {item.value}
+                </span>
               </div>
             ))}
           </div>

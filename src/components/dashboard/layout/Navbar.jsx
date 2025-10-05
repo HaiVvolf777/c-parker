@@ -4,12 +4,12 @@ const Navbar = () => {
   return (
     <>
       <div className="w-full p-5 h-[83px] bg-white dark:bg-[#00000E] border-b border-gray-200 dark:border-[#141429]">
-        <div className="flex item-center justify-between ">
+        <div className="flex items-center justify-between ">
           <div>
             {/* Light mode logo */}
-            <img src="images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" />
+            <img src="/images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" />
             {/* Dark mode logo */}
-            <img src="images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" />
+            <img src="/images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" />
           </div>
 
           <div className="hidden md:flex items-center gap-[10px]">
