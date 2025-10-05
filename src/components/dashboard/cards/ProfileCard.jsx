@@ -1,6 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const ProfileCard = () => (
+const ProfileCard = () => {
+  const [copied, setCopied] = useState(false);
+
+  const referLink = '0saC3adbbc2ea1f62a50f57a';
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(referLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch (_) {
+      const textarea = document.createElement('textarea');
+      textarea.value = referLink;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(textarea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    }
+  };
+
+  return (
   <>
     <div className="bg-white dark:bg-[#0B0B1A4D] w-full p-4 md:p-[30px] border-2 border-gray-200 dark:border-[#141429] rounded-[10px]">
       <div className="grid grid-col-1 lg:grid-cols-2 gap-5">
@@ -86,12 +110,14 @@ const ProfileCard = () => (
             <div className="flex flex-col md:flex-row items-center justify-between gap-[10px] w-full">
               <input
                 type="text"
-                value="0saC3adbbc2ea1f62a50f57a"
+                value={referLink}
                 disabled={true}
                 className="bg-white/20 dark:bg-[#00000066] text-gray-800 dark:text-[#4DD9E8] md:text-[20px] font-bold px-[18px] py-3 rounded-[10px] w-full overflow-x-scroll cursor-pointer border border-gray-200 dark:border-transparent"
+                onClick={handleCopy}
+                title="Click to copy"
               />
-              <button className="w-full md:w-auto bg-white dark:bg-[#6F23D5] text-[#6F23D5] dark:text-white py-[11px] px-[26px] rounded-[12px] font-bold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#5a1fb8] transition-colors">
-                Copy
+              <button onClick={handleCopy} className="w-full md:w-auto bg-white dark:bg-[#6F23D5] text-[#6F23D5] dark:text-white py-[11px] px-[26px] rounded-[12px] font-bold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#5a1fb8] transition-colors">
+                {copied ? 'Copied' : 'Copy'}
               </button>
             </div>
           </div>
@@ -99,6 +125,7 @@ const ProfileCard = () => (
       </div>
     </div>
   </>
-);
+  );
+};
 
 export default ProfileCard;
