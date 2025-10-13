@@ -36,9 +36,10 @@ const NodeLevelProgression = () => {
                 <div className="flex items-center justify-between gap-12 ">
                   {/* controller left  */}
                   <div className="hidden lg:block w-[7%]">
-                    <div onClick={prevSlide} className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer">
-                      <img src="icons/arrow-left.svg" alt="" />
-                    </div>
+                    <button onClick={prevSlide} type="button" aria-label="Previous"
+                      className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer">
+                      <img src="icons/left.svg" alt="Previous" className="w-4 h-4" />
+                    </button>
                   </div>
 
                   {/* Slides container  */}
@@ -86,20 +87,21 @@ const NodeLevelProgression = () => {
 
                   {/* controller right  */}
                   <div className="hidden lg:block w-[7%]">
-                    <div onClick={nextSlide} className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer">
-                      <img src="icons/right.svg" alt="" />
-                    </div>
+                    <button onClick={nextSlide} type="button" aria-label="Next"
+                      className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white text-2xl">
+                      ›
+                    </button>
                   </div>
                 </div>
 
                 {/* controller bar  */}
                 <div className="w-full lg:w-[80%] mx-auto">
                   <div className="w-full lg:w-[85%] mx-auto">
-                    <div className="w-full mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-11 py-4 border border-gray-200 dark:border-[#141429]">
-                      <div className="flex items-center justify-between">
-                        <img onClick={prevSlide} src="icons/arrow-left.svg" alt="" className="cursor-pointer hover:opacity-70 transition-opacity" />
-                        <span className="text-gray-800 dark:text-white">Cycle: {slideIndex + 1}</span>
-                        <img onClick={nextSlide} src="icons/arrow-right.svg" alt="" className="cursor-pointer hover:opacity-70 transition-opacity" />
+                      <div className="w-full mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-11 py-4 border border-gray-200 dark:border-[#141429]">
+                      <div className="flex items-center justify-between text-gray-800 dark:text-white">
+                        <button onClick={prevSlide} type="button" aria-label="Previous" className="text-2xl leading-none hover:opacity-80">‹</button>
+                        <span>Cycle: {slideIndex + 1}</span>
+                        <button onClick={nextSlide} type="button" aria-label="Next" className="text-2xl leading-none hover:opacity-80">›</button>
                       </div>
                     </div>
                   </div>
