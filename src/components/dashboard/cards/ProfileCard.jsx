@@ -31,7 +31,7 @@ const ProfileCard = () => {
         {/* profile  */}
         <div className="flex flex-col md:flex-row gap-[28px] items-center">
           <div className="relative h-[150px] w-[150px] border-4 border-[#6F23D5] bg-gray-100 dark:bg-white rounded-full">
-            <img src="images/profile.png" alt="Profile" className="w-full h-full rounded-full object-cover" />
+            <img src="images/profile.png" alt="" className="w-full h-full rounded-full object-cover" />
             <div className="rounded-full absolute bottom-0 right-2">
               <svg
                 width="34"
@@ -88,7 +88,7 @@ const ProfileCard = () => {
           </div>
         </div>
 
-        <div className="w-full bg-gradient-to-r from-[#6F23D5] to-gray-100 dark:to-[#00000E] backdrop-blur-[30px] px-5 py-[18px] rounded-[10px]">
+        <div className="w-full bg-gradient-to-r from-[#6F23D5] to-[#F3F4F6] dark:to-[#00000E] backdrop-blur-[30px] px-5 py-[18px] rounded-[10px]">
           <div className="w-full flex flex-col gap-[40px]">
             <div className="flex gap-[6px]">
               <span className="text-gray-800 dark:text-white text-[20px] font-semibold">
@@ -112,7 +112,7 @@ const ProfileCard = () => {
                 type="text"
                 value={referLink}
                 disabled={true}
-                className="bg-white/20 dark:bg-[#00000066] text-gray-800 dark:text-[#4DD9E8] md:text-[20px] font-bold px-[18px] py-3 rounded-[10px] w-full overflow-x-scroll cursor-pointer border border-gray-200 dark:border-transparent"
+                className="bg-white dark:bg-[#00000066] text-[#0a0a0a] dark:text-[#4DD9E8] md:text-[20px] font-bold px-[18px] py-3 rounded-[10px] w-full overflow-x-scroll cursor-pointer border border-gray-200 dark:border-transparent shadow-sm"
                 onClick={handleCopy}
                 title="Click to copy"
               />
