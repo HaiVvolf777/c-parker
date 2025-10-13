@@ -2,14 +2,14 @@ import React from 'react';
 
 const TotalEarningCard = () => {
   return (
-    <div className="bg-[#191932] rounded-[10px] p-[18px] mt-5 ">
+    <div className="bg-white/60 dark:bg-[#191932] border-2 border-[#E5E7EB] dark:border-[#141429] rounded-[10px] p-[18px] mt-5 ">
       <div>
-        <p className="text-white text-lg font-semibold ">
+        <p className="text-[#0a0a0a] dark:text-white text-lg font-semibold ">
           Total Earnings (CCT)
         </p>
 
         <div className="flex items-baseline-last gap-[6px] mt-[10px]">
-          <span className="text-white text-[34px] font-extrabold ">8,920</span>
+          <span className="text-[#0a0a0a] dark:text-white text-[34px] font-extrabold ">8,920</span>
 
           <div className="flex">
             <svg

@@ -34,12 +34,12 @@ const EarningGraphCard = () => {
     },
   ];
   return (
-    <div className="bg-[#191932] rounded-[10px] p-[18px] mt-5 ">
+    <div className="bg-white/60 dark:bg-[#191932] border-2 border-[#E5E7EB] dark:border-[#141429] rounded-[10px] p-[18px] mt-5 ">
       <div>
-        <p className="text-white">Total Earnings (CCT)</p>
+        <p className="text-[#0a0a0a] dark:text-white">Total Earnings (CCT)</p>
 
         <div className="flex items-baseline-last gap-[6px] mt-[10px]">
-          <span className="text-white text-[20px] font-bold ">8,920</span>
+          <span className="text-[#0a0a0a] dark:text-white text-[20px] font-bold ">8,920</span>
 
           <div className="flex">
             <svg
@@ -58,7 +58,7 @@ const EarningGraphCard = () => {
             <span className="text-[#65FFE3] text-sm ">10%</span>
           </div>
         </div>
-        <p className="text-white opacity-60 text-sm ">
+        <p className="text-[#6B7280] dark:text-white/60 text-sm ">
           Compared to $21,490 last year
         </p>
 
@@ -66,11 +66,11 @@ const EarningGraphCard = () => {
           <div className="flex gap-[10px]">
             {statsGraphData.map((item, index) => (
               <div key={index} className="relative h-[87px] w-[27px] ">
-                <div className="w-[10px] mx-auto h-[100%] rounded-[100px] bg-[#05050F] z-1"></div>
+                <div className="w-[10px] mx-auto h-[100%] rounded-[100px] bg-[#E5E7EB] dark:bg-[#05050F] z-1"></div>
                 <div
                   className={`w-[100%] h-[40%] rounded-[100px] bg-[#FF04B4] z-10 absolute bottom-0`}
                 ></div>
-                <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs text-white opacity-70">
+                <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-xs text-[#0a0a0a] dark:text-white opacity-70">
                   {item.value}
                 </span>
               </div>
