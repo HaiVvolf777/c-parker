@@ -123,11 +123,11 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
                   <span className="relative inline-block rounded-md p-[1px]">
                     <span className="absolute inset-0 rounded-md bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></span>
                     <span
-                      className={`relative block rounded-md bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-4 py-2 text-white font-semibold ${
+                      className={`relative block rounded-md px-4 py-2 font-semibold ${
                         isDashboard ? 'text-[16px]' : 'text-[20px]'
-                      } `}
+                      } text-[#0a0a0a] dark:text-white bg-white dark:bg-gradient-to-r dark:from-[#150F3E] dark:via-[#200F46] dark:to-[#3A126F]`}
                     >
-                      Orbit A
+                      {item.plan}
                     </span>
                   </span>
                 </td>
