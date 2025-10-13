@@ -19,7 +19,7 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/support" element={<SupportPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/all-nodes" element={<AllNodes />} />
+        {/* <Route path="/dashboard/all-nodes" element={<AllNodes />} /> */}
         <Route path="/dashboard/node-level-progression" element={<NodeLevelProgression />} />
         <Route path="/dashboard/all-nodes-b" element={<AllNodesB />} />
         <Route path="/dashboard/orbit-level-progression" element={<OrbitLevelProgression />} />

@@ -15,17 +15,17 @@ const Sidebar = () => {
         </svg>
       )
     },
-    {
-      name: 'All Nodes',
-      path: '/dashboard/all-nodes',
-      icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#6F23D5" />
-          <path d="M2 17L12 22L22 17" fill="#6F23D5" />
-          <path d="M2 12L12 17L22 12" fill="#6F23D5" />
-        </svg>
-      )
-    },
+    // {
+    //   name: 'All Nodes',
+    //   path: '/dashboard/all-nodes',
+    //   icon: (
+    //     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    //       <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#6F23D5" />
+    //       <path d="M2 17L12 22L22 17" fill="#6F23D5" />
+    //       <path d="M2 12L12 17L22 12" fill="#6F23D5" />
+    //     </svg>
+    //   )
+    // },
     {
       name: 'Node Level Progression',
       path: '/dashboard/node-level-progression',
