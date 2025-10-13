@@ -52,16 +52,16 @@ const NodeLevelProgression = () => {
                         <div className="flex flex-col gap-0">
                           <div className="flex justify-between">
                             <div className="">
-                              <p className="text-white text-[20px] lg:text-[30px] font-semibold ">
+                              <p className="text-[#0a0a0a] dark:text-white text-[20px] lg:text-[30px] font-semibold ">
                                 Lvl 1
                               </p>
-                              <p className="text-white text-sm font-semibold ">
+                              <p className="text-[#6B7280] dark:text-white text-sm font-semibold ">
                                 ID 1297
                               </p>
                             </div>
 
                             <div>
-                              <button className="bg-[#FFFFFF33] text-white font-bold rounded-[10px] px-5 py-2  ">
+                              <button className="bg-[#FFFFFF33] text-white keep-white font-bold rounded-[10px] px-5 py-2  ">
                                 Active
                               </button>
                             </div>
