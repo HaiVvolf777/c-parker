@@ -7,9 +7,9 @@ const Navbar = () => {
         <div className="flex items-center justify-between ">
           <div>
             {/* Light mode logo */}
-            <img src="/images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" />
+            <a href="/"><img src="/images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" /></a>
             {/* Dark mode logo */}
-            <img src="/images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" />
+            <a href="/"><img src="/images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" /></a>
           </div>
 
           <div className="hidden md:flex items-center gap-[10px]">
