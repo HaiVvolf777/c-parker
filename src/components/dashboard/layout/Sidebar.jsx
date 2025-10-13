@@ -60,17 +60,16 @@ const Sidebar = () => {
             <div key={item.path} className="p-[10px]">
               <div 
                 onClick={() => navigate(item.path)}
-                className={`flex items-center gap-[10px] px-[10px] py-[10px] rounded-[5px] cursor-pointer transition-colors ${
-                  isActive(item.path) 
-                    ? 'bg-[#6F23D5] text-white' 
-                    : 'bg-gray-100 dark:bg-[#FFFFFF0D] hover:bg-gray-200 dark:hover:bg-[#FFFFFF1A]'
+                className={`flex items-center gap-[10px] px-[10px] py-[10px] rounded-[8px] cursor-pointer transition-colors border ${
+                  isActive(item.path)
+                    ? 'bg-[#6F23D5] text-white border-transparent'
+                    : 'bg-white/60 dark:bg-[#0B0B1A4D] hover:bg-gray-100 dark:hover:bg-[#1a1a2e] border-[#E5E7EB] dark:border-[#141429]'
                 }`}
               >
-                {item.icon}
                 <span className={`font-medium ${
                   isActive(item.path) 
                     ? 'text-white' 
-                    : 'text-gray-800 dark:text-white'
+                    : 'text-[#0a0a0a] dark:text-white'
                 }`}>
                   {item.name}
                 </span>
