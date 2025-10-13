@@ -4,7 +4,7 @@ const UpdatesCard = ({ className }) => {
   return (
     <>
       <div
-        className={`h-full rounded-[10px] border-2 border-[#141429] p-[18px] ${className}`}
+        className={`rounded-[10px] border-2 border-[#141429] p-[18px] ${className}`}
         style={{
           backgroundImage: "url('/images/updatesbg.png'), linear-gradient(90deg, rgba(1,241,227,0.45) 0%, rgba(61,153,136,0.45) 100%)",
           backgroundSize: 'cover, cover',
