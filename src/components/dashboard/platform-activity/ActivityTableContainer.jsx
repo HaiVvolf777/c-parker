@@ -35,6 +35,13 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
       plan: 'Orbit B',
       details: 'instant payout',
     },
+    {
+      time: '2min',
+      id: '#876',
+      event: 'joined',
+      plan: 'Orbit B',
+      details: 'instant payout',
+    },
   ];
 
   return (

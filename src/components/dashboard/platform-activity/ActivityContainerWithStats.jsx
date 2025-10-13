@@ -8,7 +8,7 @@ const ActivityContainerWithStats = () => {
   return (
     <>
       <div className="mt-5">
-        <h2 className="text-white text-[30px] font-bold mb-5">
+        <h2 className="text-[#0a0a0a] dark:text-white text-[30px] font-bold mb-5">
           Platform Activity
         </h2>
 

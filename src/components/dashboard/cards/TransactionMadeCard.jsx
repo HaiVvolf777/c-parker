@@ -2,12 +2,12 @@ import React from 'react';
 
 const TransactionMadeCard = () => {
   return (
-    <div className="bg-[#191932] rounded-[10px] p-[18px] mt-5 ">
+    <div className="bg-white/60 dark:bg-[#191932] rounded-[10px] p-[18px] mt-5 border-2 border-[#E5E7EB] dark:border-[#141429] ">
       <div>
-        <p className="text-white text-lg  ">Transaction Made (CCT)</p>
+        <p className="text-[#0a0a0a] dark:text-white text-lg  ">Transaction Made (CCT)</p>
 
         <div className="flex items-baseline-last gap-[6px] mt-[10px]">
-          <span className="text-white text-[34px] font-extrabold ">16,875</span>
+          <span className="text-[#0a0a0a] dark:text-white text-[34px] font-extrabold ">16,875</span>
 
           <div className="flex">
             <svg
@@ -28,12 +28,12 @@ const TransactionMadeCard = () => {
         </div>
       </div>
 
-      <hr className="text-[#141429] my-[10px]" />
+      <hr className="text-[#E5E7EB] dark:text-[#141429] my-[10px]" />
       <div>
-        <p className="text-white text-lg  ">Turnover (CCT)</p>
+        <p className="text-[#0a0a0a] dark:text-white text-lg  ">Turnover (CCT)</p>
 
         <div className="flex items-baseline-last gap-[6px] mt-[10px]">
-          <span className="text-white text-[34px] font-extrabold ">16,875</span>
+          <span className="text-[#0a0a0a] dark:text-white text-[34px] font-extrabold ">16,875</span>
 
           <div className="flex">
             <svg

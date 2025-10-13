@@ -3,9 +3,9 @@ import React from 'react';
 const TotalMembersCard = () => {
   return (
     <div className="bg-[#7D40FF] rounded-[10px] p-[18px] ">
-      <p className="text-white text-lg font-semibold ">Members Total</p>
+      <p className="text-white keep-white text-lg font-semibold ">Members Total</p>
       <div className="flex items-baseline-last gap-[6px] mt-[10px]">
-        <span className="text-white text-[34px] font-extrabold ">
+        <span className="text-white keep-white text-[34px] font-extrabold ">
           7,541,390
         </span>
 
