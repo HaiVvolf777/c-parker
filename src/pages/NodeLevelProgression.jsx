@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/dashboard/layout/Navbar';
 import Sidebar from '../components/dashboard/layout/Sidebar';
 import ActivityTableContainer from '../components/dashboard/platform-activity/ActivityTableContainer';
 import SliderLevelNode from '../components/dashboard/nodes/SliderLevelNode';
 
 const NodeLevelProgression = () => {
+  const [slideIndex, setSlideIndex] = useState(0);
+  const prevSlide = () => setSlideIndex((i) => (i + 2) % 3);
+  const nextSlide = () => setSlideIndex((i) => (i + 1) % 3);
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-[#00000e] transition-colors">
@@ -33,10 +36,8 @@ const NodeLevelProgression = () => {
                 <div className="flex items-center justify-between gap-12 ">
                   {/* controller left  */}
                   <div className="hidden lg:block w-[7%]">
-                    <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                    <div onClick={prevSlide} className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer">
+                      <img src="icons/arrow-left.svg" alt="" />
                     </div>
                   </div>
 
@@ -63,15 +64,15 @@ const NodeLevelProgression = () => {
                             </div>
                           </div>
 
-                          <div className="">
-                            <SliderLevelNode className="w-full" />
-                          </div>
+                           <div className="">
+                             <SliderLevelNode className="w-full" stage={slideIndex} />
+                           </div>
                         </div>
                         <div className="flex gap-[20px]">
                           {[1, 1, 1].map((item, index) => (
                             <div className="flex items-center gap-[10px]">
                               <img src="icons/user.svg" alt="" />
-                              <span className="text-white keep-white font-semibold">
+                              <span className="text-white font-semibold">
                                 4
                               </span>
                             </div>
@@ -79,16 +80,14 @@ const NodeLevelProgression = () => {
                         </div>
                       </div>
 
-                      {/* <div className="hidden lg:block relative w-[10%] h-full bg-gradient-to-r from-[#4B158E] to-[#150628] rounded-[10px] p-7"></div> */}
+                      <div className="hidden lg:block relative w-[10%] h-full bg-gradient-to-r from-[#4B158E] to-[#150628] rounded-[10px] p-7"></div>
                     </div>
                   </div>
 
                   {/* controller right  */}
                   <div className="hidden lg:block w-[7%]">
-                    <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
+                    <div onClick={nextSlide} className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer">
+                      <img src="icons/right.svg" alt="" />
                     </div>
                   </div>
                 </div>
@@ -97,18 +96,10 @@ const NodeLevelProgression = () => {
                 <div className="w-full lg:w-[80%] mx-auto">
                   <div className="w-full lg:w-[85%] mx-auto">
                     <div className="w-full mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-11 py-4 border border-gray-200 dark:border-[#141429]">
-                      <div className="flex items-center justify-between text-gray-800 dark:text-white">
-                        <span className="cursor-pointer hover:opacity-70 transition-opacity">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </span>
-                        <span>Cycle: 1</span>
-                        <span className="cursor-pointer hover:opacity-70 transition-opacity">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </span>
+                      <div className="flex items-center justify-between">
+                        <img onClick={prevSlide} src="icons/arrow-left.svg" alt="" className="cursor-pointer hover:opacity-70 transition-opacity" />
+                        <span className="text-gray-800 dark:text-white">Cycle: {slideIndex + 1}</span>
+                        <img onClick={nextSlide} src="icons/arrow-right.svg" alt="" className="cursor-pointer hover:opacity-70 transition-opacity" />
                       </div>
                     </div>
                   </div>
