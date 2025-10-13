@@ -38,14 +38,14 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
   ];
 
   return (
-    <div className={`mt-[60px] min-w-[700px] text-white ${className} `}>
-      <div className="border-2 border-[#141429] rounded-[10px] bg-[#0B0B1A4D] backdrop-blur-[30px] px-[44px]">
+    <div className={`mt-[60px] min-w-[700px] text-[#0a0a0a] dark:text-white ${className} `}>
+      <div className="border-2 border-[#E5E7EB] dark:border-[#141429] rounded-[10px] bg-white/60 dark:bg-[#0B0B1A4D] backdrop-blur-[30px] px-[44px]">
         <table className=" w-full">
           <thead>
             <tr
-              className={`*:pt-[44px] *:pb-[30px] border-b-1 border-[#141429] px-[42px] *:text-[#747474] *:font-[400] ${
+              className={`*:pt-[44px] *:pb-[30px] border-b-[1px] border-[#E5E7EB] dark:border-[#141429] px-[42px] *:font-[400] ${
                 isDashboard ? '*:text-[20px]' : '*:text-[24px]'
-              } `}
+              } *:text-[#6B7280] dark:*:text-[#9aa0a6]`}
             >
               <th></th>
               <th>Time</th>
@@ -61,9 +61,9 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
             {activityData.map((item, index) => (
               <tr
                 key={index}
-                className={`*:py-[30px] *px-4 border-b-1 border-[#141429] text-center  *:text-white ${
+                className={`*:py-[30px] *px-4 border-b-[1px] border-[#E5E7EB] dark:border-[#141429] text-center ${
                   isDashboard ? '*:text-[16px]' : '*:text-[24px]'
-                }`}
+                } hover:bg-[#F3F4F6] dark:hover:bg-[#0B0B1A] transition-colors`}
               >
                 <td>
                   <svg
@@ -81,7 +81,7 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
                       height="59"
                       rx="29.5"
                       fill="#01F1E3"
-                      fill-opacity="0.1"
+                      fillOpacity="0.1"
                     />
                     <path
                       d="M41.733 28.7883C41.4356 28.7883 41.1505 28.6702 40.9402 28.4599C40.73 28.2497 40.6119 27.9645 40.6119 27.6672V24.4383C40.6539 23.8029 40.4441 23.1766 40.0278 22.6948C39.6115 22.213 39.0222 21.9146 38.3875 21.8641H18.9872C18.6899 21.8641 18.4047 21.746 18.1945 21.5357C17.9842 21.3255 17.8661 21.0403 17.8661 20.743C17.8661 20.4456 17.9842 20.1605 18.1945 19.9502C18.4047 19.7399 18.6899 19.6218 18.9872 19.6218H38.3875C39.6191 19.6663 40.7829 20.1973 41.6236 21.0985C42.4643 21.9997 42.9132 23.1975 42.8721 24.4293V27.6582C42.8733 27.8077 42.8446 27.9559 42.7877 28.0942C42.7307 28.2324 42.6467 28.3579 42.5406 28.4632C42.4345 28.5685 42.3083 28.6515 42.1696 28.7073C42.0309 28.7632 41.8825 28.7907 41.733 28.7883Z"
@@ -104,7 +104,7 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
                 <td>{item.time}</td>
                 <td>
                   <span
-                    className={`text-white bg-[#00000D] px-[35px] py-2 rounded-[40px] ${
+                    className={`bg-[#F3F4F6] text-[#0a0a0a] dark:bg-[#00000D] dark:text-white px-[35px] py-2 rounded-[40px] ${
                       isDashboard ? '*:text-[16px]' : '*:text-[24px]'
                     }`}
                   >
@@ -124,7 +124,7 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
                     </span>
                   </span>
                 </td>
-                <td>earned 250 CCT</td>
+                <td className="text-[#0a0a0a] dark:text-white">earned 250 CCT</td>
                 <td>
                   <svg
                     className="mx-auto cursor-pointer"
