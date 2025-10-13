@@ -9,6 +9,7 @@ import AllNodes from './pages/AllNodes';
 import NodeLevelProgression from './pages/NodeLevelProgression';
 import OrbitLevelProgression from './pages/OrbitLevelProgression';
 import NotFound from './pages/NotFound';
+import Orbitb from './components/dashboard/Orbitb';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/dashboard/node-level-progression" element={<NodeLevelProgression />} />
         <Route path="/dashboard/all-nodes-b" element={<AllNodesB />} />
         <Route path="/dashboard/orbit-level-progression" element={<OrbitLevelProgression />} />
+        {/* <Route path="/dashboard/all-nodes" element={<Orbitb />} /> */}
         <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
