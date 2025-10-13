@@ -12,14 +12,14 @@ const UpdatesCard = ({ className }) => {
           backgroundRepeat: 'no-repeat, no-repeat',
         }}
       >
-        <div className="flex flex-col justify-between h-full text-[#0a0a0a] dark:text-white">
+        <div className="flex flex-col justify-between h-full text-white keep-white">
           <div>
             <div>
               <img src="svgs/i.svg" alt="" />
             </div>
             <div className="my-4">
-              <p className="text-lg text-[#0a0a0a] dark:text-white font-semibold ">Updates</p>
-              <p className="text-sm text-[#0a0a0a] dark:text-white mt-4 ">
+              <p className="text-lg text-white keep-white font-semibold ">Updates</p>
+              <p className="text-sm text-white keep-white mt-4 ">
                 System upgrade scheduled for tomorrow
               </p>
             </div>
