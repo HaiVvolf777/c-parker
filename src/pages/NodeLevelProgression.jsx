@@ -72,11 +72,15 @@ const NodeLevelProgression = () => {
                            </div>
                         </div>
                         <div className="flex gap-[20px]">
-                          {[1, 1, 1].map((item, index) => (
-                            <div className="flex items-center gap-[10px]">
-                              <img src="/icons/user.svg" alt="" />
+                          {[
+                            { icon: '/icons/user.svg', text: '4' },
+                            { icon: '/icons/team.svg', text: '12' },
+                            { icon: '/icons/crown.svg', text: '1' }
+                          ].map((item, index) => (
+                            <div key={index} className="flex items-center gap-[10px]">
+                              <img src={item.icon} alt="" />
                               <span className="text-white keep-white font-semibold">
-                                4
+                                {item.text}
                               </span>
                             </div>
                           ))}
