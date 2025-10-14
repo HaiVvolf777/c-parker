@@ -226,8 +226,8 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
             y2="51.9336"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#5DE6E0" />
-            <stop offset="1" stop-color="#018B83" />
+            <stop stop-color="#01F1E3" />
+            <stop offset="1" stop-color="#7D40FF" />
           </linearGradient>
         </defs>
       </svg>
