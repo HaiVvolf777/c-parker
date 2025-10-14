@@ -10,7 +10,7 @@ import NodeLevelProgression from './pages/NodeLevelProgression';
 import OrbitLevelProgression from './pages/OrbitLevelProgression';
 import NotFound from './pages/NotFound';
 import OrbitBLevelProgression from './pages/OrbitBLevelProgression';
-
+import NodeLevelProgressionB from './pages/NodeLevelProgressionB';
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +22,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         {/* <Route path="/dashboard/all-nodes" element={<AllNodes />} /> */}
         <Route path="/dashboard/node-level-progression" element={<NodeLevelProgression />} />
+        <Route path="/dashboard/node-level-progression-b" element={<NodeLevelProgressionB />} />
         <Route path="/dashboard/all-nodes-b" element={<AllNodesB />} />
         <Route path="/dashboard/orbit-level-progression" element={<OrbitLevelProgression />} />
         <Route path="/dashboard/orbit-b-level-progression" element={<OrbitBLevelProgression />} />
