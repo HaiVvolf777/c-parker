@@ -78,7 +78,7 @@ const NodeLevelProgression = () => {
                             { icon: '/svgs/layer.svg', text: '5 CCT' }
                           ].map((item, index) => (
                             <div key={index} className="flex items-center gap-[10px]">
-                              <div className="w-10 h-10 rounded-full border-2 border-gray-300 bg-gray-100 dark:bg-[#0B0B1A4D] dark:border-[#141429] flex items-center justify-center">
+                              <div className="w-10 h-10 rounded-full border-2 dark:bg-[#0B0B1A4D] dark:border-[#141429] flex items-center justify-center">
                                 <img src={item.icon} alt="" className="w-5 h-5" />
                               </div>
                               <span className="text-white keep-white font-semibold">
