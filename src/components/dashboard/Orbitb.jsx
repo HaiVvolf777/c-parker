@@ -1,7 +1,8 @@
-const Orbitb = () => {
+const Orbitb = ({ className }) => {
   return (
-    <div>
+    <div className={`w-[100%] ${className}`}>
       <svg
+        className="w-[100%] h-fit"
         width="954"
         height="829"
         viewBox="0 0 954 829"
