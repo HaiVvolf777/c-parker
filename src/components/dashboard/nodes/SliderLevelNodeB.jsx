@@ -47,10 +47,17 @@ const SliderLevelNodeB = ({ className, stage = 0 }) => {
           rx="10"
           fill={stage === 1 ? 'url(#paintStage1_box_B)' : 'url(#paint1_linear_886_471)'}
         />
-        <path
-          d="M326.5 61C330.488 61 333.75 57.8499 333.75 54C333.75 50.1501 330.488 47 326.5 47C322.512 47 319.25 50.1501 319.25 54C319.25 57.8499 322.512 61 326.5 61ZM326.5 64.5C321.697 64.5 312 66.8626 312 71.5V75H341V71.5C341 66.8626 331.303 64.5 326.5 64.5Z"
-          fill="#200F46"
-        />
+        {stage === 1 && (
+          <text x="300" y="66" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
+            ID 4567
+          </text>
+        )}
+        {stage !== 1 && (
+          <path
+            d="M326.5 61C330.488 61 333.75 57.8499 333.75 54C333.75 50.1501 330.488 47 326.5 47C322.512 47 319.25 50.1501 319.25 54C319.25 57.8499 322.512 61 326.5 61ZM326.5 64.5C321.697 64.5 312 66.8626 312 71.5V75H341V71.5C341 66.8626 331.303 64.5 326.5 64.5Z"
+            fill="#200F46"
+          />
+        )}
         <rect
           x="265.231"
           y="160"
@@ -130,12 +137,19 @@ const SliderLevelNodeB = ({ className, stage = 0 }) => {
           width="78.5081"
           height="52"
           rx="10"
-          fill="url(#paint4_linear_886_471)"
+          fill={stage === 1 ? 'url(#paintStage1_box_B)' : 'url(#paint4_linear_886_471)'}
         />
-        <path
-          d="M476.746 99C480.733 99 483.996 95.8499 483.996 92C483.996 88.1501 480.733 85 476.746 85C472.758 85 469.496 88.1501 469.496 92C469.496 95.8499 472.758 99 476.746 99ZM476.746 102.5C471.943 102.5 462.246 104.863 462.246 109.5V113H491.246V109.5C491.246 104.863 481.549 102.5 476.746 102.5Z"
-          fill="#200F46"
-        />
+        {stage === 2 && (
+          <text x="460" y="107" fill="#FFFFFF" fontSize="12" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
+            ID 6485
+          </text>
+        )}
+        {stage !== 2 && (
+          <path
+            d="M476.746 99C480.733 99 483.996 95.8499 483.996 92C483.996 88.1501 480.733 85 476.746 85C472.758 85 469.496 88.1501 469.496 92C469.496 95.8499 472.758 99 476.746 99ZM476.746 102.5C471.943 102.5 462.246 104.863 462.246 109.5V113H491.246V109.5C491.246 104.863 481.549 102.5 476.746 102.5Z"
+            fill="#200F46"
+          />
+        )}
         {/* node: level box (first line - right, top row) */}
         <rect
           x="437.492"
@@ -144,10 +158,17 @@ const SliderLevelNodeB = ({ className, stage = 0 }) => {
           rx="10"
           fill={stage === 1 ? "url(#paintStage1_box_B)" : 'url(#paint6_linear_886_471)'}
         />
-        <path
-          d="M476.746 26C480.733 26 483.996 22.8499 483.996 19C483.996 15.1501 480.733 12 476.746 12C472.758 12 469.496 15.1501 469.496 19C469.496 22.8499 472.758 26 476.746 26ZM476.746 29.5C471.943 29.5 462.246 31.8626 462.246 36.5V40H491.246V36.5C491.246 31.8626 481.549 29.5 476.746 29.5Z"
-          fill="#200F46"
-        />
+        {stage === 1 && (
+          <text x="460" y="34" fill="#FFFFFF" fontSize="12" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
+            ID 1023
+          </text>
+        )}
+        {stage !== 1 && (
+          <path
+            d="M476.746 26C480.733 26 483.996 22.8499 483.996 19C483.996 15.1501 480.733 12 476.746 12C472.758 12 469.496 15.1501 469.496 19C469.496 22.8499 472.758 26 476.746 26ZM476.746 29.5C471.943 29.5 462.246 31.8626 462.246 36.5V40H491.246V36.5C491.246 31.8626 481.549 29.5 476.746 29.5Z"
+            fill="#200F46"
+          />
+        )}
         <defs>
           <pattern
             id="pattern0_886_471"
