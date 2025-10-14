@@ -96,6 +96,8 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
               ID 6485
             </text>
           )}
+          {stage === 1 && (
+          <image x="339" y="76" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
           {stage === 0 && (
           <image x="339" y="76" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
         </>
@@ -117,6 +119,8 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
               ID 3648
             </text>
           )}
+          {stage === 1 && (
+          <image x="339" y="140" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
           {stage === 0 && (
           <image x="339" y="140" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
         </>
@@ -138,6 +142,8 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
               ID 9283
             </text>
           )}
+          {stage === 1 && (
+          <image x="339" y="204" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
           {stage === 0 && (
           <image x="339" y="204" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
         </>
