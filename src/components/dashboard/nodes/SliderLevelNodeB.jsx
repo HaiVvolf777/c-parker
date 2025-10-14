@@ -66,10 +66,17 @@ const SliderLevelNodeB = ({ className, stage = 0 }) => {
           rx="10"
           fill={stage === 1 ? 'url(#paintStage1_box_B)' : 'url(#paint1_linear_886_471)'}
         />
-        <path
-          d="M326.731 194C330.719 194 333.981 190.85 333.981 187C333.981 183.15 330.719 180 326.731 180C322.744 180 319.481 183.15 319.481 187C319.481 190.85 322.744 194 326.731 194ZM326.731 197.5C321.928 197.5 312.231 199.863 312.231 204.5V208H341.231V204.5C341.231 199.863 331.534 197.5 326.731 197.5Z"
-          fill="#200F46"
-        />
+        {stage === 1 && (
+          <text x="300" y="199" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
+            ID 7891
+          </text>
+        )}
+        {stage !== 1 && stage !== 2 && (
+          <path
+            d="M326.731 194C330.719 194 333.981 190.85 333.981 187C333.981 183.15 330.719 180 326.731 180C322.744 180 319.481 183.15 319.481 187C319.481 190.85 322.744 194 326.731 194ZM326.731 197.5C321.928 197.5 312.231 199.863 312.231 204.5V208H341.231V204.5C341.231 199.863 331.534 197.5 326.731 197.5Z"
+            fill="#200F46"
+          />
+        )}
         {/* nodeline */}
         <path
           d="M265.947 62C224.509 62 241.739 127.614 200.443 127.614"
@@ -137,7 +144,7 @@ const SliderLevelNodeB = ({ className, stage = 0 }) => {
           width="78.5081"
           height="52"
           rx="10"
-          fill={stage === 1 ? 'url(#paintStage1_box_B)' : 'url(#paint4_linear_886_471)'}
+          fill={stage === 2 ? 'url(#paintStage1_box_B)' : 'url(#paint4_linear_886_471)'}
         />
         {stage === 2 && (
           <text x="460" y="107" fill="#FFFFFF" fontSize="12" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
