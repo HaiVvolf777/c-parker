@@ -36,12 +36,23 @@ const Sidebar = () => {
       )
     },
     {
-      name: 'Orbit Level Progression',
+      name: 'Orbit A Level Progression',
       path: '/dashboard/orbit-level-progression',
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="12" r="10" fill="none" stroke="#6F23D5" strokeWidth="2"/>
           <path d="M12 6V12L16 14" stroke="#6F23D5" strokeWidth="2"/>
+        </svg>
+      )
+    }
+    ,
+    {
+      name: 'Orbit B Level Progression',
+      path: '/dashboard/orbit-b-level-progression',
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="#6F23D5" strokeWidth="2"/>
+          <path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12" stroke="#6F23D5" strokeWidth="2"/>
         </svg>
       )
     }
