@@ -51,7 +51,7 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           {/* Node Line 1 */}
           <path
             d="M307 34.25C239.943 34.25 267.826 111.25 201 111.25"
-            stroke="url(#paint2_linear_423_69)"
+            stroke={stage === 0 ? '#9CA3AF' : 'url(#paint2_linear_423_69)'}
             stroke-opacity="0.7"
             stroke-width="11.11"
           />
@@ -84,7 +84,7 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           {/* Node line 2 */}
           <path
             d="M307 85.25C239.943 85.25 267.826 117.25 201 117.25"
-            stroke="url(#paint1_linear_423_69)"
+            stroke={stage === 0 || stage === 1 ? '#9CA3AF' : 'url(#paint1_linear_423_69)'}
             stroke-opacity="0.7"
             stroke-width="11.11"
           />
@@ -105,7 +105,7 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           {/* Node Line 3 */}
           <path
             d="M201 129.25C272.102 129.25 234.814 163.25 308 163.25"
-            stroke="url(#paint4_linear_423_69)"
+            stroke={stage === 0 || stage === 1 ? '#9CA3AF' : 'url(#paint4_linear_423_69)'}
             stroke-opacity="0.7"
             stroke-width="11.11"
           />
@@ -126,7 +126,7 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           {/* Node Line 4 */}
           <path
             d="M307 212.25C239.943 212.25 267.826 136.25 201 136.25"
-            stroke="url(#paint3_linear_423_69)"
+            stroke={stage === 0 || stage === 1 ? '#9CA3AF' : 'url(#paint3_linear_423_69)'}
             stroke-opacity="0.7"
             stroke-width="11.11"
           />
