@@ -105,8 +105,7 @@ const NodeLevelProgression = () => {
                 </div>
 
                 {/* controller bar  */}
-                <div className="w-full lg:w-[80%] mx-auto">
-                  <div className="w-full lg:w-[85%] mx-auto">
+                <div className="w-[70%] sm:w-[80%] lg:w-[86%] mx-auto">
                       <div className="w-full mt-6 md:mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-6 md:px-11 py-3 md:py-4 border border-gray-200 dark:border-[#141429]">
                       <div className="flex items-center justify-between text-gray-800 dark:text-white">
                         <button onClick={prevSlide} type="button" aria-label="Previous" className="hover:opacity-80 p-2 touch-manipulation">
@@ -122,7 +121,6 @@ const NodeLevelProgression = () => {
                         </button>
                       </div>
                     </div>
-                  </div>
                 </div>
               </div>
             </div>
