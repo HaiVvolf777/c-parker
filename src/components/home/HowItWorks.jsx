@@ -9,7 +9,7 @@ const HowItWorks = () => {
 
   return (
     <div className="mt-[100px] md:mt-[150px] relative">
-      <div className="container mx-auto px-6 relative">
+      <div className="container mx-auto px-6 relative z-10">
         <h2 className="text-white font-bold text-[28px] md:text-[40px] text-center">How It Works</h2>
         <div className="relative flex flex-col items-center justify-center">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[16px] sm:gap-[20px] md:gap-[30px] mx-auto mt-[40px] md:mt-[60px] z-10 w-full max-w-[1024px]">
