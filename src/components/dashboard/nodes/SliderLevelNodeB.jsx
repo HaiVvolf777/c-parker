@@ -2,15 +2,14 @@ import React from 'react';
 
 const SliderLevelNodeB = ({ className, stage = 0 }) => {
   return (
-    <div>
+    <div className={`${className}`}>
       <svg
-        className={`${className}`}
-        width="516"
-        height="255"
+        className="w-full h-auto max-w-full lg:max-w-none"
         viewBox="0 0 516 255"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
+        preserveAspectRatio="xMidYMid meet"
       >
         <rect
           y="59"
