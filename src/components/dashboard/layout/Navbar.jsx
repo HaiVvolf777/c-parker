@@ -5,14 +5,14 @@ const Navbar = () => {
     <>
       <div className="w-full p-5 h-[83px] bg-white dark:bg-[#00000E] border-b border-gray-200 dark:border-[#141429]">
         <div className="flex items-center justify-between ">
-          <div>
+          <div className='cursor-pointer max-xl:hidden'>
             {/* Light mode logo */}
             <a href="/"><img src="/images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" /></a>
             {/* Dark mode logo */}
             <a href="/"><img src="/images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" /></a>
           </div>
 
-          <div className="hidden md:flex items-center gap-[10px]">
+          <div className="hidden xl:flex items-center gap-[10px]">
             <span className="text-gray-800 dark:text-white text-[20px] font-semibold ">
               Preview ID
             </span>
