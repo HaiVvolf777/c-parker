@@ -19,6 +19,7 @@ const ParkerPool = () => {
       </div>
       <div className="container mx-auto px-6 relative z-10">
         <div 
+          ref={containerRef}
           className={`w-full md:w-[70%] xl:w-[60%] 2xl:w-[50%] mx-auto border-2 border-gray-200 dark:border-[#141429] rounded-[10px] bg-white dark:bg-[#0B0B1A4D] backdrop-blur-[100px] px-[24px] md:px-[100px] py-[40px] md:py-[54px] relative overflow-hidden animate-fade-in-up hover:scale-105 transition-all duration-500 ${isContainerVisible ? 'animate' : ''}`}
         >
           <h2 
