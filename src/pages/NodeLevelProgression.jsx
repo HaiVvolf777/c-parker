@@ -71,17 +71,17 @@ const NodeLevelProgression = () => {
                              <SliderLevelNode className="w-full" stage={slideIndex} />
                            </div>
                         </div>
-                        <div className="flex gap-[20px]">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-[20px]">
                           {[
                             { icon: '/svgs/two.svg', text: '4' },
                             { icon: '/svgs/recycle.svg', text: '1' },
                             { icon: '/svgs/layer.svg', text: '5 CCT' }
                           ].map((item, index) => (
-                            <div key={index} className="flex items-center gap-[10px]">
-                              <div className="w-10 h-10 rounded-full border-2 dark:bg-[#0B0B1A4D] dark:border-[#141429] flex items-center justify-center">
-                                <img src={item.icon} alt="" className="w-5 h-5" />
+                            <div key={index} className="flex items-center gap-2 sm:gap-[10px]">
+                              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 dark:bg-[#0B0B1A4D] dark:border-[#141429] flex items-center justify-center">
+                                <img src={item.icon} alt="" className="w-4 h-4 sm:w-5 sm:h-5" />
                               </div>
-                              <span className="text-white keep-white font-semibold">
+                              <span className="text-white keep-white font-semibold text-sm sm:text-base">
                                 {item.text}
                               </span>
                             </div>

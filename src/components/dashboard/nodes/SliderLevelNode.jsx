@@ -2,9 +2,9 @@ import React from 'react';
 
 const SliderLevelNode = ({ className, stage = 0 }) => {
   return (
-    <div className={`${className} w-full`}>
+    <div className={`${className}`}>
       <svg
-        className="w-full h-auto max-w-full"
+        className="w-full h-auto max-w-full lg:max-w-none"
         viewBox="0 0 405 244"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
