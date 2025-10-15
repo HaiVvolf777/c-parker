@@ -89,7 +89,7 @@ const NodeLevelProgression = () => {
                         </div>
                       </div>
 
-                      <div className="hidden lg:block relative w-[10%] h-full bg-gradient-to-r from-[#4B158E] to-[#150628] rounded-[10px] p-7"></div>
+                      {/* <div className="hidden lg:block relative w-[10%] h-full bg-gradient-to-r from-[#4B158E] to-[#150628] rounded-[10px] p-7"></div> */}
                     </div>
                   </div>
 
