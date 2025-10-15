@@ -33,22 +33,22 @@ const NodeLevelProgression = () => {
             {/* Level Carousal  */}
             <div className="w-full mt-5">
               <div className="w-full xl:w-[80%] mx-auto">
-                <div className="flex items-center justify-between gap-12 ">
+                <div className="flex items-center justify-between gap-4 md:gap-8 lg:gap-12">
                   {/* controller left  */}
-                  <div className="w-[7%]">
+                  <div className="w-[15%] sm:w-[10%] lg:w-[7%]">
                     <button onClick={prevSlide} type="button" aria-label="Previous"
-                      className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white touch-manipulation">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </button>
                   </div>
 
                   {/* Slides container  */}
-                  <div className="w-full lg:w-[86%] relative">
+                  <div className="w-[70%] sm:w-[80%] lg:w-[86%] relative">
                     <div className="flex items-center gap-5 lg:gap-8 overflow-hidden">
                       {/* slide  */}
-                      <div className="w-full lg:w-[90%] bg-gradient-to-r from-[#4B158E] to-[#150628] rounded-[10px] p-7">
+                      <div className="w-full lg:w-[90%] bg-gradient-to-r from-[#4B158E] to-[#150628] rounded-[10px] p-4 md:p-7">
                         <div className="flex flex-col gap-0">
                           <div className="flex justify-between">
                             <div className="">
@@ -67,7 +67,7 @@ const NodeLevelProgression = () => {
                             </div>
                           </div>
 
-                           <div className="">
+                           <div className="w-full overflow-hidden">
                              <SliderLevelNode className="w-full" stage={slideIndex} />
                            </div>
                         </div>
@@ -94,10 +94,10 @@ const NodeLevelProgression = () => {
                   </div>
 
                   {/* controller right  */}
-                  <div className="w-[7%]">
+                  <div className="w-[15%] sm:w-[10%] lg:w-[7%]">
                     <button onClick={nextSlide} type="button" aria-label="Next"
-                      className="w-16 h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white touch-manipulation">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </button>
@@ -107,16 +107,16 @@ const NodeLevelProgression = () => {
                 {/* controller bar  */}
                 <div className="w-full lg:w-[80%] mx-auto">
                   <div className="w-full lg:w-[85%] mx-auto">
-                      <div className="w-full mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-11 py-4 border border-gray-200 dark:border-[#141429]">
+                      <div className="w-full mt-6 md:mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-6 md:px-11 py-3 md:py-4 border border-gray-200 dark:border-[#141429]">
                       <div className="flex items-center justify-between text-gray-800 dark:text-white">
-                        <button onClick={prevSlide} type="button" aria-label="Previous" className="hover:opacity-80">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <button onClick={prevSlide} type="button" aria-label="Previous" className="hover:opacity-80 p-2 touch-manipulation">
+                          <svg className="w-4 h-4 md:w-3.5 md:h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </button>
-                        <span>Cycle: {slideIndex + 1}</span>
-                        <button onClick={nextSlide} type="button" aria-label="Next" className="hover:opacity-80">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <span className="text-sm md:text-base font-medium">Cycle: {slideIndex + 1}</span>
+                        <button onClick={nextSlide} type="button" aria-label="Next" className="hover:opacity-80 p-2 touch-manipulation">
+                          <svg className="w-4 h-4 md:w-3.5 md:h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </button>

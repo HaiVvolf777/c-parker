@@ -2,15 +2,14 @@ import React from 'react';
 
 const SliderLevelNode = ({ className, stage = 0 }) => {
   return (
-    <div>
+    <div className={`${className} w-full`}>
       <svg
-        className={`${className}`}
-        width="405"
-        height="244"
+        className="w-full h-auto max-w-full"
         viewBox="0 0 405 244"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
+        preserveAspectRatio="xMidYMid meet"
       >
         {/* Certral Box Level  */}
         <>
