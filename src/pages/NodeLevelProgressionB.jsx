@@ -4,11 +4,17 @@ import Sidebar from '../components/dashboard/layout/Sidebar';
 import ActivityTableContainer from '../components/dashboard/platform-activity/ActivityTableContainer';
 import SliderLevelNode from '../components/dashboard/nodes/SliderLevelNode';
 import SliderLevelNodeB from '../components/dashboard/nodes/SliderLevelNodeB';
+import useScrollAnimation from '../hooks/useScrollAnimation';
 
 const NodeLevelProgression = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const prevSlide = () => setSlideIndex((i) => (i + 2) % 3);
   const nextSlide = () => setSlideIndex((i) => (i + 1) % 3);
+
+  // Scroll animation hooks
+  const [overviewRef, isOverviewVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [carouselRef, isCarouselVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [activityRef, isActivityVisible] = useScrollAnimation({ threshold: 0.1 });
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-[#00000e] transition-colors">
@@ -17,28 +23,35 @@ const NodeLevelProgression = () => {
           <Sidebar />
           <div className="min-h-screen py-8 px-10 w-full bg-white dark:bg-[#00000e] transition-colors">
             {/* overview  */}
-            <div className="flex items-start justify-between">
+            <div 
+              ref={overviewRef}
+              className={`flex items-start justify-between animate-fade-in-up ${isOverviewVisible ? 'animate' : ''}`}
+            >
               <div>
                 <p className="text-gray-600 dark:text-[#747474] text-[20px] font-bold mt-[10px]">
-                  <span className="text-[#F0B90B]">ID 1297</span> | 1 out of 12
+                  <span className="text-[#F0B90B] animate-pulse-slow">ID 1297</span> | 1 out of 12
                   levels
                 </p>
               </div>
               <div className="">
-                <button className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-colors">
+                <button className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300">
                   10 CCT
                 </button>
               </div>
             </div>
 
             {/* Level Carousal  */}
-            <div className="w-full mt-5">
+            <div 
+              ref={carouselRef}
+              className={`w-full mt-5 animate-fade-in-up ${isCarouselVisible ? 'animate' : ''}`}
+              style={{ transitionDelay: '200ms' }}
+            >
               <div className="w-full xl:w-[80%] mx-auto">
                 <div className="flex items-center justify-between gap-4 md:gap-8 lg:gap-12">
                   {/* controller left  */}
                   <div className="w-[15%] sm:w-[10%] lg:w-[7%]">
                     <button onClick={prevSlide} type="button" aria-label="Previous"
-                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white touch-manipulation">
+                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] hover:scale-110 transition-all duration-300 cursor-pointer text-gray-800 dark:text-white touch-manipulation">
                       <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -97,7 +110,7 @@ const NodeLevelProgression = () => {
                   {/* controller right  */}
                   <div className="w-[15%] sm:w-[10%] lg:w-[7%]">
                     <button onClick={nextSlide} type="button" aria-label="Next"
-                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] transition-colors cursor-pointer text-gray-800 dark:text-white touch-manipulation">
+                      className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 hover:bg-gray-200 dark:hover:bg-[#1a1a2e] hover:scale-110 transition-all duration-300 cursor-pointer text-gray-800 dark:text-white touch-manipulation">
                       <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-4 lg:h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -127,7 +140,11 @@ const NodeLevelProgression = () => {
             </div>
 
             {/* Platform Activity  */}
-            <div className="">
+            <div 
+              ref={activityRef}
+              className={`animate-fade-in-up ${isActivityVisible ? 'animate' : ''}`}
+              style={{ transitionDelay: '400ms' }}
+            >
               <h2 className="text-gray-800 dark:text-white text-[30px] font-bold mb-5">
                 Platform Activity
               </h2>
