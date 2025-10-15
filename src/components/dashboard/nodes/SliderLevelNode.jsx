@@ -1,15 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const SliderLevelNode = ({ className, stage = 0 }) => {
+  const [prevStage, setPrevStage] = useState(stage);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    if (stage !== prevStage) {
+      setIsTransitioning(true);
+      const timer = setTimeout(() => {
+        setIsTransitioning(false);
+        setPrevStage(stage);
+      }, 300); // Match transition duration
+      return () => clearTimeout(timer);
+    }
+  }, [stage, prevStage]);
+
   return (
-    <div className={`${className}`}>
+    <div className={`${className} relative`}>
       <svg
-        className="w-full h-auto max-w-full lg:max-w-none"
+        className="w-full h-auto max-w-full lg:max-w-none transition-all duration-300"
         viewBox="0 0 405 244"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
         preserveAspectRatio="xMidYMid meet"
+        style={{
+          transform: isTransitioning ? 'scale(1.02)' : 'scale(1)',
+          filter: isTransitioning ? 'brightness(1.1)' : 'brightness(1)'
+        }}
       >
         {/* Certral Box Level  */}
         <>
@@ -51,8 +69,13 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           <path
             d="M307 34.25C239.943 34.25 267.826 111.25 201 111.25"
             stroke={stage === 0 ? '#9CA3AF' : 'url(#paint2_linear_423_69)'}
-            stroke-opacity="0.7"
-            stroke-width="11.11"
+            strokeOpacity="0.7"
+            strokeWidth="11.11"
+            style={{
+              transition: 'stroke 0.3s ease-in-out, stroke-opacity 0.3s ease-in-out',
+              strokeDasharray: isTransitioning ? '5,5' : 'none',
+              animation: isTransitioning ? 'pulse-glow 0.3s ease-in-out' : 'none'
+            }}
           />
 
           {/* ID 1  */}
@@ -62,14 +85,53 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
             height="52"
             rx="10"
             fill={stage >= 1 ? 'url(#paint5_linear_423_69)' : '#322661'}
+            style={{
+              transition: 'fill 0.3s ease-in-out, transform 0.3s ease-in-out',
+              transform: stage >= 1 && isTransitioning ? 'scale(1.05)' : 'scale(1)',
+              filter: stage >= 1 && isTransitioning ? 'drop-shadow(0 0 8px rgba(125, 64, 255, 0.5))' : 'none'
+            }}
           />
           {stage === 1 && (
-            <text x="332" y="34" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
+            <text 
+              x="332" 
+              y="34" 
+              fill="#FFFFFF" 
+              fontSize="14" 
+              fontFamily="Inter, sans-serif" 
+              fontWeight="700" 
+              stroke="#000000" 
+              strokeOpacity="0.35" 
+              strokeWidth="1" 
+              style={{ 
+                paintOrder: 'stroke',
+                animation: isTransitioning ? 'fade-in-scale 0.3s ease-in-out' : 'none',
+                opacity: isTransitioning ? 0 : 1,
+                transition: 'opacity 0.3s ease-in-out'
+              }} 
+              pointerEvents="none"
+            >
               ID 4567
             </text>
           )}
           {stage === 2 && (
-            <text x="332" y="34" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
+            <text 
+              x="332" 
+              y="34" 
+              fill="#FFFFFF" 
+              fontSize="14" 
+              fontFamily="Inter, sans-serif" 
+              fontWeight="700" 
+              stroke="#000000" 
+              strokeOpacity="0.35" 
+              strokeWidth="1" 
+              style={{ 
+                paintOrder: 'stroke',
+                animation: isTransitioning ? 'fade-in-scale 0.3s ease-in-out' : 'none',
+                opacity: isTransitioning ? 0 : 1,
+                transition: 'opacity 0.3s ease-in-out'
+              }} 
+              pointerEvents="none"
+            >
               ID 4567
             </text>
           )}
