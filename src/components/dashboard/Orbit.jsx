@@ -1,8 +1,13 @@
+import React from 'react';
+import useScrollAnimation from '../../hooks/useScrollAnimation';
+
 const Orbit = ({ className }) => {
+  const [orbitRef, isOrbitVisible] = useScrollAnimation({ threshold: 0.1 });
+  
   return (
-    <div className={`w-[100%] ${className}`}>
+    <div ref={orbitRef} className={`w-[100%] animate-fade-in-up ${isOrbitVisible ? 'animate' : ''} ${className}`}>
       <svg
-        className="w-[100%] h-fit"
+        className="w-[100%] h-fit hover:scale-105 transition-transform duration-500"
         width="954"
         height="829"
         viewBox="0 0 954 829"
@@ -15,6 +20,7 @@ const Orbit = ({ className }) => {
           stroke="#3A126F"
           stroke-width="14.58"
           stroke-dasharray="0.64 6.42"
+          className="animate-pulse-slow"
         />
 
         {/* ID  */}
