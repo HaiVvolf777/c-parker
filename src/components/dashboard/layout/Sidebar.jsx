@@ -16,6 +16,17 @@ const Sidebar = () => {
         </svg>
       )
     },
+    {
+      name: 'Purchase Access',
+      path: '/purchase',
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 6H18V8H6V6Z" fill="#6F23D5" />
+          <path d="M6 10H18V12H6V10Z" fill="#6F23D5" />
+          <path d="M6 14H14V16H6V14Z" fill="#6F23D5" />
+        </svg>
+      )
+    },
     // {
     //   name: 'All Nodes',
     //   path: '/dashboard/all-nodes',

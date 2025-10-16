@@ -6,8 +6,9 @@ import TotalMembersCard from '../components/dashboard/cards/TotalMembersCard';
 import EarningGraphCard from '../components/dashboard/orbit/EarningGraphCard';
 import TotalEarningCard from '../components/dashboard/orbit/TotalEarningCard';
 import useScrollAnimation from '../hooks/useScrollAnimation';
+import withProgressGuard from '../components/dashboard/nodes/withProgressGuard.jsx'
 
-const OrbitBLevelProgression = () => {
+const OrbitBLevelProgressionBase = () => {
   const [overviewRef, isOverviewVisible] = useScrollAnimation({ threshold: 0.1 });
   const [orbitRef, isOrbitVisible] = useScrollAnimation({ threshold: 0.1 });
   const [statsRef, isStatsVisible] = useScrollAnimation({ threshold: 0.1 });
@@ -57,6 +58,8 @@ const OrbitBLevelProgression = () => {
     </>
   );
 };
+
+const OrbitBLevelProgression = withProgressGuard(OrbitBLevelProgressionBase)
 
 export default OrbitBLevelProgression;
 
