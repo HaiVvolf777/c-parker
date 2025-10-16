@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useProgress } from '../../../context/ProgressContext.jsx'
 
-const SliderLevelNode = ({ className, stage = 0 }) => {
+const SliderLevelNode = ({ className, stage = 0, flowKey = 'nodeA' }) => {
   const [prevStage, setPrevStage] = useState(stage);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const { purchased, unlockedLevels } = useProgress();
+  const isLocked = !purchased || (unlockedLevels?.[flowKey] ?? 0) < 1;
 
   useEffect(() => {
     if (stage !== prevStage) {
@@ -36,30 +39,30 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
             width="201"
             height="138"
             rx="10"
-            fill="url(#paint0_linear_423_69)"
+            fill={isLocked ? '#1f1536' : 'url(#paint0_linear_423_69)'}
           />
           {/* level Name  */}
           <path
             d="M83.043 91V77H85.443V89.12H91.683V91H83.043ZM95.4887 91L91.7687 80.92H94.2887L96.9487 88.72L99.6087 80.92H102.089L98.3687 91H95.4887ZM103.803 91V76.6H106.203V91H103.803ZM115.524 91V79.74L113.044 80.38V78.52L116.484 77H117.984V91H115.524Z"
-            fill="white"
+            fill={isLocked ? '#9CA3AF' : 'white'}
           />
           {/* ID  */}
           <path
             d="M78.5458 116V106.2H80.2258V116H78.5458ZM82.1961 116V106.2H85.3601C86.4988 106.2 87.4368 106.401 88.1741 106.802C88.9208 107.203 89.4715 107.773 89.8261 108.51C90.1901 109.238 90.3721 110.106 90.3721 111.114C90.3721 112.103 90.1901 112.967 89.8261 113.704C89.4715 114.432 88.9208 114.997 88.1741 115.398C87.4368 115.799 86.4988 116 85.3601 116H82.1961ZM83.8761 114.572H85.2761C86.1255 114.572 86.7928 114.437 87.2781 114.166C87.7728 113.886 88.1228 113.489 88.3281 112.976C88.5428 112.453 88.6501 111.833 88.6501 111.114C88.6501 110.386 88.5428 109.765 88.3281 109.252C88.1228 108.729 87.7728 108.328 87.2781 108.048C86.7928 107.759 86.1255 107.614 85.2761 107.614H83.8761V114.572ZM96.6065 116V108.118L94.8705 108.566V107.264L97.2785 106.2H98.3285V116H96.6065ZM100.06 116V114.782C100.685 114.287 101.282 113.793 101.852 113.298C102.421 112.803 102.934 112.313 103.392 111.828C103.849 111.343 104.208 110.867 104.47 110.4C104.731 109.933 104.862 109.485 104.862 109.056C104.862 108.776 104.81 108.515 104.708 108.272C104.605 108.029 104.442 107.833 104.218 107.684C104.003 107.535 103.714 107.46 103.35 107.46C102.995 107.46 102.692 107.539 102.44 107.698C102.197 107.857 102.015 108.071 101.894 108.342C101.772 108.603 101.712 108.902 101.712 109.238H100.088C100.106 108.529 100.26 107.936 100.55 107.46C100.839 106.984 101.231 106.629 101.726 106.396C102.22 106.153 102.776 106.032 103.392 106.032C104.054 106.032 104.619 106.153 105.086 106.396C105.552 106.639 105.912 106.979 106.164 107.418C106.416 107.857 106.542 108.375 106.542 108.972C106.542 109.411 106.458 109.845 106.29 110.274C106.131 110.694 105.907 111.105 105.618 111.506C105.328 111.898 105.002 112.281 104.638 112.654C104.283 113.018 103.914 113.368 103.532 113.704C103.149 114.031 102.78 114.334 102.426 114.614H106.808V116H100.06ZM111.572 116.168C110.909 116.168 110.344 116.042 109.878 115.79C109.42 115.529 109.061 115.188 108.8 114.768C108.538 114.339 108.384 113.881 108.338 113.396H109.892C109.976 113.835 110.162 114.175 110.452 114.418C110.75 114.651 111.133 114.768 111.6 114.768C112.029 114.768 112.402 114.642 112.72 114.39C113.037 114.129 113.289 113.741 113.476 113.228C113.672 112.705 113.779 112.052 113.798 111.268C113.798 111.249 113.798 111.226 113.798 111.198C113.798 111.17 113.798 111.142 113.798 111.114C113.658 111.375 113.462 111.613 113.21 111.828C112.958 112.043 112.664 112.211 112.328 112.332C112.001 112.453 111.646 112.514 111.264 112.514C110.722 112.514 110.209 112.388 109.724 112.136C109.248 111.875 108.865 111.506 108.576 111.03C108.286 110.554 108.142 109.994 108.142 109.35C108.142 108.762 108.282 108.216 108.562 107.712C108.842 107.208 109.238 106.802 109.752 106.494C110.265 106.186 110.858 106.032 111.53 106.032C112.267 106.032 112.883 106.167 113.378 106.438C113.882 106.709 114.283 107.073 114.582 107.53C114.88 107.978 115.095 108.482 115.226 109.042C115.366 109.602 115.436 110.176 115.436 110.764C115.436 111.847 115.282 112.794 114.974 113.606C114.675 114.418 114.236 115.048 113.658 115.496C113.088 115.944 112.393 116.168 111.572 116.168ZM111.656 111.086C112.01 111.086 112.328 111.011 112.608 110.862C112.897 110.703 113.126 110.489 113.294 110.218C113.462 109.938 113.546 109.63 113.546 109.294C113.546 108.939 113.462 108.627 113.294 108.356C113.126 108.076 112.897 107.861 112.608 107.712C112.328 107.553 112.006 107.474 111.642 107.474C111.278 107.474 110.956 107.553 110.676 107.712C110.396 107.871 110.172 108.085 110.004 108.356C109.845 108.617 109.766 108.925 109.766 109.28C109.766 109.644 109.845 109.961 110.004 110.232C110.172 110.503 110.396 110.713 110.676 110.862C110.965 111.011 111.292 111.086 111.656 111.086ZM117.608 116L121.262 107.642H116.334V106.2H122.984V107.404L119.358 116H117.608Z"
-            fill="white"
+            fill={isLocked ? '#9CA3AF' : 'white'}
           />
           <rect
             x="58"
             y="130"
             width="42"
             height="42"
-            fill="url(#pattern0_423_69)"
+            fill={isLocked ? '#1f1536' : 'url(#pattern0_423_69)'}
           />
 
           {/* Earning */}
           <path
             d="M132.68 165.48C130.68 165.48 128.947 165.133 127.48 164.44C126.04 163.72 124.907 162.747 124.08 161.52C123.253 160.267 122.76 158.853 122.6 157.28H127.28C127.52 158.453 128.12 159.44 129.08 160.24C130.04 161.013 131.24 161.4 132.68 161.4C133.773 161.4 134.707 161.147 135.48 160.64C136.253 160.107 136.853 159.4 137.28 158.52C137.733 157.613 137.96 156.6 137.96 155.48C137.96 154.333 137.733 153.333 137.28 152.48C136.853 151.627 136.253 150.973 135.48 150.52C134.707 150.04 133.813 149.8 132.8 149.8C131.547 149.8 130.467 150.093 129.56 150.68C128.68 151.24 128.04 151.947 127.64 152.8H123L125.32 137H140.76V141.2H128.92L127.64 148.12C128.253 147.453 129.067 146.92 130.08 146.52C131.093 146.093 132.253 145.88 133.56 145.88C135.027 145.88 136.32 146.133 137.44 146.64C138.56 147.147 139.507 147.84 140.28 148.72C141.053 149.6 141.627 150.627 142 151.8C142.4 152.947 142.6 154.16 142.6 155.44C142.6 156.88 142.36 158.213 141.88 159.44C141.4 160.64 140.72 161.693 139.84 162.6C138.987 163.507 137.947 164.213 136.72 164.72C135.52 165.227 134.173 165.48 132.68 165.48Z"
-            fill="white"
+            fill={isLocked ? '#9CA3AF' : 'white'}
           />
         </>
 
@@ -68,7 +71,7 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           {/* Node Line 1 */}
           <path
             d="M307 34.25C239.943 34.25 267.826 111.25 201 111.25"
-            stroke={stage === 0 ? '#9CA3AF' : 'url(#paint2_linear_423_69)'}
+            stroke={isLocked ? '#9CA3AF' : (stage === 0 ? '#9CA3AF' : 'url(#paint2_linear_423_69)')}
             strokeOpacity="0.7"
             strokeWidth="11.11"
             style={{
@@ -84,14 +87,14 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
             width="103"
             height="52"
             rx="10"
-            fill={stage >= 1 ? 'url(#paint5_linear_423_69)' : '#322661'}
+            fill={isLocked ? '#322661' : (stage >= 1 ? 'url(#paint5_linear_423_69)' : '#322661')}
             style={{
               transition: 'fill 0.3s ease-in-out, transform 0.3s ease-in-out',
               transform: stage >= 1 && isTransitioning ? 'scale(1.05)' : 'scale(1)',
               filter: stage >= 1 && isTransitioning ? 'drop-shadow(0 0 8px rgba(125, 64, 255, 0.5))' : 'none'
             }}
           />
-          {stage === 1 && (
+          {!isLocked && stage === 1 && (
             <text 
               x="332" 
               y="34" 
@@ -113,7 +116,7 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
               ID 4567
             </text>
           )}
-          {stage === 2 && (
+          {!isLocked && stage === 2 && (
             <text 
               x="332" 
               y="34" 
@@ -135,7 +138,7 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
               ID 4567
             </text>
           )}
-          {stage === 0 && (
+          {!isLocked && stage === 0 && (
             <image x="339" y="12" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />
           )}
         </>
@@ -145,21 +148,21 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           {/* Node line 2 */}
           <path
             d="M307 85.25C239.943 85.25 267.826 117.25 201 117.25"
-            stroke={stage === 0 || stage === 1 ? '#9CA3AF' : 'url(#paint1_linear_423_69)'}
+            stroke={isLocked ? '#9CA3AF' : ((stage === 0 || stage === 1) ? '#9CA3AF' : 'url(#paint1_linear_423_69)')}
             stroke-opacity="0.7"
             stroke-width="11.11"
           />
 
           {/* ID 2 */}
-          <rect x="302" y="64" width="103" height="52" rx="10" fill={stage === 2 ? 'url(#paint5_linear_423_69)' : '#322661'} />
-          {stage === 2 && (
+          <rect x="302" y="64" width="103" height="52" rx="10" fill={isLocked ? '#322661' : (stage === 2 ? 'url(#paint5_linear_423_69)' : '#322661')} />
+          {!isLocked && stage === 2 && (
             <text x="332" y="98" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
               ID 6485
             </text>
           )}
-          {stage === 1 && (
+          {!isLocked && stage === 1 && (
           <image x="339" y="76" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
-          {stage === 0 && (
+          {!isLocked && stage === 0 && (
           <image x="339" y="76" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
         </>
 
@@ -168,21 +171,21 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           {/* Node Line 3 */}
           <path
             d="M201 129.25C272.102 129.25 234.814 163.25 308 163.25"
-            stroke={stage === 0 || stage === 1 ? '#9CA3AF' : 'url(#paint4_linear_423_69)'}
+            stroke={isLocked ? '#9CA3AF' : ((stage === 0 || stage === 1) ? '#9CA3AF' : 'url(#paint4_linear_423_69)')}
             stroke-opacity="0.7"
             stroke-width="11.11"
           />
 
           {/* ID 3 */}
-          <rect x="302" y="128" width="103" height="52" rx="10" fill={stage === 2 ? 'url(#paint5_linear_423_69)' : '#322661'} />
-          {stage === 2 && (
+          <rect x="302" y="128" width="103" height="52" rx="10" fill={isLocked ? '#322661' : (stage === 2 ? 'url(#paint5_linear_423_69)' : '#322661')} />
+          {!isLocked && stage === 2 && (
             <text x="332" y="162" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
               ID 3648
             </text>
           )}
-          {stage === 1 && (
+          {!isLocked && stage === 1 && (
           <image x="339" y="140" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
-          {stage === 0 && (
+          {!isLocked && stage === 0 && (
           <image x="339" y="140" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
         </>
 
@@ -191,21 +194,21 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           {/* Node Line 4 */}
           <path
             d="M307 212.25C239.943 212.25 267.826 136.25 201 136.25"
-            stroke={stage === 0 || stage === 1 ? '#9CA3AF' : 'url(#paint3_linear_423_69)'}
+            stroke={isLocked ? '#9CA3AF' : ((stage === 0 || stage === 1) ? '#9CA3AF' : 'url(#paint3_linear_423_69)')}
             stroke-opacity="0.7"
             stroke-width="11.11"
           />
 
           {/* ID 4  */}
-          <rect x="302" y="192" width="103" height="52" rx="10" fill={stage === 2 ? 'url(#paint5_linear_423_69)' : '#322661'} />
-          {stage === 2 && (
+          <rect x="302" y="192" width="103" height="52" rx="10" fill={isLocked ? '#322661' : (stage === 2 ? 'url(#paint5_linear_423_69)' : '#322661')} />
+          {!isLocked && stage === 2 && (
             <text x="332" y="226" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
               ID 9283
             </text>
           )}
-          {stage === 1 && (
+          {!isLocked && stage === 1 && (
           <image x="339" y="204" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
-          {stage === 0 && (
+          {!isLocked && stage === 0 && (
           <image x="339" y="204" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
         </>
 
@@ -286,6 +289,17 @@ const SliderLevelNode = ({ className, stage = 0 }) => {
           </linearGradient>
         </defs>
       </svg>
+      {isLocked && (
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center rounded-[10px]">
+          <div className="flex items-center gap-3 text-white">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="2"/>
+            </svg>
+            <span className="font-semibold">Purchase to unlock</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

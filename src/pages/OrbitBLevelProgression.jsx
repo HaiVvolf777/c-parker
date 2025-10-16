@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from '../components/dashboard/layout/Sidebar';
 import Navbar from '../components/dashboard/layout/Navbar';
-import Orbitb from '../components/dashboard/Orbitb';
+import OrbitBWithLock from '../components/dashboard/orbit/OrbitBWithLock.jsx';
 import TotalMembersCard from '../components/dashboard/cards/TotalMembersCard';
 import EarningGraphCard from '../components/dashboard/orbit/EarningGraphCard';
 import TotalEarningCard from '../components/dashboard/orbit/TotalEarningCard';
@@ -41,7 +41,7 @@ const OrbitBLevelProgressionBase = () => {
             {/* Orbit B  */}
             <div className="flex flex-col lg:flex-row">
               <div ref={orbitRef} className={`w-full lg:w-[75%] animate-fade-in-up ${isOrbitVisible ? 'animate' : ''}`} style={{ transitionDelay: '200ms' }}>
-                <Orbitb className="" />
+                <OrbitBWithLock className="" />
               </div>
               <div ref={statsRef} className={`w-full lg:w-[25%] animate-fade-in-up ${isStatsVisible ? 'animate' : ''}`} style={{ transitionDelay: '400ms' }}>
                 <h2 className="text-gray-800 dark:text-white text-[30px] font-bold mb-5">
