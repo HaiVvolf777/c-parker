@@ -11,10 +11,10 @@ const ParkerPool = () => {
   return (
     <div className="mt-[100px] md:mt-[150px] relative">
       <div className="pointer-events-none absolute inset-0 z-0">
-        <img src="/images/Bubble-2.png" alt="" className="hidden sm:block absolute w-[200px] md:w-[300px] -top-10 left-[10%] opacity-20 dark:opacity-60 animate-float-slow" />
-        <img src="/images/Bubble-2.png" alt="" className="hidden sm:block absolute w-[160px] md:w-[220px] top-[5%] right-[12%] opacity-15 dark:opacity-50 animate-float animation-delay-1000" />
-        <img src="/images/Bubble-2.png" alt="" className="hidden sm:block absolute w-[180px] md:w-[240px] bottom-[8%] left-[18%] opacity-15 dark:opacity-40 animate-float-slow animation-delay-2000" />
-        <img src="/images/Bubble-3.png" alt="" className="hidden sm:block absolute w-[200px] md:w-[260px] bottom-[6%] right-[20%] opacity-15 dark:opacity-45 animate-float animation-delay-1500" />
+        <img src="/images/Bubble-2.png" alt="" className="hidden sm:block absolute w-[200px] md:w-[300px] -top-10 left-[10%] opacity-70 dark:opacity-60 animate-float-slow" />
+        <img src="/images/Bubble-2.png" alt="" className="hidden sm:block absolute w-[160px] md:w-[220px] top-[5%] right-[12%] opacity-70 dark:opacity-50 animate-float animation-delay-1000" />
+        <img src="/images/Bubble-2.png" alt="" className="hidden sm:block absolute w-[180px] md:w-[240px] bottom-[8%] left-[18%] opacity-70 dark:opacity-40 animate-float-slow animation-delay-2000" />
+        <img src="/images/Bubble-3.png" alt="" className="hidden sm:block absolute w-[200px] md:w-[260px] bottom-[6%] right-[20%] opacity-70 dark:opacity-45 animate-float animation-delay-1500" />
         <img src="/images/Bubble-5.png" alt="" className="hidden sm:block absolute w-[120px] md:w-[180px] top-[38%] left-[48%] -translate-x-1/2 opacity-10 dark:opacity-35 animate-float-slow animation-delay-500" />
       </div>
       <div className="container mx-auto px-6 relative z-10">
