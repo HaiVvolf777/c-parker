@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 const UpdatesCard = ({ className }) => {
+  const latest = useMemo(() => {
+    try {
+      const raw = localStorage.getItem('cparker_announcements_v1');
+      const list = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(list) && list.length) {
+        return list[0];
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }, []);
+
   return (
     <>
       <div
@@ -20,7 +33,7 @@ const UpdatesCard = ({ className }) => {
             <div className="my-4">
               <p className="text-lg text-white keep-white font-semibold ">Updates</p>
               <p className="text-sm text-white keep-white mt-4 ">
-                System upgrade scheduled for tomorrow
+                {latest ? latest.text : 'System upgrade scheduled for tomorrow'}
               </p>
             </div>
           </div>
