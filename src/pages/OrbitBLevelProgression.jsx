@@ -7,11 +7,15 @@ import EarningGraphCard from '../components/dashboard/orbit/EarningGraphCard';
 import TotalEarningCard from '../components/dashboard/orbit/TotalEarningCard';
 import useScrollAnimation from '../hooks/useScrollAnimation';
 import withProgressGuard from '../components/dashboard/nodes/withProgressGuard.jsx'
+import { useProgress } from '../context/ProgressContext.jsx'
 
 const OrbitBLevelProgressionBase = () => {
   const [overviewRef, isOverviewVisible] = useScrollAnimation({ threshold: 0.1 });
   const [orbitRef, isOrbitVisible] = useScrollAnimation({ threshold: 0.1 });
   const [statsRef, isStatsVisible] = useScrollAnimation({ threshold: 0.1 });
+  const { unlockedLevels, unlockNextLevel } = useProgress();
+  const currentLevel = Math.max(unlockedLevels?.orbitB ?? 1, 1);
+  const nextLevel = Math.min((unlockedLevels?.orbitB ?? 0) + 1, 12);
   
   return (
     <>
@@ -27,13 +31,16 @@ const OrbitBLevelProgressionBase = () => {
                   Orbit B Level Progression
                 </h2>
                 <p className="text-gray-600 dark:text-[#747474] text-[20px] font-bold mt-[10px]">
-                  <span className="text-[#F0B90B] animate-pulse-slow">ID 1297</span> | 1 out of 12
+                  <span className="text-[#F0B90B] animate-pulse-slow">ID 1297</span> | {currentLevel} out of 12
                   levels
                 </p>
               </div>
               <div className="">
-                <button className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300">
-                  10 CCT
+                <button
+                  onClick={() => unlockNextLevel('orbitB')}
+                  className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300"
+                >
+                  Unlock next (Lv {nextLevel})
                 </button>
               </div>
             </div>
