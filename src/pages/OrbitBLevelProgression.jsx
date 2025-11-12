@@ -1,16 +1,21 @@
 import React from 'react';
 import Sidebar from '../components/dashboard/layout/Sidebar';
 import Navbar from '../components/dashboard/layout/Navbar';
-import Orbitb from '../components/dashboard/Orbitb';
+import OrbitBWithLock from '../components/dashboard/orbit/OrbitBWithLock.jsx';
 import TotalMembersCard from '../components/dashboard/cards/TotalMembersCard';
 import EarningGraphCard from '../components/dashboard/orbit/EarningGraphCard';
 import TotalEarningCard from '../components/dashboard/orbit/TotalEarningCard';
 import useScrollAnimation from '../hooks/useScrollAnimation';
+import withProgressGuard from '../components/dashboard/nodes/withProgressGuard.jsx'
+import { useProgress } from '../context/ProgressContext.jsx'
 
-const OrbitBLevelProgression = () => {
+const OrbitBLevelProgressionBase = () => {
   const [overviewRef, isOverviewVisible] = useScrollAnimation({ threshold: 0.1 });
   const [orbitRef, isOrbitVisible] = useScrollAnimation({ threshold: 0.1 });
   const [statsRef, isStatsVisible] = useScrollAnimation({ threshold: 0.1 });
+  const { unlockedLevels, unlockNextLevel } = useProgress();
+  const currentLevel = Math.max(unlockedLevels?.orbitB ?? 1, 1);
+  const nextLevel = Math.min((unlockedLevels?.orbitB ?? 0) + 1, 12);
   
   return (
     <>
@@ -26,13 +31,16 @@ const OrbitBLevelProgression = () => {
                   Orbit B Level Progression
                 </h2>
                 <p className="text-gray-600 dark:text-[#747474] text-[20px] font-bold mt-[10px]">
-                  <span className="text-[#F0B90B] animate-pulse-slow">ID 1297</span> | 1 out of 12
+                  <span className="text-[#F0B90B] animate-pulse-slow">ID 1297</span> | {currentLevel} out of 12
                   levels
                 </p>
               </div>
               <div className="">
-                <button className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300">
-                  10 CCT
+                <button
+                  onClick={() => unlockNextLevel('orbitB')}
+                  className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300"
+                >
+                  Unlock next (Lv {nextLevel})
                 </button>
               </div>
             </div>
@@ -40,7 +48,7 @@ const OrbitBLevelProgression = () => {
             {/* Orbit B  */}
             <div className="flex flex-col lg:flex-row">
               <div ref={orbitRef} className={`w-full lg:w-[75%] animate-fade-in-up ${isOrbitVisible ? 'animate' : ''}`} style={{ transitionDelay: '200ms' }}>
-                <Orbitb className="" />
+                <OrbitBWithLock className="" />
               </div>
               <div ref={statsRef} className={`w-full lg:w-[25%] animate-fade-in-up ${isStatsVisible ? 'animate' : ''}`} style={{ transitionDelay: '400ms' }}>
                 <h2 className="text-gray-800 dark:text-white text-[30px] font-bold mb-5">
@@ -57,6 +65,8 @@ const OrbitBLevelProgression = () => {
     </>
   );
 };
+
+const OrbitBLevelProgression = withProgressGuard(OrbitBLevelProgressionBase)
 
 export default OrbitBLevelProgression;
 

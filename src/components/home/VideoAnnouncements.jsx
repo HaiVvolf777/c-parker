@@ -1,12 +1,10 @@
 import React from "react";
+import { useAnnouncements } from "../../context/AnnouncementsContext.jsx";
 
 const VideoAnnouncements = () => {
-  const announcements = [
-    "Orbit B Update – Faster payout cycle enabled.",
-    "Community AMA – Join us on Telegram.",
-    "Parker Pool milestone: 5,000,000 CCT pooled!",
-    "UI improvements - Performance updates & more",
-  ];
+  const { announcements, videos } = useAnnouncements();
+
+  const latestVideoUrl = videos.length ? videos[0].url : '';
 
   return (
     <div className="mt-[100px] md:mt-[150px] relative">
@@ -15,19 +13,33 @@ const VideoAnnouncements = () => {
         <p className="text-white text-[16px] sm:text-[20px] md:text-[26px] mt-5 text-center leading-relaxed">Stay updated with the latest news and learn more about <br className="hidden md:block" />how C-Parker works.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[30px] md:gap-[60px] mt-10 md:mt-20">
           <div>
-            <div className="relative inline-block mb-[20px] md:mb-[30px] w-full">
-              <img src="images/video-thumbnail.png" alt="Video Thumbnail" className="block w-full h-auto rounded-lg" />
-              <div className="absolute inset-0 bg-[#00000099] border border-[#141429] flex items-center justify-center rounded-lg">
-                <img src="icons/play.svg" alt="Play Icon" className="w-12 h-12 sm:w-16 sm:h-16" />
+            {latestVideoUrl ? (
+              <div className="w-full aspect-video rounded-lg overflow-hidden border border-[#141429]">
+                <iframe
+                  src={latestVideoUrl}
+                  title="Latest video"
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
               </div>
-            </div>
-            <p className="text-white text-[20px] sm:text-[24px] md:text-[30px] leading-[32px] sm:leading-[40px] md:leading-[50px] font-bold">Watch: How to get started with Orbit A & Orbit B</p>
+            ) : (
+              <>
+                <div className="relative inline-block mb-[20px] md:mb-[30px] w-full">
+                  <img src="images/video-thumbnail.png" alt="Video Thumbnail" className="block w-full h-auto rounded-lg" />
+                  <div className="absolute inset-0 bg-[#00000099] border border-[#141429] flex items-center justify-center rounded-lg">
+                    <img src="icons/play.svg" alt="Play Icon" className="w-12 h-12 sm:w-16 sm:h-16" />
+                  </div>
+                </div>
+                <p className="text-white text-[20px] sm:text-[24px] md:text-[30px] leading-[32px] sm:leading-[40px] md:leading-[50px] font-bold">Watch: How to get started with Orbit A & Orbit B</p>
+              </>
+            )}
           </div>
           <div>
             {announcements.map((item, idx) => (
               <div key={idx} className="mb-[15px]">
-                <span className="text-[#7D40FF] text-sm sm:text-base">08/01</span>
-                <p className="text-white w-full md:w-[60%] text-[16px] sm:text-[18px] md:text-[20px] my-[8px]">{item}</p>
+                <span className="text-[#7D40FF] text-sm sm:text-base">{item.date || '—'}</span>
+                <p className="text-white w-full md:w-[60%] text-[16px] sm:text-[18px] md:text-[20px] my-[8px]">{item.text}</p>
                 {idx < announcements.length - 1 && <hr className="text-[#7474744D]" />}
               </div>
             ))}

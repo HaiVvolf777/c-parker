@@ -5,11 +5,14 @@ import ActivityTableContainer from '../components/dashboard/platform-activity/Ac
 import SliderLevelNode from '../components/dashboard/nodes/SliderLevelNode';
 import SliderLevelNodeB from '../components/dashboard/nodes/SliderLevelNodeB';
 import useScrollAnimation from '../hooks/useScrollAnimation';
+import withProgressGuard from '../components/dashboard/nodes/withProgressGuard.jsx'
+import { useProgress } from '../context/ProgressContext.jsx'
 
-const NodeLevelProgression = () => {
+const NodeLevelProgressionBase = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const prevSlide = () => setSlideIndex((i) => (i + 2) % 3);
   const nextSlide = () => setSlideIndex((i) => (i + 1) % 3);
+  const { unlockedLevels, unlockNextLevel } = useProgress();
 
   // Scroll animation hooks
   const [overviewRef, isOverviewVisible] = useScrollAnimation({ threshold: 0.1 });
@@ -29,13 +32,13 @@ const NodeLevelProgression = () => {
             >
               <div>
                 <p className="text-gray-600 dark:text-[#747474] text-[20px] font-bold mt-[10px]">
-                  <span className="text-[#F0B90B] animate-pulse-slow">ID 1297</span> | 1 out of 12
+                  <span className="text-[#F0B90B] animate-pulse-slow">ID 1297</span> | {Math.max(unlockedLevels?.nodeB ?? 1, 1)} out of 12
                   levels
                 </p>
               </div>
               <div className="">
-                <button className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300">
-                  10 CCT
+                <button onClick={() => unlockNextLevel('nodeB')} className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300">
+                  Unlock next (Lv {Math.min((unlockedLevels?.nodeB ?? 0) + 1, 12)})
                 </button>
               </div>
             </div>
@@ -67,7 +70,7 @@ const NodeLevelProgression = () => {
                           <div className="flex justify-between">
                             <div className="">
                               <p className="text-[#0a0a0a] dark:text-white text-[20px] lg:text-[30px] font-semibold ">
-                                Lvl 1
+                                Lvl {Math.max(unlockedLevels?.nodeB ?? 1, 1)}
                               </p>
                               <p className="text-[#6B7280] dark:text-white text-sm font-semibold ">
                                 ID 1297
@@ -75,8 +78,8 @@ const NodeLevelProgression = () => {
                             </div>
 
                             <div>
-                              <button className="bg-[#FFFFFF33] text-white keep-white font-bold rounded-[10px] px-5 py-2  ">
-                                Active
+                              <button onClick={() => unlockNextLevel('nodeB')} className="bg-[#FFFFFF33] text-white keep-white font-bold rounded-[10px] px-5 py-2  ">
+                                Unlock next (Lv {Math.min((unlockedLevels?.nodeB ?? 0) + 1, 12)})
                               </button>
                             </div>
                           </div>
@@ -158,5 +161,7 @@ const NodeLevelProgression = () => {
     </>
   );
 };
+
+const NodeLevelProgression = withProgressGuard(NodeLevelProgressionBase)
 
 export default NodeLevelProgression;

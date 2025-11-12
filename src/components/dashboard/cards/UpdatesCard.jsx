@@ -1,6 +1,10 @@
 import React from 'react';
+import { useAnnouncements } from '../../../context/AnnouncementsContext.jsx';
 
 const UpdatesCard = ({ className }) => {
+  const { announcements } = useAnnouncements();
+  const latest = announcements.length ? announcements[0] : null;
+
   return (
     <>
       <div
@@ -20,7 +24,7 @@ const UpdatesCard = ({ className }) => {
             <div className="my-4">
               <p className="text-lg text-white keep-white font-semibold ">Updates</p>
               <p className="text-sm text-white keep-white mt-4 ">
-                System upgrade scheduled for tomorrow
+                {latest ? latest.text : 'System upgrade scheduled for tomorrow'}
               </p>
             </div>
           </div>
