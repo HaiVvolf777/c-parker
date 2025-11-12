@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProgressProvider } from './context/ProgressContext.jsx';
 import { AdminAuthProvider } from './context/AdminAuthContext.jsx';
+import { AnnouncementsProvider } from './context/AnnouncementsContext.jsx';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -20,7 +21,8 @@ function App() {
   return (
     <AdminAuthProvider>
       <ProgressProvider>
-        <BrowserRouter>
+        <AnnouncementsProvider>
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
@@ -40,7 +42,8 @@ function App() {
             <Route path="/home" element={<Navigate to="/" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
+          </BrowserRouter>
+        </AnnouncementsProvider>
       </ProgressProvider>
     </AdminAuthProvider>
   );

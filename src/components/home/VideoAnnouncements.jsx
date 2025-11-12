@@ -1,34 +1,10 @@
-import React, { useMemo } from "react";
+import React from "react";
+import { useAnnouncements } from "../../context/AnnouncementsContext.jsx";
 
 const VideoAnnouncements = () => {
-  const storedAnnouncements = useMemo(() => {
-    try {
-      const raw = localStorage.getItem('cparker_announcements_v1');
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }, []);
+  const { announcements, videos } = useAnnouncements();
 
-  const announcements = storedAnnouncements.length
-    ? storedAnnouncements.map((a) => a.text)
-    : [
-        "Orbit B Update – Faster payout cycle enabled.",
-        "Community AMA – Join us on Telegram.",
-        "Parker Pool milestone: 5,000,000 CCT pooled!",
-        "UI improvements - Performance updates & more",
-      ];
-
-  const latestVideoUrl = useMemo(() => {
-    try {
-      const raw = localStorage.getItem('cparker_videos_v1');
-      const parsed = raw ? JSON.parse(raw) : [];
-      return Array.isArray(parsed) && parsed.length ? parsed[0].url : '';
-    } catch {
-      return '';
-    }
-  }, []);
+  const latestVideoUrl = videos.length ? videos[0].url : '';
 
   return (
     <div className="mt-[100px] md:mt-[150px] relative">
@@ -62,8 +38,8 @@ const VideoAnnouncements = () => {
           <div>
             {announcements.map((item, idx) => (
               <div key={idx} className="mb-[15px]">
-                <span className="text-[#7D40FF] text-sm sm:text-base">08/01</span>
-                <p className="text-white w-full md:w-[60%] text-[16px] sm:text-[18px] md:text-[20px] my-[8px]">{item}</p>
+                <span className="text-[#7D40FF] text-sm sm:text-base">{item.date || '—'}</span>
+                <p className="text-white w-full md:w-[60%] text-[16px] sm:text-[18px] md:text-[20px] my-[8px]">{item.text}</p>
                 {idx < announcements.length - 1 && <hr className="text-[#7474744D]" />}
               </div>
             ))}

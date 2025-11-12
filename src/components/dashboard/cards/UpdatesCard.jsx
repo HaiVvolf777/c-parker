@@ -1,18 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+import { useAnnouncements } from '../../../context/AnnouncementsContext.jsx';
 
 const UpdatesCard = ({ className }) => {
-  const latest = useMemo(() => {
-    try {
-      const raw = localStorage.getItem('cparker_announcements_v1');
-      const list = raw ? JSON.parse(raw) : [];
-      if (Array.isArray(list) && list.length) {
-        return list[0];
-      }
-      return null;
-    } catch {
-      return null;
-    }
-  }, []);
+  const { announcements } = useAnnouncements();
+  const latest = announcements.length ? announcements[0] : null;
 
   return (
     <>
