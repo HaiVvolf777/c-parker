@@ -1,6 +1,37 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useWallet } from "../../context/WalletContext.jsx";
 
 const HomeNavbar = () => {
+  const {
+    account,
+    isConnecting,
+    hasProvider,
+    connectWallet,
+    error,
+  } = useWallet();
+
+  const displayAddress = useMemo(() => {
+    if (!account) return null;
+    return `${account.slice(0, 6)}...${account.slice(-4)}`;
+  }, [account]);
+
+  const walletLabel = (() => {
+    if (!hasProvider) return "Install MetaMask";
+    if (isConnecting) return "Connecting...";
+    return displayAddress ?? "Connect Wallet";
+  })();
+
+  const handleWalletClick = () => {
+    if (!hasProvider) {
+      window.open("https://metamask.io/download.html", "_blank", "noopener");
+      return;
+    }
+
+    if (!isConnecting) {
+      connectWallet();
+    }
+  };
+
   return (
     <div className="container mx-auto bg-transparent min-h-[70px] p-3 flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-2 border-[#21213C] rounded-xl backdrop-blur-[60px] mt-[20px] md:mt-[37px] relative z-[10]">
       <div className="flex items-center justify-between">
@@ -15,11 +46,27 @@ const HomeNavbar = () => {
           <input type="text" placeholder="Enter ID to check status" className="placeholder-gray-400 dark:placeholder-white text-gray-800 dark:text-[#D9D9D94D] bg-transparent outline-none w-full min-w-0" />
         </div>
       </div>
-      <div className="flex items-center justify-end gap-2">
-        <button className="relative rounded-xl p-[1px] w-full sm:w-auto">
+      <div className="flex flex-col items-end justify-end gap-1">
+        <button
+          className="relative rounded-xl p-[1px] w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
+          onClick={handleWalletClick}
+          disabled={isConnecting}
+        >
           <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-          <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[16px] md:text-[20px] text-white keep-white font-bold text-center">Connect Wallet</div>
+          <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[16px] md:text-[20px] text-white keep-white font-bold text-center">
+            {walletLabel}
+          </div>
         </button>
+        {!hasProvider && (
+          <span className="text-xs text-[#F04438]">
+            MetaMask extension required.
+          </span>
+        )}
+        {error && hasProvider && (
+          <span className="text-xs text-[#F04438] text-right max-w-[220px]">
+            {error.message}
+          </span>
+        )}
       </div>
     </div>
   );
