@@ -6,17 +6,52 @@ import TotalMembersCard from '../components/dashboard/cards/TotalMembersCard';
 import EarningGraphCard from '../components/dashboard/orbit/EarningGraphCard';
 import TotalEarningCard from '../components/dashboard/orbit/TotalEarningCard';
 import useScrollAnimation from '../hooks/useScrollAnimation';
-import withProgressGuard from '../components/dashboard/nodes/withProgressGuard.jsx'
-import { useProgress } from '../context/ProgressContext.jsx'
+import withProgressGuard from '../components/dashboard/nodes/withProgressGuard.jsx';
+import { useProgress } from '../context/ProgressContext.jsx';
+import { useWallet } from '../context/WalletContext.jsx';
 
 const OrbitBLevelProgressionBase = () => {
   const [overviewRef, isOverviewVisible] = useScrollAnimation({ threshold: 0.1 });
   const [orbitRef, isOrbitVisible] = useScrollAnimation({ threshold: 0.1 });
   const [statsRef, isStatsVisible] = useScrollAnimation({ threshold: 0.1 });
   const { unlockedLevels, unlockNextLevel } = useProgress();
+  const {
+    account,
+    isConnecting,
+    hasProvider,
+    connectWallet,
+    error: walletError,
+  } = useWallet();
   const currentLevel = Math.max(unlockedLevels?.orbitB ?? 1, 1);
-  const nextLevel = Math.min((unlockedLevels?.orbitB ?? 0) + 1, 12);
-  
+  const nextLevel = Math.min(currentLevel + 1, 12);
+  const isAtCap = currentLevel >= 12;
+
+  const handleActionClick = () => {
+    if (!hasProvider) {
+      window.open('https://metamask.io/download.html', '_blank', 'noopener');
+      return;
+    }
+
+    if (!account) {
+      connectWallet();
+      return;
+    }
+
+    if (!isAtCap) {
+      unlockNextLevel('orbitB');
+    }
+  };
+
+  const actionLabel = (() => {
+    if (!hasProvider) return 'Install MetaMask';
+    if (isConnecting) return 'Connecting...';
+    if (!account) return 'Connect Wallet';
+    if (isAtCap) return 'Max Level Reached';
+    return `Unlock next (Lv ${nextLevel})`;
+  })();
+
+  const isActionDisabled = isConnecting || (account && isAtCap);
+
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-[#00000e] transition-colors">
@@ -35,13 +70,24 @@ const OrbitBLevelProgressionBase = () => {
                   levels
                 </p>
               </div>
-              <div className="">
+              <div className="flex flex-col items-end gap-2">
                 <button
-                  onClick={() => unlockNextLevel('orbitB')}
+                  onClick={handleActionClick}
+                  disabled={isActionDisabled}
                   className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300"
                 >
-                  Unlock next (Lv {nextLevel})
+                  {actionLabel}
                 </button>
+                {!hasProvider && (
+                  <span className="text-sm text-[#F04438]">
+                    MetaMask is required to manage orbit levels.
+                  </span>
+                )}
+                {walletError && hasProvider && (
+                  <span className="text-sm text-[#F04438]">
+                    {walletError.message}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -66,8 +112,6 @@ const OrbitBLevelProgressionBase = () => {
   );
 };
 
-const OrbitBLevelProgression = withProgressGuard(OrbitBLevelProgressionBase)
+const OrbitBLevelProgression = withProgressGuard(OrbitBLevelProgressionBase);
 
 export default OrbitBLevelProgression;
-
-
