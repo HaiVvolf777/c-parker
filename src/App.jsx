@@ -3,6 +3,7 @@ import { ProgressProvider } from './context/ProgressContext.jsx';
 import { AdminAuthProvider } from './context/AdminAuthContext.jsx';
 import { AnnouncementsProvider } from './context/AnnouncementsContext.jsx';
 import { WalletProvider } from './context/WalletContext.jsx';
+import { UserDataProvider } from './context/UserDataContext.jsx';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -22,9 +23,10 @@ function App() {
   return (
     <AdminAuthProvider>
       <WalletProvider>
-        <ProgressProvider>
-          <AnnouncementsProvider>
-            <BrowserRouter>
+        <UserDataProvider>
+          <ProgressProvider>
+            <AnnouncementsProvider>
+              <BrowserRouter>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/about" element={<AboutPage />} />
@@ -43,10 +45,11 @@ function App() {
               {/* <Route path="/dashboard/all-nodes" element={<Orbitb />} /> */}
               <Route path="/home" element={<Navigate to="/" replace />} />
               <Route path="*" element={<NotFound />} />
-            </Routes>
-            </BrowserRouter>
-          </AnnouncementsProvider>
-        </ProgressProvider>
+              </Routes>
+              </BrowserRouter>
+            </AnnouncementsProvider>
+          </ProgressProvider>
+        </UserDataProvider>
       </WalletProvider>
     </AdminAuthProvider>
   );

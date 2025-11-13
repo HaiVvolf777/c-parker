@@ -1,7 +1,18 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useWallet } from "../context/WalletContext.jsx";
 import { HomeNavbar, Hero, Stats, Verified, VideoAnnouncements, PlatformActivity, HowItWorks, ParkerPool, CTA, Footer as HomeFooter, Eclips } from "../components/home";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const { account } = useWallet();
+
+  useEffect(() => {
+    if (account) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [account, navigate]);
+
   // Sync with system theme by toggling `dark` on <html>
   useEffect(() => {
     const m = window.matchMedia('(prefers-color-scheme: dark)');
