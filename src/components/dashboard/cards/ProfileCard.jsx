@@ -1,15 +1,20 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useWallet } from '../../../context/WalletContext.jsx';
 import { useUserData } from '../../../context/UserDataContext.jsx';
-import { registerUserWithMetaMask } from '../../../services/registrationService.js';
 
 const ProfileCard = () => {
   const { account } = useWallet();
-  const { user, userStats, isLoading, error, refresh } = useUserData();
+  const {
+    user,
+    isLoading,
+    isRegistering,
+    error,
+    registrationMessage,
+    refresh,
+    acknowledgeRegistration,
+  } = useUserData();
   const [copied, setCopied] = useState(false);
-  const [isRegistering, setIsRegistering] = useState(false);
-  const [registrationError, setRegistrationError] = useState(null);
-  const [registrationMessage, setRegistrationMessage] = useState(null);
+  const [modalState, setModalState] = useState('hidden');
 
   const shortenedWallet = useMemo(() => {
     if (!account) return null;
@@ -33,27 +38,29 @@ const ProfileCard = () => {
     });
   }, [user]);
 
-  const showRegistrationPrompt = useMemo(() => {
-    if (user) return false;
-    if (!error?.message) return false;
-    return error.message.toLowerCase().includes('wallet not registered');
-  }, [user, error]);
+  useEffect(() => {
+    const registrationError =
+      !user &&
+      typeof error?.message === 'string' &&
+      error.message.toLowerCase().includes('register');
 
-  const handleRegistration = async () => {
-    setRegistrationError(null);
-    setRegistrationMessage(null);
-    setIsRegistering(true);
-    try {
-      const result = await registerUserWithMetaMask(1);
-      setRegistrationMessage(result.message);
-      await refresh();
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Registration failed';
-      setRegistrationError(message);
-    } finally {
-      setIsRegistering(false);
+    if (isRegistering) {
+      setModalState('registering');
+      return;
     }
-  };
+
+    if (registrationMessage) {
+      setModalState('success');
+      return;
+    }
+
+    if (registrationError) {
+      setModalState('error');
+      return;
+    }
+
+    setModalState((prev) => (prev === 'hidden' ? prev : 'hidden'));
+  }, [isRegistering, registrationMessage, error, user]);
 
   const handleCopy = async () => {
     if (!referLink) return;
@@ -87,34 +94,6 @@ const ProfileCard = () => {
         <p className="text-gray-600 dark:text-[#747474] text-center md:text-start">
           Syncing wallet data from C-Parker...
         </p>
-      );
-    }
-
-    if (showRegistrationPrompt) {
-      return (
-        <div className="flex flex-col items-center md:items-start gap-3">
-          <p className="text-gray-600 dark:text-[#747474] text-center md:text-start">
-            Wallet detected but not registered yet. Complete the on-chain registration to unlock your dashboard.
-          </p>
-          <button
-            type="button"
-            onClick={handleRegistration}
-            disabled={isRegistering}
-            className="inline-flex items-center justify-center rounded-[10px] bg-[#6F23D5] px-5 py-2 text-white font-semibold transition-transform hover:scale-105 disabled:opacity-60 disabled:hover:scale-100"
-          >
-            {isRegistering ? 'Registering...' : 'Register Now'}
-          </button>
-          {registrationError && (
-            <span className="text-sm text-red-500 text-center md:text-start">
-              {registrationError}
-            </span>
-          )}
-          {registrationMessage && (
-            <span className="text-sm text-emerald-500 text-center md:text-start">
-              {registrationMessage}
-            </span>
-          )}
-        </div>
       );
     }
 
@@ -233,7 +212,101 @@ const ProfileCard = () => {
         </div>
       </div>
     </div>
+    {modalState !== 'hidden' && (
+      <RegistrationModal
+        state={modalState}
+        message={registrationMessage}
+        errorMessage={error?.message ?? ''}
+        onClose={() => {
+          acknowledgeRegistration();
+          setModalState('hidden');
+        }}
+        onRetry={() => {
+          acknowledgeRegistration();
+          refresh();
+        }}
+      />
+    )}
   </>
+  );
+};
+
+const RegistrationModal = ({ state, message, errorMessage, onClose, onRetry }) => {
+  const isRegistering = state === 'registering';
+  const isSuccess = state === 'success';
+  const isError = state === 'error';
+
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      <div className="relative w-full max-w-md rounded-2xl border border-gray-200 dark:border-[#141429] bg-white dark:bg-[#0B0B1A] p-6 shadow-2xl">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Wallet Registration</h3>
+          <button
+            type="button"
+            onClick={isRegistering ? undefined : onClose}
+            className={`text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition ${
+              isRegistering ? 'cursor-not-allowed opacity-50' : ''
+            }`}
+            aria-label="Close registration modal"
+            disabled={isRegistering}
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="mt-4 space-y-3 text-sm text-gray-600 dark:text-[#bdbdbd]">
+          {isRegistering && (
+            <>
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#6F23D5]/10">
+                  <span className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-[#6F23D5] border-t-transparent" />
+                </span>
+                <p className="font-medium text-gray-900 dark:text-white">Registering your wallet on-chain</p>
+              </div>
+              <p>Please confirm the registration transaction in MetaMask. This process may take a few moments.</p>
+            </>
+          )}
+
+          {isSuccess && (
+            <>
+              <p className="font-medium text-emerald-500">
+                {message || 'Registration transaction confirmed. Your dashboard will refresh shortly.'}
+              </p>
+              <p>You can close this window once the dashboard updates with your latest data.</p>
+            </>
+          )}
+
+          {isError && (
+            <>
+              <p className="font-medium text-red-500">{errorMessage || 'Registration failed. Please try again.'}</p>
+              <p>Ensure you confirmed the transaction in MetaMask and that you have enough CCT and gas for the transaction.</p>
+            </>
+          )}
+        </div>
+
+        <div className="mt-6 flex justify-end gap-3">
+          {isError && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="rounded-lg border border-transparent bg-[#6F23D5] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#5a1fb8]"
+            >
+              Try Again
+            </button>
+          )}
+          {!isRegistering && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg border border-gray-300 dark:border-[#141429] px-4 py-2 text-sm font-semibold text-gray-700 dark:text-white transition hover:bg-gray-100 dark:hover:bg-[#1a1a2e]"
+            >
+              Close
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
