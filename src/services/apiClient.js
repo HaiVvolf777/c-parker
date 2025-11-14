@@ -18,6 +18,16 @@ const parseResponse = async (response) => {
   return response.text();
 };
 
+const buildQueryString = (params = {}) => {
+  const query = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === '') return;
+    query.append(key, Array.isArray(value) ? value.join(',') : value);
+  });
+  const serialized = query.toString();
+  return serialized ? `?${serialized}` : '';
+};
+
 export class ApiError extends Error {
   constructor(message, status, payload) {
     super(message);
@@ -52,10 +62,83 @@ export const apiClient = async (path, options = {}) => {
   return payload;
 };
 
+// ========================
+// User endpoints
+// ========================
+
 export const getUserByWallet = (walletAddress, options = {}) =>
   apiClient(`/users/wallet/${walletAddress}`, options);
+
+export const getUserById = (userId, options = {}) =>
+  apiClient(`/users/${userId}`, options);
 
 export const getUserStats = (userId, options = {}) =>
   apiClient(`/users/${userId}/stats`, options);
 
+export const getUserReferrals = (userId, options = {}) =>
+  apiClient(`/users/${userId}/referrals`, options);
 
+export const getUserTeam = (userId, options = {}) =>
+  apiClient(`/users/${userId}/team`, options);
+
+export const getUserLevels = (userId, { orbit } = {}, options = {}) => {
+  const query = buildQueryString({ orbit });
+  return apiClient(`/users/${userId}/levels${query}`, options);
+};
+
+export const getUserMatrix = (userId, orbit, level, options = {}) =>
+  apiClient(`/users/${userId}/matrix/${orbit}/${level}`, options);
+
+// ========================
+// Payment endpoints
+// ========================
+
+export const getUserPayments = (userId, params = {}, options = {}) => {
+  const query = buildQueryString(params);
+  return apiClient(`/payments/user/${userId}${query}`, options);
+};
+
+export const getUserEarnedPayments = (userId, params = {}, options = {}) => {
+  const query = buildQueryString(params);
+  return apiClient(`/payments/user/${userId}/earned${query}`, options);
+};
+
+export const getUserMissedPayments = (userId, params = {}, options = {}) => {
+  const query = buildQueryString(params);
+  return apiClient(`/payments/user/${userId}/missed${query}`, options);
+};
+
+export const getPaymentsByLevel = (userId, options = {}) =>
+  apiClient(`/payments/user/${userId}/by-level`, options);
+
+export const getUserTotalEarned = (userId, options = {}) =>
+  apiClient(`/payments/user/${userId}/total-earned`, options);
+
+export const getUserTotalMissed = (userId, options = {}) =>
+  apiClient(`/payments/user/${userId}/total-missed`, options);
+
+// ========================
+// Platform statistics
+// ========================
+
+export const getPlatformStats = (options = {}) =>
+  apiClient('/statistics/platform', options);
+
+export const getLeaderboard = (params = {}, options = {}) => {
+  const query = buildQueryString(params);
+  return apiClient(`/statistics/leaderboard${query}`, options);
+};
+
+export const getRecentUsers = (params = {}, options = {}) => {
+  const query = buildQueryString(params);
+  return apiClient(`/statistics/recent${query}`, options);
+};
+
+// ========================
+// Activity feed
+// ========================
+
+export const getActivityFeed = (params = {}, options = {}) => {
+  const query = buildQueryString(params);
+  return apiClient(`/activity/feed${query}`, options);
+};

@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ProgramOrbitCard = ({ data }) => {
   // Right-side decorative graphic based on orbit type
   const getRightGraphic = () => {
@@ -19,13 +17,19 @@ const ProgramOrbitCard = ({ data }) => {
           <div className="flex flex-col gap-[30px]">
             <p className="text-white keep-white text-[28px] font-bold">{data.title}</p>
 
-            <p className="text-[#01F1E3] text-[42px] font-extrabold">
-              {data.cct}
+            <p className="text-[#01F1E3] text-[32px] font-extrabold min-h-[40px]">
+              {data.isLoading ? 'Syncing levels...' : data.cct}
+            </p>
+
+            <p className="text-white/80 text-sm">
+              {data.opened
+                ? `Levels active: ${data.levelsActive}`
+                : 'Activate level 1 to open this orbit'}
             </p>
 
             <div className="">
               <button className="text-white keep-white font-bold bg-[#7D40FF] hover:bg-[#5a1fb8] px-[67px] py-2 leading-[100%] rounded-[10px] cursor-pointer transition-colors">
-                Preview
+                {data.opened ? 'View Matrix' : 'Activate'}
               </button>
             </div>
           </div>

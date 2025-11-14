@@ -7,6 +7,9 @@ import ActivityContainerWithStats from '../components/dashboard/platform-activit
 import UpdatesCard from '../components/dashboard/cards/UpdatesCard';
 import TotalNumbersCard from '../components/dashboard/cards/TotalNumbersCard';
 import useScrollAnimation from '../hooks/useScrollAnimation';
+import PaymentsBreakdown from '../components/dashboard/payments/PaymentsBreakdown';
+import NetworkOverview from '../components/dashboard/network/NetworkOverview';
+import MatrixExplorer from '../components/dashboard/network/MatrixExplorer';
 
 const Dashboard = () => {
   const [profileRef, isProfileVisible] = useScrollAnimation({ threshold: 0.1 });
@@ -15,6 +18,8 @@ const Dashboard = () => {
   const [updatesRef, isUpdatesVisible] = useScrollAnimation({ threshold: 0.1 });
   const [programsRef, isProgramsVisible] = useScrollAnimation({ threshold: 0.1 });
   const [activityRef, isActivityVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [paymentsRef, isPaymentsVisible] = useScrollAnimation({ threshold: 0.1 });
+  const [networkRef, isNetworkVisible] = useScrollAnimation({ threshold: 0.1 });
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#00000e] transition-colors">
@@ -71,6 +76,25 @@ const Dashboard = () => {
             style={{ transitionDelay: '1000ms' }}
           >
             <ActivityContainerWithStats />
+          </div>
+
+          <div
+            ref={paymentsRef}
+            className={`mt-8 animate-fade-in-up ${isPaymentsVisible ? 'animate' : ''}`}
+            style={{ transitionDelay: '1200ms' }}
+          >
+            <PaymentsBreakdown />
+          </div>
+
+          <div
+            ref={networkRef}
+            className={`mt-8 grid grid-cols-1 lg:grid-cols-2 gap-5 animate-fade-in-up ${
+              isNetworkVisible ? 'animate' : ''
+            }`}
+            style={{ transitionDelay: '1400ms' }}
+          >
+            <NetworkOverview />
+            <MatrixExplorer />
           </div>
         </div>
       </div>

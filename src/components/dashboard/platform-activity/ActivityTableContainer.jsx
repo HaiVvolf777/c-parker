@@ -1,75 +1,91 @@
+import { useDashboardData } from '../../../context/DashboardDataContext.jsx';
+
+const formatTimeAgo = (secondsAgo) => {
+  if (secondsAgo === null || secondsAgo === undefined) return '--';
+  if (secondsAgo < 60) return `${secondsAgo}s ago`;
+  if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)}m ago`;
+  if (secondsAgo < 86400) return `${Math.floor(secondsAgo / 3600)}h ago`;
+  return `${Math.floor(secondsAgo / 86400)}d ago`;
+};
+
+const formatAmount = (amount) => {
+  if (!amount && amount !== 0) return '--';
+  const numeric = Number.parseFloat(amount);
+  if (Number.isNaN(numeric)) return `${amount} CCT`;
+  return `${numeric.toLocaleString(undefined, { maximumFractionDigits: 4 })} CCT`;
+};
+
+const eventLabelMap = {
+  UserRegistered: 'joined the platform',
+  OrbitBActivated: 'activated Orbit B',
+  LevelPurchased: 'purchased a level',
+  PaymentSent: 'received a payment',
+};
+
 const ActivityTableContainer = ({ className, isDashboard = false }) => {
-  const activityData = [
-    {
-      time: '1min',
-      id: '#1023',
-      event: 'reached Level 4',
-      plan: 'Orbit A',
-      details: 'earned 250 CCT',
-    },
-    {
-      time: '2min',
-      id: '#876',
-      event: 'joined',
-      plan: 'Orbit B',
-      details: 'instant payout',
-    },
-    {
-      time: '1min',
-      id: '#1023',
-      event: 'reached Level 4',
-      plan: 'Orbit A',
-      details: 'earned 250 CCT',
-    },
-    {
-      time: '2min',
-      id: '#876',
-      event: 'joined',
-      plan: 'Orbit B',
-      details: 'instant payout',
-    },
-    {
-      time: '2min',
-      id: '#876',
-      event: 'joined',
-      plan: 'Orbit B',
-      details: 'instant payout',
-    },
-    {
-      time: '2min',
-      id: '#876',
-      event: 'joined',
-      plan: 'Orbit B',
-      details: 'instant payout',
-    },
-  ];
+  const { data, isLoading, error, refresh } = useDashboardData();
+  const activityData = data.activityFeed || [];
 
   return (
-    <div className={`mt-[60px] min-w-[700px] text-[#0a0a0a] dark:text-white ${className} `}>
+    <div className={`mt-[60px] min-w-[700px] text-[#0a0a0a] dark:text-white ${className}`}>
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-lg font-semibold text-[#0a0a0a] dark:text-white">Live activity from Orbit A & B</p>
+        <button
+          type="button"
+          onClick={refresh}
+          className="text-sm text-[#7D40FF] hover:text-[#5a1fb8] font-semibold transition-colors"
+        >
+          Refresh
+        </button>
+      </div>
       <div className="border-2 border-[#E5E7EB] dark:border-[#141429] rounded-[10px] bg-white/60 dark:bg-[#0B0B1A4D] backdrop-blur-[30px] px-[44px]">
-        <table className=" w-full">
+        <table className="w-full">
           <thead>
             <tr
               className={`*:pt-[44px] *:pb-[30px] border-b-[1px] border-[#E5E7EB] dark:border-[#141429] px-[42px] *:font-[400] ${
-                isDashboard ? '*:text-[20px]' : '*:text-[24px]'
+                isDashboard ? '*:text-[18px]' : '*:text-[20px]'
               } *:text-[#6B7280] dark:*:text-[#9aa0a6]`}
             >
               <th></th>
               <th>Time</th>
               <th>ID</th>
               <th>Event</th>
-              <th>Plan</th>
+              <th>Contract</th>
               <th>Amount</th>
               <th></th>
             </tr>
           </thead>
 
           <tbody>
-            {activityData.map((item, index) => (
+            {isLoading && (
+              <tr>
+                <td colSpan={7} className="py-10 text-center text-[#6B7280] dark:text-[#9aa0a6]">
+                  Syncing on-chain activity...
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && error && (
+              <tr>
+                <td colSpan={7} className="py-10 text-center text-red-500">
+                  {error.message}
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && !error && activityData.length === 0 && (
+              <tr>
+                <td colSpan={7} className="py-10 text-center text-[#6B7280] dark:text-[#9aa0a6]">
+                  No activity yet. Try refreshing in a few seconds.
+                </td>
+              </tr>
+            )}
+
+            {activityData.map((item) => (
               <tr
-                key={index}
+                key={`${item.transactionHash}-${item.id}`}
                 className={`*:py-[30px] *px-4 border-b-[1px] border-[#E5E7EB] dark:border-[#141429] text-center ${
-                  isDashboard ? '*:text-[16px]' : '*:text-[24px]'
+                  isDashboard ? '*:text-[16px]' : '*:text-[20px]'
                 } hover:bg-[#F3F4F6] dark:hover:bg-[#0B0B1A] transition-colors`}
               >
                 <td>
@@ -81,15 +97,7 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <rect
-                      x="0.5"
-                      y="0.078125"
-                      width="59"
-                      height="59"
-                      rx="29.5"
-                      fill="#01F1E3"
-                      fillOpacity="0.1"
-                    />
+                    <rect x="0.5" y="0.078125" width="59" height="59" rx="29.5" fill="#01F1E3" fillOpacity="0.1" />
                     <path
                       d="M41.733 28.7883C41.4356 28.7883 41.1505 28.6702 40.9402 28.4599C40.73 28.2497 40.6119 27.9645 40.6119 27.6672V24.4383C40.6539 23.8029 40.4441 23.1766 40.0278 22.6948C39.6115 22.213 39.0222 21.9146 38.3875 21.8641H18.9872C18.6899 21.8641 18.4047 21.746 18.1945 21.5357C17.9842 21.3255 17.8661 21.0403 17.8661 20.743C17.8661 20.4456 17.9842 20.1605 18.1945 19.9502C18.4047 19.7399 18.6899 19.6218 18.9872 19.6218H38.3875C39.6191 19.6663 40.7829 20.1973 41.6236 21.0985C42.4643 21.9997 42.9132 23.1975 42.8721 24.4293V27.6582C42.8733 27.8077 42.8446 27.9559 42.7877 28.0942C42.7307 28.2324 42.6467 28.3579 42.5406 28.4632C42.4345 28.5685 42.3083 28.6515 42.1696 28.7073C42.0309 28.7632 41.8825 28.7907 41.733 28.7883Z"
                       fill="#01F1E3"
@@ -108,48 +116,39 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
                     />
                   </svg>
                 </td>
-                <td>{item.time}</td>
+                <td>{formatTimeAgo(item.secondsAgo)}</td>
                 <td>
-                  <span
-                    className={`bg-[#F3F4F6] text-[#0a0a0a] dark:bg-[#00000D] dark:text-white px-[35px] py-2 rounded-[40px] ${
-                      isDashboard ? '*:text-[16px]' : '*:text-[24px]'
-                    }`}
-                  >
-                    {item.id}
+                  <span className="bg-[#F3F4F6] text-[#0a0a0a] dark:bg-[#00000D] dark:text-white px-[35px] py-2 rounded-[40px]">
+                    #{item.userId ?? '—'}
                   </span>
                 </td>
-                <td>reached Level 4</td>
+                <td>{eventLabelMap[item.eventName] ?? item.eventName}</td>
                 <td>
                   <span className="relative inline-block rounded-md p-[1px]">
-                    <span className="absolute inset-0 rounded-md bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></span>
+                    <span className="absolute inset-0 rounded-md bg-gradient-to-r from-[#324AB9] to-[#4B158E]" />
                     <span
                       className={`relative block rounded-md px-4 py-2 font-semibold ${
                         isDashboard ? 'text-[16px]' : 'text-[20px]'
                       } text-[#0a0a0a] dark:text-white bg-white dark:bg-gradient-to-r dark:from-[#150F3E] dark:via-[#200F46] dark:to-[#3A126F]`}
                     >
-                      {item.plan}
+                      {item.contract}
                     </span>
                   </span>
                 </td>
-                <td className="text-[#0a0a0a] dark:text-white">earned 250 CCT</td>
+                <td className="text-[#0a0a0a] dark:text-white">{formatAmount(item.amount)}</td>
                 <td>
-                  <svg
-                    className="mx-auto cursor-pointer"
-                    width="32"
-                    height="30"
-                    viewBox="0 0 32 30"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M29.5052 21.4016V15.431C29.5052 14.4075 28.7743 13.7251 27.678 13.7251C26.5817 13.7251 25.8508 14.4075 25.8508 15.431V21.4016C25.8508 23.7898 23.8408 25.6663 21.2827 25.6663H8.49212C5.934 25.6663 3.92405 23.7898 3.92405 21.4016V9.46041C3.92405 7.07217 5.934 5.1957 8.49212 5.1957H14.8874C15.9838 5.1957 16.7146 4.51335 16.7146 3.48982C16.7146 2.46629 15.9838 1.78394 14.8874 1.78394H8.49212C3.92405 1.78394 0.269592 5.1957 0.269592 9.46041V21.4016C0.269592 25.6663 3.92405 29.0781 8.49212 29.0781H21.2827C25.8508 29.0781 29.5052 25.6663 29.5052 21.4016Z"
-                      fill="white"
-                    />
-                    <path
-                      d="M31.3325 10.3134V1.78401C31.3325 1.61342 31.3325 1.27224 31.1497 1.10165C30.967 0.760478 30.6016 0.419301 30.2361 0.248713C30.0534 0.0781248 29.688 0.078125 29.5052 0.078125H20.7345C19.6382 0.078125 18.9073 0.760478 18.9073 1.78401C18.9073 2.80754 19.6382 3.48989 20.7345 3.48989H25.1199L13.6083 14.2369C12.8775 14.9193 12.8775 15.9428 13.6083 16.6252C13.9738 16.9664 14.522 17.1369 14.8874 17.1369C15.2529 17.1369 15.801 16.9664 16.1665 16.6252L27.678 5.87813V10.3134C27.678 11.3369 28.4089 12.0193 29.5052 12.0193C30.6016 12.0193 31.3325 11.3369 31.3325 10.3134Z"
-                      fill="white"
-                    />
-                  </svg>
+                  {item.transactionHash ? (
+                    <a
+                      className="text-[#7D40FF] hover:text-[#5a1fb8] font-semibold text-sm"
+                      href={`https://polygonscan.com/tx/${item.transactionHash}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      View Tx
+                    </a>
+                  ) : (
+                    <span className="text-[#6B7280] dark:text-[#9aa0a6] text-sm">—</span>
+                  )}
                 </td>
               </tr>
             ))}
