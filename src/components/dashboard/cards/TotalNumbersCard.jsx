@@ -1,24 +1,54 @@
+import { useMemo } from 'react';
+import { useUserData } from '../../../context/UserDataContext.jsx';
+
+const formatNumber = (value, options = {}) => {
+  if (value === null || value === undefined || Number.isNaN(value)) {
+    return '--';
+  }
+  return new Intl.NumberFormat(undefined, options).format(value);
+};
+
+const toFloat = (value) => {
+  if (value === null || value === undefined) return 0;
+  const parsed = Number.parseFloat(value);
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+const computeEarningsRatio = (earnedString, missedString) => {
+  const earned = toFloat(earnedString);
+  const missed = toFloat(missedString);
+  const total = earned + missed;
+  if (total <= 0) return 0;
+  return (earned / total) * 100;
+};
+
 const TotalNumbersCard = () => {
-  const data = [
+  const { userStats, isLoading } = useUserData();
+
+  const ratioValue = useMemo(() => {
+    if (!userStats) return null;
+    return computeEarningsRatio(userStats.totalEarned, userStats.totalMissed);
+  }, [userStats]);
+
+  const data = useMemo(() => ([
     {
       id: 1,
       title: 'Partners',
-      icon: '',
-      total: '2',
+      total: userStats?.totalPartners ?? null,
     },
     {
       id: 2,
       title: 'Team',
-      icon: '',
-      total: '5',
+      total: userStats?.totalTeamSize ?? null,
     },
     {
-      id: 3,
-      title: 'Ratio',
-      icon: '',
-      total: '290%',
+      id: 4,
+      title: 'Earnings Ratio',
+      total: ratioValue !== null ? `${formatNumber(ratioValue, { maximumFractionDigits: 1 })}%` : null,
+      accent: true,
     },
-  ];
+  ]), [userStats, ratioValue]);
+
   return (
     <>
       <div>
@@ -56,7 +86,7 @@ const TotalNumbersCard = () => {
 
                 <div className="mt-5">
                   <span className="text-gray-800 dark:text-white text-[40px] font-extrabold">
-                    {item.total}
+                    {isLoading ? '...' : item.total ?? '--'}
                   </span>
                 </div>
               </div>

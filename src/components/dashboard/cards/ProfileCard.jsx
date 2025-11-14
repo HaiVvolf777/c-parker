@@ -1,11 +1,70 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useWallet } from '../../../context/WalletContext.jsx';
+import { useUserData } from '../../../context/UserDataContext.jsx';
 
 const ProfileCard = () => {
+  const { account } = useWallet();
+  const {
+    user,
+    isLoading,
+    isRegistering,
+    error,
+    registrationMessage,
+    refresh,
+    acknowledgeRegistration,
+  } = useUserData();
   const [copied, setCopied] = useState(false);
+  const [modalState, setModalState] = useState('hidden');
 
-  const referLink = '0saC3adbbc2ea1f62a50f57a';
+  const shortenedWallet = useMemo(() => {
+    if (!account) return null;
+    return `${account.slice(0, 6)}...${account.slice(-4)}`;
+  }, [account]);
+
+  const referLink = useMemo(() => {
+    if (!user) return '';
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    return origin ? `${origin}/register?ref=${user.userId}` : `ref:${user.userId}`;
+  }, [user]);
+
+  const registeredDate = useMemo(() => {
+    if (!user?.registeredAt) return null;
+    const date = new Date(user.registeredAt);
+    if (Number.isNaN(date.getTime())) return null;
+    return date.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  }, [user]);
+
+  useEffect(() => {
+    const registrationError =
+      !user &&
+      typeof error?.message === 'string' &&
+      error.message.toLowerCase().includes('register');
+
+    if (isRegistering) {
+      setModalState('registering');
+      return;
+    }
+
+    if (registrationMessage) {
+      setModalState('success');
+      return;
+    }
+
+    if (registrationError) {
+      setModalState('error');
+      return;
+    }
+
+    setModalState((prev) => (prev === 'hidden' ? prev : 'hidden'));
+  }, [isRegistering, registrationMessage, error, user]);
 
   const handleCopy = async () => {
+    if (!referLink) return;
+
     try {
       await navigator.clipboard.writeText(referLink);
       setCopied(true);
@@ -13,15 +72,55 @@ const ProfileCard = () => {
     } catch (_) {
       const textarea = document.createElement('textarea');
       textarea.value = referLink;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      try { document.execCommand('copy'); } catch (e) {}
-      document.body.removeChild(textarea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1200);
+      try {
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+      } catch (err) {
+        console.error('Failed to copy referral link', err);
+      } finally {
+        document.body.removeChild(textarea);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1200);
+      }
     }
+  };
+
+  const renderStatus = () => {
+    if (isLoading) {
+      return (
+        <p className="text-gray-600 dark:text-[#747474] text-center md:text-start">
+          Syncing wallet data from C-Parker...
+        </p>
+      );
+    }
+
+    if (error) {
+      return (
+        <p className="text-red-500 text-center md:text-start">
+          {error.message}
+        </p>
+      );
+    }
+
+    if (!user) {
+      return (
+        <p className="text-gray-600 dark:text-[#747474] text-center md:text-start">
+          Connect your wallet to load your C-Parker profile.
+        </p>
+      );
+    }
+
+    return (
+      <p className="text-gray-600 dark:text-[#747474] text-center md:text-start">
+        Joined {registeredDate || '—'} • Referrer ID{' '}
+        <span className="text-[#EE9C04] font-bold">
+          {user.referrerId ?? 'N/A'}
+        </span>
+      </p>
+    );
   };
 
   return (
@@ -55,36 +154,21 @@ const ProfileCard = () => {
 
           <div>
             <h2 className="text-gray-800 dark:text-white text-[36px] text-center md:text-start font-extrabold mb-[10px]">
-              ID 2355
+              {user ? `ID ${user.userId}` : 'No ID yet'}
             </h2>
             <div className="flex gap-[10px] items-center justify-center md:justify-start mb-[10px]">
               <span className="text-lg text-[#6F23D5] font-semibold">
-                h9w434....4h89
+                {shortenedWallet ?? 'No wallet connected'}
               </span>
-              <div>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4.19982 4.90003C4.19982 4.51344 4.51322 4.20004 4.89982 4.20004H11.8998C12.2864 4.20004 12.5998 4.51344 12.5998 4.90003V11.9C12.5998 12.2866 12.2864 12.6 11.8998 12.6H4.89982C4.51322 12.6 4.19982 12.2866 4.19982 11.9V4.90003ZM2.79983 11.9C2.79983 13.0598 3.74003 14 4.89982 14H11.8998C13.0596 14 13.9998 13.0598 13.9998 11.9V4.90003C13.9998 3.74024 13.0596 2.80005 11.8998 2.80005H4.89982C3.74003 2.80005 2.79983 3.74024 2.79983 4.90003V11.9Z"
-                    fill="#6F23D5"
-                  />
-                  <path
-                    d="M11.2001 2.45005C11.2001 2.15787 11.2036 1.91087 11.1605 1.69195L11.1598 1.69058C11.0788 1.28308 10.8794 0.908396 10.5856 0.614611C10.2918 0.320827 9.91712 0.121374 9.50961 0.0403966L9.50825 0.0397131C9.28932 -0.00336851 9.04232 6.4892e-05 8.75015 6.4892e-05H3.50018C2.8599 6.4892e-05 2.30917 -0.00152624 1.87051 0.0574864C1.41164 0.119239 0.972122 0.258611 0.615438 0.615295C0.258755 0.971979 0.119382 1.4115 0.0576296 1.87036C-0.00138283 2.30903 0.000206947 2.85975 0.000206947 3.50004V9.1C0.000206947 9.74029 -0.00138283 10.291 0.0576296 10.7297C0.119382 11.1885 0.258755 11.6281 0.615438 11.9847C0.972122 12.3414 1.41164 12.4808 1.87051 12.5426C2.30917 12.6016 2.8599 12.6 3.50018 12.6H4.20018V11.2H3.50018C2.82028 11.2 2.38075 11.1984 2.05713 11.1549C1.75397 11.1141 1.65872 11.0484 1.60528 10.9949C1.55183 10.9415 1.48613 10.8462 1.44532 10.5431C1.40178 10.2194 1.4002 9.7799 1.4002 9.1V3.50004C1.4002 2.82014 1.40178 2.38061 1.44532 2.05698C1.48613 1.75383 1.55183 1.65858 1.60528 1.60513C1.65872 1.55168 1.75397 1.48598 2.05713 1.44517C2.38075 1.40164 2.82028 1.40006 3.50018 1.40006H8.75015C9.1089 1.40006 9.18699 1.40364 9.23823 1.41373L9.23891 1.41304C9.37398 1.44029 9.49761 1.50768 9.59506 1.60513C9.69251 1.70258 9.75991 1.82622 9.78715 1.96128L9.78647 1.96197C9.79656 2.0132 9.80014 2.09129 9.80014 2.45005V2.80005H11.2001V2.45005Z"
-                    fill="#6F23D5"
-                  />
-                </svg>
-              </div>
             </div>
 
-            <p className="text-gray-600 dark:text-[#747474] text-center md:text-start">
-              invited 01.06.2025 by{' '}
-              <span className="text-[#EE9C04] font-bold">ID 1297</span>
-            </p>
+            {renderStatus()}
+
+            {registrationMessage && user && (
+              <p className="mt-2 text-sm text-emerald-500 text-center md:text-start">
+                {registrationMessage}
+              </p>
+            )}
           </div>
         </div>
 
@@ -110,13 +194,17 @@ const ProfileCard = () => {
             <div className="flex flex-col md:flex-row items-center justify-between gap-[10px] w-full">
               <input
                 type="text"
-                value={referLink}
-                disabled={true}
-                className="bg-white dark:bg-[#00000066] text-[#0a0a0a] dark:text-[#4DD9E8] md:text-[20px] font-bold px-[18px] py-3 rounded-[10px] w-full overflow-x-scroll cursor-pointer border border-gray-200 dark:border-transparent shadow-sm"
-                onClick={handleCopy}
-                title="Click to copy"
+                value={referLink || 'Connect wallet to generate your invite link'}
+                disabled
+                className="bg-white dark:bg-[#00000066] text-[#0a0a0a] dark:text-[#4DD9E8] md:text-[20px] font-bold px-[18px] py-3 rounded-[10px] w-full overflow-x-scroll cursor-pointer border border-gray-200 dark:border-transparent shadow-sm disabled:cursor-not-allowed"
+                onClick={referLink ? handleCopy : undefined}
+                title={referLink ? 'Click to copy' : 'Referral link unavailable'}
               />
-              <button onClick={handleCopy} className="w-full md:w-auto bg-white dark:bg-[#6F23D5] text-[#6F23D5] dark:text-white py-[11px] px-[26px] rounded-[12px] font-bold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#5a1fb8] transition-colors">
+              <button
+                onClick={handleCopy}
+                className="w-full md:w-auto bg-white dark:bg-[#6F23D5] text-[#6F23D5] dark:text-white py-[11px] px-[26px] rounded-[12px] font-bold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#5a1fb8] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                disabled={!referLink}
+              >
                 {copied ? 'Copied' : 'Copy'}
               </button>
             </div>
@@ -124,7 +212,101 @@ const ProfileCard = () => {
         </div>
       </div>
     </div>
+    {modalState !== 'hidden' && (
+      <RegistrationModal
+        state={modalState}
+        message={registrationMessage}
+        errorMessage={error?.message ?? ''}
+        onClose={() => {
+          acknowledgeRegistration();
+          setModalState('hidden');
+        }}
+        onRetry={() => {
+          acknowledgeRegistration();
+          refresh();
+        }}
+      />
+    )}
   </>
+  );
+};
+
+const RegistrationModal = ({ state, message, errorMessage, onClose, onRetry }) => {
+  const isRegistering = state === 'registering';
+  const isSuccess = state === 'success';
+  const isError = state === 'error';
+
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+      <div className="relative w-full max-w-md rounded-2xl border border-gray-200 dark:border-[#141429] bg-white dark:bg-[#0B0B1A] p-6 shadow-2xl">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Wallet Registration</h3>
+          <button
+            type="button"
+            onClick={isRegistering ? undefined : onClose}
+            className={`text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition ${
+              isRegistering ? 'cursor-not-allowed opacity-50' : ''
+            }`}
+            aria-label="Close registration modal"
+            disabled={isRegistering}
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="mt-4 space-y-3 text-sm text-gray-600 dark:text-[#bdbdbd]">
+          {isRegistering && (
+            <>
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#6F23D5]/10">
+                  <span className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-[#6F23D5] border-t-transparent" />
+                </span>
+                <p className="font-medium text-gray-900 dark:text-white">Registering your wallet on-chain</p>
+              </div>
+              <p>Please confirm the registration transaction in MetaMask. This process may take a few moments.</p>
+            </>
+          )}
+
+          {isSuccess && (
+            <>
+              <p className="font-medium text-emerald-500">
+                {message || 'Registration transaction confirmed. Your dashboard will refresh shortly.'}
+              </p>
+              <p>You can close this window once the dashboard updates with your latest data.</p>
+            </>
+          )}
+
+          {isError && (
+            <>
+              <p className="font-medium text-red-500">{errorMessage || 'Registration failed. Please try again.'}</p>
+              <p>Ensure you confirmed the transaction in MetaMask and that you have enough CCT and gas for the transaction.</p>
+            </>
+          )}
+        </div>
+
+        <div className="mt-6 flex justify-end gap-3">
+          {isError && (
+            <button
+              type="button"
+              onClick={onRetry}
+              className="rounded-lg border border-transparent bg-[#6F23D5] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#5a1fb8]"
+            >
+              Try Again
+            </button>
+          )}
+          {!isRegistering && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-lg border border-gray-300 dark:border-[#141429] px-4 py-2 text-sm font-semibold text-gray-700 dark:text-white transition hover:bg-gray-100 dark:hover:bg-[#1a1a2e]"
+            >
+              Close
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 
