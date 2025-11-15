@@ -16,17 +16,12 @@ const Navbar = () => {
   }, [account]);
 
   const walletLabel = (() => {
-    if (!hasProvider) return 'Install MetaMask';
+    if (!hasProvider) return 'Connect Wallet';
     if (isConnecting) return 'Connecting...';
     return displayAddress ?? 'Connect Wallet';
   })();
 
   const handleWalletClick = () => {
-    if (!hasProvider) {
-      window.open('https://metamask.io/download.html', '_blank', 'noopener');
-      return;
-    }
-
     if (!isConnecting) {
       connectWallet();
     }
@@ -67,7 +62,7 @@ const Navbar = () => {
               </button>
               {!hasProvider && (
                 <span className="text-xs text-[#F04438]">
-                  MetaMask extension required.
+                  Wallet connection unavailable.
                 </span>
               )}
               {error && hasProvider && (

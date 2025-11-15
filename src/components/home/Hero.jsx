@@ -1,35 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import useScrollAnimation from "../../hooks/useScrollAnimation";
+import { useWallet } from "../../context/WalletContext";
 
 const Hero = () => {
   const [heroRef, isHeroVisible] = useScrollAnimation({ threshold: 0.1 });
   const [titleRef, isTitleVisible] = useScrollAnimation({ threshold: 0.2 });
   const [descRef, isDescVisible] = useScrollAnimation({ threshold: 0.2 });
   const [buttonRef, isButtonVisible] = useScrollAnimation({ threshold: 0.2 });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [investment, setInvestment] = useState('');
-  const [error, setError] = useState('');
+  const { account, connectWallet, isConnecting } = useWallet();
 
   const handleJoinClick = () => {
-    setIsModalOpen(true);
-    setError('');
-    setInvestment('');
-  };
-
-  const handleClose = () => {
-    setIsModalOpen(false);
-    setError('');
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!investment || Number(investment) <= 0) {
-      setError('Please enter a positive number.');
-      return;
+    if (!account) {
+      connectWallet();
     }
-    // Placeholder: handle the numeric submission (send to API, etc.)
-    console.log('Submitted amount:', Number(investment));
-    handleClose();
   };
 
   return (
@@ -56,54 +39,18 @@ const Hero = () => {
             </p>
             <button 
               ref={buttonRef}
-              className={`relative rounded-xl p-[1px] w-full sm:w-auto animate-fade-in-up hover:scale-105 transition-transform duration-300 ${isButtonVisible ? 'animate' : ''}`}
+              className={`relative rounded-xl p-[1px] w-full sm:w-auto animate-fade-in-up hover:scale-105 transition-transform duration-300 ${isButtonVisible ? 'animate' : ''} ${isConnecting ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={handleJoinClick}
+              disabled={isConnecting}
             >
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E] animate-pulse-slow"></div>
               <div className="relative rounded-xl bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F] px-6 md:px-10 py-2 text-[18px] md:text-[26px] text-white keep-white font-bold text-center">
-                Join Now
+                {isConnecting ? 'Connecting...' : 'Join Now'}
               </div>
             </button>
           </div>
         </div>
       </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={handleClose}>
-          <div className="w-full max-w-md rounded-2xl border border-[#141429] bg-white dark:bg-[#0B0B1A] p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-[#0a0a0a] dark:text-white">Enter Amount</h2>
-              <button
-                type="button"
-                onClick={handleClose}
-                className="text-[#747474] hover:text-[#0a0a0a] dark:hover:text-white"
-                aria-label="Close"
-              >
-                ×
-              </button>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <label className="block text-sm font-medium text-[#0a0a0a] dark:text-[#bdbdbd] mb-2">
-                Investment Amount
-              </label>
-              <input
-                type="number"
-                value={investment}
-                onChange={(e) => setInvestment(e.target.value)}
-                className="w-full rounded-md border border-[#141429] bg-white dark:bg-[#0B0B1A] px-4 py-2 text-[#0a0a0a] dark:text-white outline-none"
-                placeholder="Enter amount"
-                min="0"
-              />
-              {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
-              <button
-                type="submit"
-                className="mt-4 w-full rounded-md bg-[#6F23D5] hover:bg-[#5a1fb8] text-white font-bold py-2"
-              >
-                Submit
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

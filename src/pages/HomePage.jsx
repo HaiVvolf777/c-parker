@@ -1,19 +1,20 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "../context/WalletContext.jsx";
+import { useUserData } from "../context/UserDataContext.jsx";
 import { HomeNavbar, Hero, Stats, Verified, VideoAnnouncements, PlatformActivity, HowItWorks, ParkerPool, CTA, Footer as HomeFooter, Eclips } from "../components/home";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { account } = useWallet();
+  const { user } = useUserData();
 
   useEffect(() => {
-    if (account) {
+    if (account && user?.userId) {
       navigate("/dashboard", { replace: true });
     }
-  }, [account, navigate]);
+  }, [account, user, navigate]);
 
-  // Sync with system theme by toggling `dark` on <html>
   useEffect(() => {
     const m = window.matchMedia('(prefers-color-scheme: dark)');
     const apply = () => {
@@ -27,7 +28,7 @@ const HomePage = () => {
     try {
       m.addEventListener('change', apply);
       return () => m.removeEventListener('change', apply);
-    } catch (_) {
+    } catch {
       m.addListener(apply);
       return () => m.removeListener(apply);
     }
@@ -59,43 +60,6 @@ const HomePage = () => {
     },
   ];
 
-  const activityData = [
-    {
-      time: "1min",
-      id: "#1023",
-      event: "reached Level 4",
-      plan: "Orbit A",
-      details: "earned 250 CCT",
-    },
-    {
-      time: "2min",
-      id: "#876",
-      event: "joined",
-      plan: "Orbit B",
-      details: "instant payout",
-    },
-    {
-      time: "1min",
-      id: "#1023",
-      event: "reached Level 4",
-      plan: "Orbit A",
-      details: "earned 250 CCT",
-    },
-    {
-      time: "2min",
-      id: "#876",
-      event: "joined",
-      plan: "Orbit B",
-      details: "instant payout",
-    },
-    {
-      time: "2min",
-      id: "#876",
-      event: "joined",
-      plan: "Orbit B",
-      details: "instant payout",
-    },
-  ];
 
   const features = [
     {
@@ -179,9 +143,9 @@ const HomePage = () => {
                 width="60.2815"
                 height="57.0781"
                 filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+                colorInterpolationFilters="sRGB"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feFlood floodOpacity="0" result="BackgroundImageFix" />
                 <feColorMatrix
                   in="SourceAlpha"
                   type="matrix"
@@ -222,7 +186,7 @@ const HomePage = () => {
       <VideoAnnouncements />
 
       {/* Platform Activity  */}
-      <PlatformActivity activity={activityData} />
+      <PlatformActivity />
 
        {/* How It Works */}
        <HowItWorks />

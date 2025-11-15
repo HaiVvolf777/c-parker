@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import detectEthereumProvider from '@metamask/detect-provider';
+import { EthereumProvider } from '@walletconnect/ethereum-provider';
 
 const WalletContext = createContext({
   account: null,
@@ -15,6 +15,7 @@ const WalletContext = createContext({
   hasProvider: false,
   isConnecting: false,
   error: null,
+  provider: null,
   connectWallet: async () => {},
   disconnectWallet: () => {},
 });
@@ -34,6 +35,7 @@ export const WalletProvider = ({ children }) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState(null);
   const providerRef = useRef(null);
+  const providerTypeRef = useRef(null);
 
   const handleAccountsChanged = useCallback((accounts) => {
     const nextAccount = Array.isArray(accounts) && accounts.length > 0 ? accounts[0] : null;
@@ -41,7 +43,8 @@ export const WalletProvider = ({ children }) => {
   }, []);
 
   const handleChainChanged = useCallback((nextChainId) => {
-    setChainId(nextChainId ?? null);
+    const chainIdNum = typeof nextChainId === 'string' ? parseInt(nextChainId, 16) : nextChainId;
+    setChainId(chainIdNum?.toString() ?? nextChainId?.toString() ?? null);
   }, []);
 
   useEffect(() => {
@@ -49,35 +52,74 @@ export const WalletProvider = ({ children }) => {
 
     const initializeProvider = async () => {
       try {
-        const provider = await detectEthereumProvider({ mustBeMetaMask: true });
+        if (window.ethereum && window.ethereum.isMetaMask) {
+          providerRef.current = window.ethereum;
+          providerTypeRef.current = 'metamask';
+          setHasProvider(true);
+
+          try {
+            const currentChain = await window.ethereum.request({ method: 'eth_chainId' });
+            if (currentChain) {
+              handleChainChanged(currentChain);
+            }
+          } catch (err) {
+            console.warn('Error checking chain:', err);
+          }
+
+          window.ethereum.on('accountsChanged', handleAccountsChanged);
+          window.ethereum.on('chainChanged', handleChainChanged);
+
+          if (!mounted) return;
+          return; 
+        }
+
+        const projectId = import.meta.env?.VITE_WALLETCONNECT_PROJECT_ID;
+        
+        if (!projectId || projectId === 'YOUR_PROJECT_ID' || projectId.trim() === '') {
+          console.warn('⚠️ WalletConnect Project ID not configured. MetaMask not detected either.');
+          setHasProvider(false);
+          return;
+        }
+
+        const provider = await EthereumProvider.init({
+          projectId: projectId,
+          chains: [80002], 
+          optionalChains: [80002], 
+          showQrModal: true,
+          metadata: {
+            name: 'C-Parker',
+            description: 'C-Parker Orbit Matrix Platform',
+            url: window.location.origin,
+            icons: [`${window.location.origin}/images/logo.png`],
+          },
+        });
 
         if (!mounted) return;
 
         if (provider) {
           providerRef.current = provider;
+          providerTypeRef.current = 'walletconnect';
           setHasProvider(true);
 
-          const [accounts, currentChain] = await Promise.allSettled([
-            provider.request({ method: 'eth_accounts' }),
-            provider.request({ method: 'eth_chainId' }),
-          ]);
-
-          if (accounts.status === 'fulfilled') {
-            handleAccountsChanged(accounts.value);
+          if (provider.session && provider.accounts && provider.accounts.length > 0) {
+            handleAccountsChanged(provider.accounts);
+            const currentChain = await provider.request({ method: 'eth_chainId' });
+            handleChainChanged(currentChain);
           }
 
-          if (currentChain.status === 'fulfilled') {
-            handleChainChanged(currentChain.value);
-          }
-
-          provider.on?.('accountsChanged', handleAccountsChanged);
-          provider.on?.('chainChanged', handleChainChanged);
+          provider.on('accountsChanged', handleAccountsChanged);
+          provider.on('chainChanged', handleChainChanged);
+          provider.on('disconnect', () => {
+            setAccount(null);
+            setChainId(null);
+          });
         } else {
           setHasProvider(false);
         }
       } catch (err) {
         if (!mounted) return;
         setError(formatError(err));
+        setHasProvider(false);
       }
     };
 
@@ -86,9 +128,17 @@ export const WalletProvider = ({ children }) => {
     return () => {
       mounted = false;
 
-      if (providerRef.current?.removeListener) {
-        providerRef.current.removeListener('accountsChanged', handleAccountsChanged);
-        providerRef.current.removeListener('chainChanged', handleChainChanged);
+      if (providerRef.current) {
+        if (providerTypeRef.current === 'metamask') {
+          if (window.ethereum?.removeListener) {
+            window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+            window.ethereum.removeListener('chainChanged', handleChainChanged);
+          }
+        } else if (providerTypeRef.current === 'walletconnect') {
+          providerRef.current.removeListener('accountsChanged', handleAccountsChanged);
+          providerRef.current.removeListener('chainChanged', handleChainChanged);
+          providerRef.current.removeListener('disconnect', () => {});
+        }
       }
     };
   }, [handleAccountsChanged, handleChainChanged]);
@@ -98,27 +148,45 @@ export const WalletProvider = ({ children }) => {
 
     if (!providerRef.current) {
       setHasProvider(false);
-      setError(new Error('MetaMask provider not detected'));
+      setError(new Error('Wallet provider not initialized'));
       return;
     }
 
     try {
       setIsConnecting(true);
-      const accounts = await providerRef.current.request({
-        method: 'eth_requestAccounts',
-      });
-      handleAccountsChanged(accounts);
+
+      if (providerTypeRef.current === 'metamask') {
+        const accounts = await providerRef.current.request({
+          method: 'eth_requestAccounts',
+        });
+        handleAccountsChanged(accounts);
+        const currentChain = await providerRef.current.request({ method: 'eth_chainId' });
+        handleChainChanged(currentChain);
+      } else {
+        const accounts = await providerRef.current.enable();
+        handleAccountsChanged(accounts);
+        const currentChain = await providerRef.current.request({ method: 'eth_chainId' });
+        handleChainChanged(currentChain);
+      }
     } catch (err) {
       setError(formatError(err));
     } finally {
       setIsConnecting(false);
     }
-  }, [handleAccountsChanged]);
+  }, [handleAccountsChanged, handleChainChanged]);
 
-  const disconnectWallet = useCallback(() => {
-    setAccount(null);
-    setChainId(null);
-    setError(null);
+  const disconnectWallet = useCallback(async () => {
+    try {
+      if (providerTypeRef.current === 'walletconnect' && providerRef.current?.session) {
+        await providerRef.current.disconnect();
+      }
+    } catch (err) {
+      console.warn('Error disconnecting:', err);
+    } finally {
+      setAccount(null);
+      setChainId(null);
+      setError(null);
+    }
   }, []);
 
   const value = useMemo(() => ({
@@ -127,6 +195,7 @@ export const WalletProvider = ({ children }) => {
     hasProvider,
     isConnecting,
     error,
+    provider: providerRef.current,
     connectWallet,
     disconnectWallet,
   }), [

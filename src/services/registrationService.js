@@ -20,13 +20,19 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   console.log('CCT Token Contract:', cctToken.target);
 
   // Helper to check if function exists
-  const hasFunc = (contract, fnName) => typeof contract[fnName] === 'function';
+  const hasFunc = (contract, fnName) => {
+    try {
+      return contract && typeof contract[fnName] === 'function';
+    } catch {
+      return false;
+    }
+  };
 
   // --- Check if user is already registered ---
   let existingUserID = 0n;
   try {
     if (hasFunc(orbitA, 'addressToUserID')) {
-      existingUserID = (await orbitA.callStatic.addressToUserID(userAddress)).toBigInt();
+      existingUserID = await orbitA.addressToUserID(userAddress);
       if (existingUserID > 0n) {
         console.log('Already registered with User ID:', existingUserID.toString());
         return { success: false, message: 'Already registered', userId: existingUserID.toString() };
@@ -40,7 +46,10 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   let orbitACost = 0n, orbitBCost = 0n, totalCost = 0n;
   try {
     if (hasFunc(orbitA, 'getTotalRegistrationCost')) {
-      [orbitACost, orbitBCost, totalCost] = await orbitA.callStatic.getTotalRegistrationCost();
+      const result = await orbitA.getTotalRegistrationCost();
+      orbitACost = result[0];
+      orbitBCost = result[1];
+      totalCost = result[2];
       console.log('Registration Cost: OrbitA', ethers.formatEther(orbitACost), 'CCT');
       console.log('Registration Cost: OrbitB', ethers.formatEther(orbitBCost), 'CCT');
       console.log('Total Cost:', ethers.formatEther(totalCost), 'CCT');
@@ -53,29 +62,46 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   let cctBalance = 0n;
   try {
     if (hasFunc(cctToken, 'balanceOf')) {
-      cctBalance = (await cctToken.callStatic.balanceOf(userAddress)).toBigInt();
+      cctBalance = await cctToken.balanceOf(userAddress);
       console.log('CCT Balance:', ethers.formatEther(cctBalance));
       if (totalCost > 0n && cctBalance < totalCost) {
         throw new Error(`Insufficient CCT. Need ${ethers.formatEther(totalCost)}, have ${ethers.formatEther(cctBalance)}`);
       }
     }
   } catch (err) {
+    if (err.message.includes('Insufficient CCT')) {
+      throw err;
+    }
     console.warn('Could not fetch balance (ignored if function missing):', err.message);
   }
 
   // --- Approve tokens if needed ---
+  // Use max uint256 for approval to avoid future approval issues
+  const MAX_UINT256 = ethers.MaxUint256;
   try {
     if (hasFunc(cctToken, 'allowance') && hasFunc(cctToken, 'approve')) {
-      const currentAllowance = (await cctToken.callStatic.allowance(userAddress, ORBIT_A_ADDRESS)).toBigInt();
-      if (totalCost > currentAllowance) {
-        console.log('Approving CCT...');
-        const approveTx = await cctToken.approve(ORBIT_A_ADDRESS, totalCost * 2n);
+      const currentAllowance = await cctToken.allowance(userAddress, ORBIT_A_ADDRESS);
+      console.log('Current allowance:', ethers.formatEther(currentAllowance));
+      
+      // Always approve if we don't have sufficient allowance or if we couldn't fetch the cost
+      // Use a reasonable minimum (1000 tokens) if totalCost is 0
+      const minRequiredAllowance = totalCost > 0n ? totalCost : ethers.parseEther('1000');
+      
+      if (currentAllowance < minRequiredAllowance) {
+        console.log('Approving CCT tokens...');
+        const approveTx = await cctToken.approve(ORBIT_A_ADDRESS, MAX_UINT256);
+        console.log('Approval transaction sent, waiting for confirmation...');
         const approveReceipt = await approveTx.wait();
         console.log('Approved CCT - TX:', approveReceipt.hash);
+      } else {
+        console.log('Sufficient allowance already exists');
       }
+    } else {
+      console.warn('Token contract does not have approve/allowance functions');
     }
   } catch (err) {
-    console.warn('Approval failed (ignored backend filter errors):', err.message);
+    console.error('Approval failed:', err);
+    throw new Error(`Failed to approve tokens: ${err.message}`);
   }
 
   // --- Register user ---
@@ -99,5 +125,10 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   }
 };
 
-// Convenience for MetaMask
-export const registerUserWithMetaMask = (referrerID = 1) => registerUser(window.ethereum, referrerID);
+// Convenience function - gets provider from WalletContext
+export const registerUserWithWallet = async (provider, referrerID = 1) => {
+  if (!provider) {
+    throw new Error('Wallet provider not available');
+  }
+  return registerUser(provider, referrerID);
+};

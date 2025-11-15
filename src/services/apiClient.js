@@ -1,4 +1,4 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:5000/api/v1';
+const DEFAULT_API_BASE_URL = 'http://localhost:4000/api/v1';
 
 const resolveBaseUrl = () => {
   const envUrl = import.meta.env?.VITE_API_BASE_URL;
@@ -94,17 +94,32 @@ export const getUserMatrix = (userId, orbit, level, options = {}) =>
 // ========================
 
 export const getUserPayments = (userId, params = {}, options = {}) => {
-  const query = buildQueryString(params);
+  // Default offset to 0 if limit is provided but offset is not
+  const finalParams = { ...params };
+  if (finalParams.limit !== undefined && finalParams.offset === undefined) {
+    finalParams.offset = 0;
+  }
+  const query = buildQueryString(finalParams);
   return apiClient(`/payments/user/${userId}${query}`, options);
 };
 
 export const getUserEarnedPayments = (userId, params = {}, options = {}) => {
-  const query = buildQueryString(params);
+  // Default offset to 0 if limit is provided but offset is not
+  const finalParams = { ...params };
+  if (finalParams.limit !== undefined && finalParams.offset === undefined) {
+    finalParams.offset = 0;
+  }
+  const query = buildQueryString(finalParams);
   return apiClient(`/payments/user/${userId}/earned${query}`, options);
 };
 
 export const getUserMissedPayments = (userId, params = {}, options = {}) => {
-  const query = buildQueryString(params);
+  // Default offset to 0 if limit is provided but offset is not
+  const finalParams = { ...params };
+  if (finalParams.limit !== undefined && finalParams.offset === undefined) {
+    finalParams.offset = 0;
+  }
+  const query = buildQueryString(finalParams);
   return apiClient(`/payments/user/${userId}/missed${query}`, options);
 };
 
@@ -131,7 +146,7 @@ export const getLeaderboard = (params = {}, options = {}) => {
 
 export const getRecentUsers = (params = {}, options = {}) => {
   const query = buildQueryString(params);
-  return apiClient(`/statistics/recent${query}`, options);
+  return apiClient(`/statistics/recent-users${query}`, options);
 };
 
 // ========================
@@ -140,5 +155,5 @@ export const getRecentUsers = (params = {}, options = {}) => {
 
 export const getActivityFeed = (params = {}, options = {}) => {
   const query = buildQueryString(params);
-  return apiClient(`/activity/feed${query}`, options);
+  return apiClient(`/activity${query}`, options);
 };

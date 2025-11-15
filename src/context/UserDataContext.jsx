@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { useWallet } from './WalletContext.jsx';
 import { getUserByWallet, getUserStats, ApiError } from '../services/apiClient.js';
-import { registerUserWithMetaMask } from '../services/registrationService.js';
+import { registerUserWithWallet } from '../services/registrationService.js';
 
 const UserDataContext = createContext({
   user: null,
@@ -29,7 +29,7 @@ const INITIAL_STATE = {
 };
 
 export const UserDataProvider = ({ children }) => {
-  const { account } = useWallet();
+  const { account, provider, disconnectWallet } = useWallet();
   const [user, setUser] = useState(null);
   const [userStats, setUserStats] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -104,11 +104,35 @@ export const UserDataProvider = ({ children }) => {
           setRegistrationMessage(null);
 
           try {
-            const result = await registerUserWithMetaMask(1);
+            if (!provider) {
+              throw new Error('Wallet provider not available. Please connect your wallet first.');
+            }
+            const result = await registerUserWithWallet(provider, 1);
             setRegistrationMessage(result?.message ?? 'Registration submitted successfully');
             await fetchUserData(false);
           } catch (registrationErr) {
             autoRegisterAttempted.current = false;
+            
+            // Check if user rejected/cancelled the transaction
+            const errorMessage = registrationErr instanceof Error ? registrationErr.message : String(registrationErr);
+            const errorCode = registrationErr?.code || registrationErr?.error?.code;
+            const isRejected = 
+              errorCode === 4001 || // User rejected request
+              errorCode === 'ACTION_REJECTED' ||
+              errorMessage.toLowerCase().includes('rejected') ||
+              errorMessage.toLowerCase().includes('denied') ||
+              errorMessage.toLowerCase().includes('user denied') ||
+              errorMessage.toLowerCase().includes('user rejected');
+            
+            if (isRejected) {
+              // User cancelled/rejected - redirect to home page
+              console.log('Transaction rejected by user, redirecting to home page...');
+              disconnectWallet();
+              // Use window.location since we're outside Router context
+              window.location.href = '/';
+              return;
+            }
+            
             const message =
               registrationErr instanceof Error
                 ? registrationErr.message
@@ -135,7 +159,7 @@ export const UserDataProvider = ({ children }) => {
         activeRequest.current = null;
       }
     }
-  }, [account, resetState]);
+  }, [account, provider, resetState, disconnectWallet]);
 
   const acknowledgeRegistration = useCallback(() => {
     setRegistrationMessage(null);
@@ -151,13 +175,20 @@ export const UserDataProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    fetchUserData();
+    // Only fetch user data if account is connected (user clicked "Connect Wallet")
+    // Auto-registration is OK here because user explicitly connected
+    if (account) {
+      fetchUserData(true); // Allow auto-registration since user explicitly connected
+    } else {
+      // Reset state when account is disconnected
+      resetState();
+    }
 
     return () => {
       activeRequest.current?.abort?.();
       activeRequest.current = null;
     };
-  }, [fetchUserData]);
+  }, [account, fetchUserData, resetState]);
 
   const value = useMemo(() => ({
     user,

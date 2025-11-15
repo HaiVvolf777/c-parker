@@ -8,23 +8,31 @@ const Verified = () => {
       await navigator.clipboard.writeText(text);
       setCopiedIndex(index);
       setTimeout(() => setCopiedIndex(null), 1200);
-    } catch (_) {
+    } catch {
       const textarea = document.createElement('textarea');
       textarea.value = text;
       textarea.style.position = 'fixed';
       textarea.style.opacity = '0';
       document.body.appendChild(textarea);
       textarea.select();
-      try { document.execCommand('copy'); } catch (e) {}
+      try { 
+        document.execCommand('copy'); 
+      } catch {
+        // Fallback copy failed
+      }
       document.body.removeChild(textarea);
       setCopiedIndex(index);
       setTimeout(() => setCopiedIndex(null), 1200);
     }
   };
 
+  const handleViewExplorer = (address) => {
+    window.open(`https://amoy.polygonscan.com/address/${address}`, '_blank');
+  };
+
   const addresses = [
-    '0saC3adbbc2ea1f62a50f57a',
-    '0saC3adbbc2ea1f62a50f57a',
+    import.meta.env?.VITE_ORBIT_A_ADDRESS ?? '0x0000000000000000000000000000000000000000',
+    import.meta.env?.VITE_ORBIT_B_ADDRESS ?? '0x0000000000000000000000000000000000000000',
   ];
 
   return (
@@ -48,7 +56,10 @@ const Verified = () => {
                   )}
                 </button>
               </div>
-              <div className="flex items-center gap-1">
+              <div 
+                onClick={() => handleViewExplorer(addresses[index])} 
+                className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
+              >
                 <span className="text-gray-800 dark:text-white text-[16px] md:text-[24px] ">View on Explorer</span>
                 <img src="icons/arrow-right.svg" alt="" className="w-4 h-4 invert dark:invert-0" />
               </div>

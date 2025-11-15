@@ -1,7 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useWallet } from "../../context/WalletContext.jsx";
+import { getUserByWallet, ApiError } from "../../services/apiClient.js";
+import JoinNowModal from "./JoinNowModal";
 
 const HomeNavbar = () => {
+  const navigate = useNavigate();
   const {
     account,
     isConnecting,
@@ -9,6 +13,8 @@ const HomeNavbar = () => {
     connectWallet,
     error,
   } = useWallet();
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [isCheckingUser, setIsCheckingUser] = useState(false);
 
   const displayAddress = useMemo(() => {
     if (!account) return null;
@@ -16,19 +22,43 @@ const HomeNavbar = () => {
   }, [account]);
 
   const walletLabel = (() => {
-    if (!hasProvider) return "Install MetaMask";
-    if (isConnecting) return "Connecting...";
+    if (!hasProvider) return "Connect Wallet";
+    if (isConnecting || isCheckingUser) return "Connecting...";
     return displayAddress ?? "Connect Wallet";
   })();
 
-  const handleWalletClick = () => {
-    if (!hasProvider) {
-      window.open("https://metamask.io/download.html", "_blank", "noopener");
-      return;
-    }
+  // Check user after wallet connection (only on home page)
+  useEffect(() => {
+    const checkUser = async () => {
+      if (!account) return;
+      // Only check if we're on the home page (not already on dashboard)
+      if (window.location.pathname !== '/' && window.location.pathname !== '/home') {
+        return;
+      }
 
+      try {
+        setIsCheckingUser(true);
+        await getUserByWallet(account);
+        // User exists, redirect to dashboard
+        navigate('/dashboard');
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 404) {
+          // User doesn't exist, show join modal
+          setShowJoinModal(true);
+        } else {
+          console.error('Error checking user:', err);
+        }
+      } finally {
+        setIsCheckingUser(false);
+      }
+    };
+
+    checkUser();
+  }, [account, navigate]);
+
+  const handleWalletClick = async () => {
     if (!isConnecting) {
-      connectWallet();
+      await connectWallet();
     }
   };
 
@@ -59,7 +89,7 @@ const HomeNavbar = () => {
         </button>
         {!hasProvider && (
           <span className="text-xs text-[#F04438]">
-            MetaMask extension required.
+            Wallet connection unavailable.
           </span>
         )}
         {error && hasProvider && (
@@ -68,6 +98,7 @@ const HomeNavbar = () => {
           </span>
         )}
       </div>
+      <JoinNowModal isOpen={showJoinModal} onClose={() => setShowJoinModal(false)} />
     </div>
   );
 };
