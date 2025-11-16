@@ -28,6 +28,47 @@ const formatError = (err) => {
   return new Error('Unexpected wallet error');
 };
 
+// localStorage keys
+const STORAGE_KEY = 'c-parker-wallet-session';
+const STORAGE_ACCOUNT_KEY = 'c-parker-wallet-account';
+const STORAGE_PROVIDER_TYPE_KEY = 'c-parker-wallet-provider-type';
+
+// Helper functions for localStorage
+const saveWalletSession = (account, providerType) => {
+  try {
+    if (account && providerType) {
+      localStorage.setItem(STORAGE_ACCOUNT_KEY, account);
+      localStorage.setItem(STORAGE_PROVIDER_TYPE_KEY, providerType);
+      localStorage.setItem(STORAGE_KEY, 'true');
+    }
+  } catch (err) {
+    console.warn('Failed to save wallet session:', err);
+  }
+};
+
+const getWalletSession = () => {
+  try {
+    const account = localStorage.getItem(STORAGE_ACCOUNT_KEY);
+    const providerType = localStorage.getItem(STORAGE_PROVIDER_TYPE_KEY);
+    if (account && providerType) {
+      return { account, providerType };
+    }
+  } catch (err) {
+    console.warn('Failed to get wallet session:', err);
+  }
+  return null;
+};
+
+export const clearWalletSession = () => {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_ACCOUNT_KEY);
+    localStorage.removeItem(STORAGE_PROVIDER_TYPE_KEY);
+  } catch (err) {
+    console.warn('Failed to clear wallet session:', err);
+  }
+};
+
 export const WalletProvider = ({ children }) => {
   const [account, setAccount] = useState(null);
   const [chainId, setChainId] = useState(null);
@@ -40,6 +81,12 @@ export const WalletProvider = ({ children }) => {
   const handleAccountsChanged = useCallback((accounts) => {
     const nextAccount = Array.isArray(accounts) && accounts.length > 0 ? accounts[0] : null;
     setAccount(nextAccount);
+    // Save to localStorage when account changes
+    if (nextAccount && providerTypeRef.current) {
+      saveWalletSession(nextAccount, providerTypeRef.current);
+    } else if (!nextAccount) {
+      clearWalletSession();
+    }
   }, []);
 
   const handleChainChanged = useCallback((nextChainId) => {
@@ -52,6 +99,9 @@ export const WalletProvider = ({ children }) => {
 
     const initializeProvider = async () => {
       try {
+        // Try to restore wallet session from localStorage
+        const savedSession = getWalletSession();
+        
         if (window.ethereum && window.ethereum.isMetaMask) {
           providerRef.current = window.ethereum;
           providerTypeRef.current = 'metamask';
@@ -64,6 +114,22 @@ export const WalletProvider = ({ children }) => {
             }
           } catch (err) {
             console.warn('Error checking chain:', err);
+          }
+
+          // Restore account from localStorage if session exists
+          if (savedSession && savedSession.providerType === 'metamask') {
+            try {
+              const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+              if (accounts && accounts.length > 0 && accounts[0].toLowerCase() === savedSession.account.toLowerCase()) {
+                handleAccountsChanged(accounts);
+              } else {
+                // Account mismatch, clear session
+                clearWalletSession();
+              }
+            } catch (err) {
+              console.warn('Error restoring wallet session:', err);
+              clearWalletSession();
+            }
           }
 
           window.ethereum.on('accountsChanged', handleAccountsChanged);
@@ -105,6 +171,25 @@ export const WalletProvider = ({ children }) => {
             handleAccountsChanged(provider.accounts);
             const currentChain = await provider.request({ method: 'eth_chainId' });
             handleChainChanged(currentChain);
+          } else if (savedSession && savedSession.providerType === 'walletconnect') {
+            // Try to restore WalletConnect session
+            try {
+              if (provider.session && provider.accounts && provider.accounts.length > 0) {
+                const account = provider.accounts[0];
+                if (account.toLowerCase() === savedSession.account.toLowerCase()) {
+                  handleAccountsChanged(provider.accounts);
+                  const currentChain = await provider.request({ method: 'eth_chainId' });
+                  handleChainChanged(currentChain);
+                } else {
+                  clearWalletSession();
+                }
+              } else {
+                clearWalletSession();
+              }
+            } catch (err) {
+              console.warn('Error restoring WalletConnect session:', err);
+              clearWalletSession();
+            }
           }
 
           provider.on('accountsChanged', handleAccountsChanged);
@@ -112,6 +197,7 @@ export const WalletProvider = ({ children }) => {
           provider.on('disconnect', () => {
             setAccount(null);
             setChainId(null);
+            clearWalletSession();
           });
         } else {
           setHasProvider(false);
@@ -162,11 +248,13 @@ export const WalletProvider = ({ children }) => {
         handleAccountsChanged(accounts);
         const currentChain = await providerRef.current.request({ method: 'eth_chainId' });
         handleChainChanged(currentChain);
+        // Session is saved in handleAccountsChanged
       } else {
         const accounts = await providerRef.current.enable();
         handleAccountsChanged(accounts);
         const currentChain = await providerRef.current.request({ method: 'eth_chainId' });
         handleChainChanged(currentChain);
+        // Session is saved in handleAccountsChanged
       }
     } catch (err) {
       setError(formatError(err));
@@ -186,6 +274,7 @@ export const WalletProvider = ({ children }) => {
       setAccount(null);
       setChainId(null);
       setError(null);
+      clearWalletSession();
     }
   }, []);
 

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUserData } from '../../../context/UserDataContext.jsx';
 
 const formatNumber = (value, options = {}) => {
@@ -23,6 +24,7 @@ const computeEarningsRatio = (earnedString, missedString) => {
 };
 
 const TotalNumbersCard = () => {
+  const navigate = useNavigate();
   const { userStats, isLoading } = useUserData();
 
   const ratioValue = useMemo(() => {
@@ -95,9 +97,9 @@ const TotalNumbersCard = () => {
           <div>
             <div className="h-full rounded-[10px] bg-gradient-to-r from-[#FF04B4] to-[#EE9C04] border-2 border-gray-200 dark:border-[#141429] p-[18px]">
               <div className="flex flex-col justify-between h-full">
-                <div className="flex items-center flex-row-reverse justify-between">
+                <div className="flex items-center flex-row-reverse gap-6 justify-end">
                   <span className="text-lg text-white font-semibold">
-                    Top 300 Leaders
+                    Top Leaders
                   </span>
                   <div>
                     <svg width="64" height="65" viewBox="0 0 64 65" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -109,7 +111,10 @@ const TotalNumbersCard = () => {
                 </div>
 
                 <div className="mt-10">
-                  <button className="text-white font-bold bg-white/20 dark:bg-[#150F3E99] px-6 py-[9px] leading-[100%] rounded-[10px] cursor-pointer hover:bg-white/30 dark:hover:bg-[#150F3E] transition-colors">
+                  <button
+                    onClick={() => navigate('/dashboard/top-leaders')}
+                    className="text-white font-bold bg-white/20 dark:bg-[#150F3E99] px-6 py-[16px] leading-[100%] rounded-[10px] cursor-pointer hover:bg-white/30 dark:hover:bg-[#6F23D5] transition-colors"
+                  >
                     See Now
                   </button>
                 </div>

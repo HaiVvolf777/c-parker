@@ -1,14 +1,22 @@
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useWallet } from '../../../context/WalletContext.jsx';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const {
     account,
     isConnecting,
     hasProvider,
     connectWallet,
+    disconnectWallet,
     error,
   } = useWallet();
+
+  const handleLogoClick = async () => {
+    await disconnectWallet();
+    navigate('/', { replace: true });
+  };
 
   const displayAddress = useMemo(() => {
     if (!account) return null;
@@ -30,16 +38,14 @@ const Navbar = () => {
   return (
     <>
       <div className="w-full p-5 h-[83px] bg-white dark:bg-[#00000E] border-b border-gray-200 dark:border-[#141429]">
-        <div className="flex items-center justify-between ">
-          <div className='cursor-pointer max-xl:hidden'>
-            {/* Light mode logo */}
-            <a href="/"><img src="/images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" /></a>
-            {/* Dark mode logo */}
-            <a href="/"><img src="/images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" /></a>
+        <div className="flex items-center justify-end lg:justify-between ">
+          <div className='cursor-pointer max-xl:hidden' onClick={handleLogoClick}>
+            <img src="/images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" />
+            <img src="/images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" />
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="hidden xl:flex items-center gap-[10px]">
+            <div className="hidden xl:flex items-center gap-[10px] ">
               <span className="text-gray-800 dark:text-white text-[20px] font-semibold ">
                 Preview ID
               </span>

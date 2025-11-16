@@ -5,10 +5,9 @@ import ActivityTableContainer from '../components/dashboard/platform-activity/Ac
 import SliderLevelNode from '../components/dashboard/nodes/SliderLevelNode';
 import SliderLevelNodeB from '../components/dashboard/nodes/SliderLevelNodeB';
 import useScrollAnimation from '../hooks/useScrollAnimation';
-import withProgressGuard from '../components/dashboard/nodes/withProgressGuard.jsx'
 import { useProgress } from '../context/ProgressContext.jsx'
 
-const NodeLevelProgressionBase = () => {
+const NodeLevelProgressionB = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const prevSlide = () => setSlideIndex((i) => (i + 2) % 3);
   const nextSlide = () => setSlideIndex((i) => (i + 1) % 3);
@@ -162,6 +161,4 @@ const NodeLevelProgressionBase = () => {
   );
 };
 
-const NodeLevelProgression = withProgressGuard(NodeLevelProgressionBase)
-
-export default NodeLevelProgression;
+export default NodeLevelProgressionB;

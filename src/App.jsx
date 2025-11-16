@@ -17,9 +17,9 @@ import OrbitLevelProgression from './pages/OrbitLevelProgression';
 import NotFound from './pages/NotFound';
 import OrbitBLevelProgression from './pages/OrbitBLevelProgression';
 import NodeLevelProgressionB from './pages/NodeLevelProgressionB';
-import Purchase from './pages/Purchase';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import TopLeaders from './pages/TopLeaders';
 function App() {
   return (
     <AdminAuthProvider>
@@ -34,7 +34,6 @@ function App() {
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/support" element={<SupportPage />} />
-                    <Route path="/purchase" element={<Purchase />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/dashboard" element={<Dashboard />} />
@@ -44,6 +43,7 @@ function App() {
                     <Route path="/dashboard/all-nodes-b" element={<AllNodesB />} />
                     <Route path="/dashboard/orbit-level-progression" element={<OrbitLevelProgression />} />
                     <Route path="/dashboard/orbit-b-level-progression" element={<OrbitBLevelProgression />} />
+                    <Route path="/dashboard/top-leaders" element={<TopLeaders />} />
                     {/* <Route path="/dashboard/all-nodes" element={<Orbitb />} /> */}
                     <Route path="/home" element={<Navigate to="/" replace />} />
                     <Route path="*" element={<NotFound />} />

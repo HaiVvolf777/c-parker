@@ -28,7 +28,6 @@ export const AdminAuthProvider = ({ children }) => {
   }, [isAdmin]);
 
   const login = async (password) => {
-    // demo-only check
     const ok = password === DEFAULT_PASSWORD;
     if (ok) setIsAdmin(true);
     return ok;

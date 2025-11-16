@@ -11,6 +11,7 @@ const HomeNavbar = () => {
     isConnecting,
     hasProvider,
     connectWallet,
+    disconnectWallet,
     error,
   } = useWallet();
   const [showJoinModal, setShowJoinModal] = useState(false);
@@ -62,9 +63,14 @@ const HomeNavbar = () => {
     }
   };
 
+  const handleLogoClick = async () => {
+    await disconnectWallet();
+    navigate('/', { replace: true });
+  };
+
   return (
     <div className="container mx-auto bg-transparent min-h-[70px] p-3 flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-2 border-[#21213C] rounded-xl backdrop-blur-[60px] mt-[20px] md:mt-[37px] relative z-[10]">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between cursor-pointer" onClick={handleLogoClick}>
         <img src="images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" />
         <img src="images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" />
       </div>

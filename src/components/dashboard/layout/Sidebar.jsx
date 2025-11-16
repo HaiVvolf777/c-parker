@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useWallet } from '../../../context/WalletContext.jsx';
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { disconnectWallet } = useWallet();
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
@@ -13,17 +15,6 @@ const Sidebar = () => {
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M13 21V11H21V21H13ZM3 13V3H11V13H3ZM9 11V5H5V11H9ZM3 21V15H11V21H3ZM5 19H9V17H5V19ZM15 19H19V13H15V19ZM13 3H21V9H13V3ZM15 5V7H19V5H15Z" fill="#6F23D5" />
-        </svg>
-      )
-    },
-    {
-      name: 'Purchase Access',
-      path: '/purchase',
-      icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 6H18V8H6V6Z" fill="#6F23D5" />
-          <path d="M6 10H18V12H6V10Z" fill="#6F23D5" />
-          <path d="M6 14H14V16H6V14Z" fill="#6F23D5" />
         </svg>
       )
     },
@@ -39,11 +30,31 @@ const Sidebar = () => {
     //   )
     // },
     {
+      name: 'Orbit A Level Progression',
+      path: '/dashboard/orbit-level-progression',
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="#6F23D5" strokeWidth="2" />
+          <path d="M12 6V12L16 14" stroke="#6F23D5" strokeWidth="2" />
+        </svg>
+      )
+    },
+    {
       name: 'Node A Level Progression',
       path: '/dashboard/node-level-progression',
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M7 4V20L17 12L7 4Z" fill="#6F23D5" />
+        </svg>
+      )
+    },
+    {
+      name: 'Orbit B Level Progression',
+      path: '/dashboard/orbit-b-level-progression',
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="none" stroke="#6F23D5" strokeWidth="2" />
+          <path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12" stroke="#6F23D5" strokeWidth="2" />
         </svg>
       )
     },
@@ -56,24 +67,15 @@ const Sidebar = () => {
         </svg>
       )
     },
+
+    
+
     {
-      name: 'Orbit A Level Progression',
-      path: '/dashboard/orbit-level-progression',
+      name: 'Top Leaders',
+      path: '/dashboard/top-leaders',
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="#6F23D5" strokeWidth="2" />
-          <path d="M12 6V12L16 14" stroke="#6F23D5" strokeWidth="2" />
-        </svg>
-      )
-    }
-    ,
-    {
-      name: 'Orbit B Level Progression',
-      path: '/dashboard/orbit-b-level-progression',
-      icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="#6F23D5" strokeWidth="2" />
-          <path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12" stroke="#6F23D5" strokeWidth="2" />
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#6F23D5" />
         </svg>
       )
     }
@@ -83,10 +85,15 @@ const Sidebar = () => {
     return location.pathname === path;
   };
 
+  const handleLogoClick = async () => {
+    await disconnectWallet();
+    navigate('/', { replace: true });
+  };
+
   return (
     <>
       {/* Mobile toggle button */}
-      <div className="xl:hidden fixed top-4 left-4">
+      <div className="xl:hidden absolute top-4 left-4">
         <button
           type="button"
           aria-label="Toggle menu"
@@ -108,11 +115,11 @@ const Sidebar = () => {
           <div className="absolute left-0 top-0 h-full w-[80%] max-w-[280px] bg-white dark:bg-[#0B0B1A] border-r border-gray-200 dark:border-[#141429] py-[18px] px-[10px]">
 
 
-            <div className='cursor-pointer'>
+            <div className='cursor-pointer' onClick={handleLogoClick}>
               {/* Light mode logo */}
-              <a href="/"><img src="/images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" /></a>
+              <img src="/images/logo-light.png" alt="C-Parker" className="h-8 md:h-10 w-auto block dark:hidden" />
               {/* Dark mode logo */}
-              <a href="/"><img src="/images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" /></a>
+              <img src="/images/logo.png" alt="C-Parker" className="h-8 md:h-10 w-auto hidden dark:block" />
             </div>
 
             <div className="space-y-2 mt-3">

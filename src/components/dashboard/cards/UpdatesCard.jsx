@@ -1,9 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAnnouncements } from '../../../context/AnnouncementsContext.jsx';
 
 const UpdatesCard = ({ className }) => {
+  const navigate = useNavigate();
   const { announcements } = useAnnouncements();
   const latest = announcements.length ? announcements[0] : null;
+
+  const handleUpgradeClick = () => {
+    navigate('/dashboard/orbit-b-level-progression');
+  };
 
   return (
     <>
@@ -30,7 +36,10 @@ const UpdatesCard = ({ className }) => {
           </div>
 
           <div className="">
-            <button className="text-white keep-white font-bold bg-[#7D40FF] px-6 py-[9px] leading-[100%] rounded-[10px] cursor-pointer ">
+            <button
+              onClick={handleUpgradeClick}
+              className="text-white keep-white font-bold bg-[#7D40FF] px-6 py-[9px] leading-[100%] rounded-[10px] cursor-pointer hover:bg-[#6a35d4] transition-colors"
+            >
               Upgrade Now
             </button>
           </div>

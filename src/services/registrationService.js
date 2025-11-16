@@ -88,11 +88,32 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
       const minRequiredAllowance = totalCost > 0n ? totalCost : ethers.parseEther('1000');
       
       if (currentAllowance < minRequiredAllowance) {
-        console.log('Approving CCT tokens...');
-        const approveTx = await cctToken.approve(ORBIT_A_ADDRESS, MAX_UINT256);
-        console.log('Approval transaction sent, waiting for confirmation...');
-        const approveReceipt = await approveTx.wait();
-        console.log('Approved CCT - TX:', approveReceipt.hash);
+        try {
+          console.log('Approving CCT tokens...');
+          const approveTx = await cctToken.approve(ORBIT_A_ADDRESS, MAX_UINT256);
+          console.log('Approval transaction sent, waiting for confirmation...');
+          const approveReceipt = await approveTx.wait();
+          console.log('Approved CCT - TX:', approveReceipt.hash);
+        } catch (approveErr) {
+          // Check if allowance is now sufficient (user might have approved manually)
+          const updatedAllowance = await cctToken.allowance(userAddress, ORBIT_A_ADDRESS);
+          if (updatedAllowance < minRequiredAllowance) {
+            const errorMsg = approveErr.reason || approveErr.message || 'Transaction failed';
+            console.error('Approval failed:', approveErr);
+            
+            if (errorMsg.includes('user rejected') || errorMsg.includes('User denied')) {
+              throw new Error('Token approval was cancelled. Please approve the transaction to continue with registration.');
+            } else if (errorMsg.includes('insufficient funds') ) {
+              throw new Error('Insufficient funds for gas fees. Please ensure you have enough MATIC/Polygon tokens.');
+            } else if (errorMsg.includes('Internal JSON-RPC error')) {
+              throw new Error('Network error during approval. Please check your connection and try again.');
+            } else {
+              throw new Error(`Token approval failed: ${errorMsg}. Please try again.`);
+            }
+          }
+          // If allowance is now sufficient, continue
+          console.log('Allowance is now sufficient, continuing with registration...');
+        }
       } else {
         console.log('Sufficient allowance already exists');
       }
@@ -101,27 +122,63 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
     }
   } catch (err) {
     console.error('Approval failed:', err);
-    throw new Error(`Failed to approve tokens: ${err.message}`);
+    // Re-throw if it's already a formatted error
+    if (err.message && (
+      err.message.includes('Token approval was cancelled') ||
+      err.message.includes('Insufficient funds') ||
+      err.message.includes('Network error') ||
+      err.message.includes('Token approval failed')
+    )) {
+      throw err;
+    }
+    throw new Error(`Failed to approve tokens: ${err.message || 'Unknown error'}`);
   }
 
   // --- Register user ---
   try {
     if (hasFunc(orbitA, 'register')) {
       console.log('Registering user with referrer ID:', referrerID);
-      const registerTx = await orbitA.register(referrerID);
-      const receipt = await registerTx.wait();
-      console.log('Registration TX confirmed:', receipt.hash);
-      console.log('Gas Used:', receipt.gasUsed.toString());
-      console.log('Block:', receipt.blockNumber);
+      try {
+        const registerTx = await orbitA.register(referrerID);
+        const receipt = await registerTx.wait();
+        console.log('Registration TX confirmed:', receipt.hash);
+        console.log('Gas Used:', receipt.gasUsed.toString());
+        console.log('Block:', receipt.blockNumber);
 
-      return { success: true, message: 'User registered', txHash: receipt.hash };
+        return { success: true, message: 'User registered successfully!', txHash: receipt.hash };
+      } catch (registerErr) {
+        const errorMsg = registerErr.reason || registerErr.message || 'Transaction failed';
+        console.error('Registration transaction failed:', registerErr);
+        
+        if (errorMsg.includes('user rejected') || errorMsg.includes('User denied')) {
+          throw new Error('Registration transaction was cancelled. Please try again.');
+        } else if (errorMsg.includes('insufficient funds') ) {
+          throw new Error('Insufficient funds for gas fees. Please ensure you have enough MATIC/Polygon tokens.');
+        } else if (errorMsg.includes('Internal JSON-RPC error')) {
+          throw new Error('Network error during registration. Please check your connection and try again.');
+        } else if (errorMsg.includes('Insufficient allowance')) {
+          throw new Error('Token allowance insufficient. Please approve tokens first.');
+        } else {
+          throw new Error(`Registration failed: ${errorMsg}. Please try again.`);
+        }
+      }
     } else {
       console.warn('Contract function register not found. Cannot register user.');
       return { success: false, message: 'Register function not found' };
     }
   } catch (err) {
     console.error('Registration failed:', err);
-    throw err;
+    // Re-throw if it's already a formatted error
+    if (err.message && (
+      err.message.includes('Registration transaction was cancelled') ||
+      err.message.includes('Insufficient funds') ||
+      err.message.includes('Network error') ||
+      err.message.includes('Token allowance insufficient') ||
+      err.message.includes('Registration failed')
+    )) {
+      throw err;
+    }
+    throw new Error(err.message || 'Failed to register user. Please try again.');
   }
 };
 
