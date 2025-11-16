@@ -11,5 +11,7 @@ VITE_CCT_TOKEN_ADDRESS=0xYourCCTTokenAddress
 - `VITE_API_BASE_URL` – base URL for the NestJS backend.
 - `VITE_ORBIT_A_ADDRESS` – Orbit A smart-contract address the registration helper should call.
 - `VITE_CCT_TOKEN_ADDRESS` – ERC‑20 CCT token contract address used for balance/allowance checks.
+- `VITE_WALLETCONNECT_PROJECT_ID`=connect walletproe=ject ID
+- `VITE_CCT_TOKEN_ADDRESS`= CCT token address
 
 After updating the `.env`, restart the Vite dev server so the new values are picked up.
