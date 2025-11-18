@@ -96,7 +96,7 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="h-auto w-full relative bg-white text-[#0a0a0a] dark:bg-[#00000e] dark:text-white">
+    <div className="h-auto w-full relative bg-white text-[#0a0a0a] dark:bg-[#00000e] dark:text-white px-2">
       <Eclips />
       <HomeNavbar />
       <div className="mt-6 md:mt-0 mx-6 md:mx-0">

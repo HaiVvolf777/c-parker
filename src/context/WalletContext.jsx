@@ -16,8 +16,10 @@ const WalletContext = createContext({
   isConnecting: false,
   error: null,
   provider: null,
+  isCorrectNetwork: false,
   connectWallet: async () => {},
   disconnectWallet: () => {},
+  switchToAmoyNetwork: async () => {},
 });
 
 const formatError = (err) => {
@@ -69,6 +71,9 @@ export const clearWalletSession = () => {
   }
 };
 
+// Expected network chain ID from environment variable
+const EXPECTED_CHAIN_ID = import.meta.env?.VITE_CHAIN_ID ?? '80002';
+
 export const WalletProvider = ({ children }) => {
   const [account, setAccount] = useState(null);
   const [chainId, setChainId] = useState(null);
@@ -91,7 +96,9 @@ export const WalletProvider = ({ children }) => {
 
   const handleChainChanged = useCallback((nextChainId) => {
     const chainIdNum = typeof nextChainId === 'string' ? parseInt(nextChainId, 16) : nextChainId;
-    setChainId(chainIdNum?.toString() ?? nextChainId?.toString() ?? null);
+    const chainIdStr = chainIdNum?.toString() ?? nextChainId?.toString() ?? null;
+    setChainId(chainIdStr);
+    // Note: Users can switch networks, but NetworkWarning will prompt them to switch back
   }, []);
 
   useEffect(() => {
@@ -147,10 +154,11 @@ export const WalletProvider = ({ children }) => {
           return;
         }
 
+        const chainIdNum = parseInt(EXPECTED_CHAIN_ID, 10);
         const provider = await EthereumProvider.init({
           projectId: projectId,
-          chains: [80002], 
-          optionalChains: [80002], 
+          chains: [chainIdNum], 
+          optionalChains: [chainIdNum], 
           showQrModal: true,
           metadata: {
             name: 'C-Parker',
@@ -229,6 +237,64 @@ export const WalletProvider = ({ children }) => {
     };
   }, [handleAccountsChanged, handleChainChanged]);
 
+  const switchToAmoyNetwork = useCallback(async () => {
+    if (!providerRef.current) {
+      setError(new Error('Wallet provider not initialized'));
+      return;
+    }
+
+    const chainIdHex = `0x${parseInt(EXPECTED_CHAIN_ID, 10).toString(16)}`;
+    const chainName = import.meta.env?.VITE_CHAIN_NAME ?? 'Polygon Amoy Testnet';
+    const rpcUrl = import.meta.env?.VITE_CHAIN_RPC_URL ?? 'https://rpc-amoy.polygon.technology';
+    const blockExplorerUrl = import.meta.env?.VITE_CHAIN_BLOCK_EXPLORER_URL ?? 'https://amoy.polygonscan.com';
+    const nativeCurrencyName = import.meta.env?.VITE_CHAIN_NATIVE_CURRENCY_NAME ?? 'MATIC';
+    const nativeCurrencySymbol = import.meta.env?.VITE_CHAIN_NATIVE_CURRENCY_SYMBOL ?? 'MATIC';
+    const nativeCurrencyDecimals = parseInt(import.meta.env?.VITE_CHAIN_NATIVE_CURRENCY_DECIMALS ?? '18', 10);
+
+    try {
+      // For MetaMask and other EIP-1193 providers
+      if (providerTypeRef.current === 'metamask') {
+        await providerRef.current.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chainIdHex }],
+        });
+      } else {
+        // For WalletConnect, try to switch chain
+        try {
+          await providerRef.current.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: chainIdHex }],
+          });
+        } catch (switchError) {
+          // If chain doesn't exist, try to add it
+          if (switchError.code === 4902) {
+            await providerRef.current.request({
+              method: 'wallet_addEthereumChain',
+              params: [
+                {
+                  chainId: chainIdHex,
+                  chainName: chainName,
+                  nativeCurrency: {
+                    name: nativeCurrencyName,
+                    symbol: nativeCurrencySymbol,
+                    decimals: nativeCurrencyDecimals,
+                  },
+                  rpcUrls: [rpcUrl],
+                  blockExplorerUrls: [blockExplorerUrl],
+                },
+              ],
+            });
+          } else {
+            throw switchError;
+          }
+        }
+      }
+    } catch (err) {
+      setError(formatError(err));
+      throw err;
+    }
+  }, []);
+
   const connectWallet = useCallback(async () => {
     setError(null);
 
@@ -246,14 +312,50 @@ export const WalletProvider = ({ children }) => {
           method: 'eth_requestAccounts',
         });
         handleAccountsChanged(accounts);
+        
+        // Check current chain and switch if needed
         const currentChain = await providerRef.current.request({ method: 'eth_chainId' });
-        handleChainChanged(currentChain);
+        const currentChainId = typeof currentChain === 'string' ? parseInt(currentChain, 16).toString() : currentChain?.toString();
+        
+        if (currentChainId !== EXPECTED_CHAIN_ID) {
+          // Automatically switch to the correct network
+          try {
+            await switchToAmoyNetwork();
+            // Get the chain ID again after switching
+            const newChain = await providerRef.current.request({ method: 'eth_chainId' });
+            handleChainChanged(newChain);
+          } catch (switchErr) {
+            // If switch fails, still set the current chain so NetworkWarning can show
+            handleChainChanged(currentChain);
+            console.warn('Failed to automatically switch network:', switchErr);
+          }
+        } else {
+          handleChainChanged(currentChain);
+        }
         // Session is saved in handleAccountsChanged
       } else {
         const accounts = await providerRef.current.enable();
         handleAccountsChanged(accounts);
+        
+        // Check current chain and switch if needed
         const currentChain = await providerRef.current.request({ method: 'eth_chainId' });
-        handleChainChanged(currentChain);
+        const currentChainId = typeof currentChain === 'string' ? parseInt(currentChain, 16).toString() : currentChain?.toString();
+        
+        if (currentChainId !== EXPECTED_CHAIN_ID) {
+          // Automatically switch to the correct network
+          try {
+            await switchToAmoyNetwork();
+            // Get the chain ID again after switching
+            const newChain = await providerRef.current.request({ method: 'eth_chainId' });
+            handleChainChanged(newChain);
+          } catch (switchErr) {
+            // If switch fails, still set the current chain so NetworkWarning can show
+            handleChainChanged(currentChain);
+            console.warn('Failed to automatically switch network:', switchErr);
+          }
+        } else {
+          handleChainChanged(currentChain);
+        }
         // Session is saved in handleAccountsChanged
       }
     } catch (err) {
@@ -261,7 +363,7 @@ export const WalletProvider = ({ children }) => {
     } finally {
       setIsConnecting(false);
     }
-  }, [handleAccountsChanged, handleChainChanged]);
+  }, [handleAccountsChanged, handleChainChanged, switchToAmoyNetwork]);
 
   const disconnectWallet = useCallback(async () => {
     try {
@@ -278,6 +380,12 @@ export const WalletProvider = ({ children }) => {
     }
   }, []);
 
+  // Check if user is on the correct network
+  const isCorrectNetwork = useMemo(() => {
+    if (!chainId) return false;
+    return chainId === EXPECTED_CHAIN_ID;
+  }, [chainId]);
+
   const value = useMemo(() => ({
     account,
     chainId,
@@ -285,8 +393,10 @@ export const WalletProvider = ({ children }) => {
     isConnecting,
     error,
     provider: providerRef.current,
+    isCorrectNetwork,
     connectWallet,
     disconnectWallet,
+    switchToAmoyNetwork,
   }), [
     account,
     chainId,
@@ -295,6 +405,8 @@ export const WalletProvider = ({ children }) => {
     error,
     hasProvider,
     isConnecting,
+    isCorrectNetwork,
+    switchToAmoyNetwork,
   ]);
 
   return (

@@ -19,7 +19,31 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   console.log('OrbitA Contract:', orbitA.target);
   console.log('CCT Token Contract:', cctToken.target);
 
-  // Helper to check if function exists
+  try {
+    const orbitACode = await provider.getCode(ORBIT_A_ADDRESS);
+    if (orbitACode === '0x' || orbitACode === '0x0') {
+      console.warn('⚠️ OrbitA contract not found at address:', ORBIT_A_ADDRESS);
+      console.warn('This might be a network issue or the contract may not be deployed. Registration will still be attempted.');
+    } else {
+      console.log('✓ OrbitA contract verified at address:', ORBIT_A_ADDRESS);
+    }
+  } catch (err) {
+    console.warn('Could not verify OrbitA contract code:', err.message);
+    console.warn('Proceeding with registration attempt anyway...');
+  }
+
+  try {
+    const cctCode = await provider.getCode(CCT_TOKEN_ADDRESS);
+    if (cctCode === '0x' || cctCode === '0x0') {
+      console.warn('⚠️ CCT Token contract not found at address:', CCT_TOKEN_ADDRESS);
+      console.warn('Token-related features may not work.');
+    } else {
+      console.log('✓ CCT Token contract verified at address:', CCT_TOKEN_ADDRESS);
+    }
+  } catch (err) {
+    console.warn('Could not verify CCT Token contract code:', err.message);
+  }
+
   const hasFunc = (contract, fnName) => {
     try {
       return contract && typeof contract[fnName] === 'function';
@@ -28,11 +52,27 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
     }
   };
 
-  // --- Check if user is already registered ---
+  const safeCall = async (contract, fnName, ...args) => {
+    try {
+      if (!hasFunc(contract, fnName)) {
+        return null;
+      }
+      const result = await contract[fnName](...args);
+      return result;
+    } catch (err) {
+      if (err.code === 'BAD_DATA' || err.message?.includes('could not decode')) {
+        console.warn(`Function ${fnName} returned empty data - may not exist on deployed contract`);
+        return null;
+      }
+      throw err;
+    }
+  };
+
   let existingUserID = 0n;
   try {
-    if (hasFunc(orbitA, 'addressToUserID')) {
-      existingUserID = await orbitA.addressToUserID(userAddress);
+    const userIDResult = await safeCall(orbitA, 'addressToUserID', userAddress);
+    if (userIDResult !== null && userIDResult !== undefined) {
+      existingUserID = BigInt(userIDResult.toString());
       if (existingUserID > 0n) {
         console.log('Already registered with User ID:', existingUserID.toString());
         return { success: false, message: 'Already registered', userId: existingUserID.toString() };
@@ -42,14 +82,13 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
     console.warn('Could not fetch existing user ID (ignored):', err.message);
   }
 
-  // --- Get registration cost ---
   let orbitACost = 0n, orbitBCost = 0n, totalCost = 0n;
   try {
-    if (hasFunc(orbitA, 'getTotalRegistrationCost')) {
-      const result = await orbitA.getTotalRegistrationCost();
-      orbitACost = result[0];
-      orbitBCost = result[1];
-      totalCost = result[2];
+    const costResult = await safeCall(orbitA, 'getTotalRegistrationCost');
+    if (costResult !== null && costResult !== undefined) {
+      orbitACost = BigInt(costResult[0].toString());
+      orbitBCost = BigInt(costResult[1].toString());
+      totalCost = BigInt(costResult[2].toString());
       console.log('Registration Cost: OrbitA', ethers.formatEther(orbitACost), 'CCT');
       console.log('Registration Cost: OrbitB', ethers.formatEther(orbitBCost), 'CCT');
       console.log('Total Cost:', ethers.formatEther(totalCost), 'CCT');
@@ -58,11 +97,11 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
     console.warn('Could not fetch registration cost (ignored):', err.message);
   }
 
-  // --- Check balance ---
   let cctBalance = 0n;
   try {
-    if (hasFunc(cctToken, 'balanceOf')) {
-      cctBalance = await cctToken.balanceOf(userAddress);
+    const balanceResult = await safeCall(cctToken, 'balanceOf', userAddress);
+    if (balanceResult !== null && balanceResult !== undefined) {
+      cctBalance = BigInt(balanceResult.toString());
       console.log('CCT Balance:', ethers.formatEther(cctBalance));
       if (totalCost > 0n && cctBalance < totalCost) {
         throw new Error(`Insufficient CCT. Need ${ethers.formatEther(totalCost)}, have ${ethers.formatEther(cctBalance)}`);
@@ -75,54 +114,73 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
     console.warn('Could not fetch balance (ignored if function missing):', err.message);
   }
 
-  // --- Approve tokens if needed ---
-  // Use max uint256 for approval to avoid future approval issues
   const MAX_UINT256 = ethers.MaxUint256;
   try {
     if (hasFunc(cctToken, 'allowance') && hasFunc(cctToken, 'approve')) {
-      const currentAllowance = await cctToken.allowance(userAddress, ORBIT_A_ADDRESS);
-      console.log('Current allowance:', ethers.formatEther(currentAllowance));
+      const currentAllowanceResult = await safeCall(cctToken, 'allowance', userAddress, ORBIT_A_ADDRESS);
       
-      // Always approve if we don't have sufficient allowance or if we couldn't fetch the cost
-      // Use a reasonable minimum (1000 tokens) if totalCost is 0
-      const minRequiredAllowance = totalCost > 0n ? totalCost : ethers.parseEther('1000');
-      
-      if (currentAllowance < minRequiredAllowance) {
+      if (currentAllowanceResult !== null && currentAllowanceResult !== undefined) {
+        const currentAllowance = BigInt(currentAllowanceResult.toString());
+        console.log('Current allowance:', ethers.formatEther(currentAllowance));
+
+        const minRequiredAllowance = totalCost > 0n ? totalCost : ethers.parseEther('1000');
+        
+        if (currentAllowance < minRequiredAllowance) {
+          try {
+            console.log('Approving CCT tokens...');
+            const approveTx = await cctToken.approve(ORBIT_A_ADDRESS, MAX_UINT256);
+            console.log('Approval transaction sent, waiting for confirmation...');
+            const approveReceipt = await approveTx.wait();
+            console.log('Approved CCT - TX:', approveReceipt.hash);
+          } catch (approveErr) {
+            const updatedAllowanceResult = await safeCall(cctToken, 'allowance', userAddress, ORBIT_A_ADDRESS);
+            if (updatedAllowanceResult !== null && updatedAllowanceResult !== undefined) {
+              const updatedAllowance = BigInt(updatedAllowanceResult.toString());
+              if (updatedAllowance < minRequiredAllowance) {
+                const errorMsg = approveErr.reason || approveErr.message || 'Transaction failed';
+                console.error('Approval failed:', approveErr);
+                
+                if (errorMsg.includes('user rejected') || errorMsg.includes('User denied')) {
+                  throw new Error('Token approval was cancelled. Please approve the transaction to continue with registration.');
+                } else if (errorMsg.includes('insufficient funds') ) {
+                  throw new Error('Insufficient funds for gas fees. Please ensure you have enough MATIC/Polygon tokens.');
+                } else if (errorMsg.includes('Internal JSON-RPC error')) {
+                  throw new Error('Network error during approval. Please check your connection and try again.');
+                } else {
+                  throw new Error(`Token approval failed: ${errorMsg}. Please try again.`);
+                }
+              }
+              console.log('Allowance is now sufficient, continuing with registration...');
+            } else {
+              console.warn('Could not verify allowance after approval attempt. Proceeding with registration...');
+            }
+          }
+        } else {
+          console.log('Sufficient allowance already exists');
+        }
+      } else {
+        console.warn('Could not check current allowance. Attempting to approve tokens...');
         try {
-          console.log('Approving CCT tokens...');
           const approveTx = await cctToken.approve(ORBIT_A_ADDRESS, MAX_UINT256);
           console.log('Approval transaction sent, waiting for confirmation...');
           const approveReceipt = await approveTx.wait();
           console.log('Approved CCT - TX:', approveReceipt.hash);
         } catch (approveErr) {
-          // Check if allowance is now sufficient (user might have approved manually)
-          const updatedAllowance = await cctToken.allowance(userAddress, ORBIT_A_ADDRESS);
-          if (updatedAllowance < minRequiredAllowance) {
-            const errorMsg = approveErr.reason || approveErr.message || 'Transaction failed';
-            console.error('Approval failed:', approveErr);
-            
-            if (errorMsg.includes('user rejected') || errorMsg.includes('User denied')) {
-              throw new Error('Token approval was cancelled. Please approve the transaction to continue with registration.');
-            } else if (errorMsg.includes('insufficient funds') ) {
-              throw new Error('Insufficient funds for gas fees. Please ensure you have enough MATIC/Polygon tokens.');
-            } else if (errorMsg.includes('Internal JSON-RPC error')) {
-              throw new Error('Network error during approval. Please check your connection and try again.');
-            } else {
-              throw new Error(`Token approval failed: ${errorMsg}. Please try again.`);
-            }
+          const errorMsg = approveErr.reason || approveErr.message || 'Transaction failed';
+          if (errorMsg.includes('user rejected') || errorMsg.includes('User denied')) {
+            throw new Error('Token approval was cancelled. Please approve the transaction to continue with registration.');
+          } else if (errorMsg.includes('insufficient funds')) {
+            throw new Error('Insufficient funds for gas fees. Please ensure you have enough MATIC/Polygon tokens.');
+          } else {
+            console.warn('Could not approve tokens, but proceeding with registration. The register function will handle any allowance issues.');
           }
-          // If allowance is now sufficient, continue
-          console.log('Allowance is now sufficient, continuing with registration...');
         }
-      } else {
-        console.log('Sufficient allowance already exists');
       }
     } else {
       console.warn('Token contract does not have approve/allowance functions');
     }
   } catch (err) {
     console.error('Approval failed:', err);
-    // Re-throw if it's already a formatted error
     if (err.message && (
       err.message.includes('Token approval was cancelled') ||
       err.message.includes('Insufficient funds') ||
@@ -131,10 +189,13 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
     )) {
       throw err;
     }
-    throw new Error(`Failed to approve tokens: ${err.message || 'Unknown error'}`);
+    if (err.code === 'BAD_DATA' || err.message?.includes('could not decode')) {
+      console.warn('Could not check/approve tokens due to contract call issues. Proceeding with registration...');
+    } else {
+      throw new Error(`Failed to approve tokens: ${err.message || 'Unknown error'}`);
+    }
   }
 
-  // --- Register user ---
   try {
     if (hasFunc(orbitA, 'register')) {
       console.log('Registering user with referrer ID:', referrerID);
@@ -168,7 +229,6 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
     }
   } catch (err) {
     console.error('Registration failed:', err);
-    // Re-throw if it's already a formatted error
     if (err.message && (
       err.message.includes('Registration transaction was cancelled') ||
       err.message.includes('Insufficient funds') ||
@@ -182,7 +242,6 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   }
 };
 
-// Convenience function - gets provider from WalletContext
 export const registerUserWithWallet = async (provider, referrerID = 1) => {
   if (!provider) {
     throw new Error('Wallet provider not available');

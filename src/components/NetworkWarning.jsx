@@ -1,5 +1,8 @@
 import { useWallet } from '../context/WalletContext';
 
+const EXPECTED_CHAIN_ID = import.meta.env?.VITE_CHAIN_ID ?? '80002';
+const CHAIN_NAME = import.meta.env?.VITE_CHAIN_NAME ?? 'Polygon Amoy Testnet';
+
 const NetworkWarning = () => {
   const { account, isCorrectNetwork, switchToAmoyNetwork, chainId } = useWallet();
 
@@ -29,7 +32,8 @@ const NetworkWarning = () => {
           </svg>
           <div>
             <p className="font-semibold">Wrong Network Detected</p>
-            <p className="text-sm"></p>     You're connected to chain ID: {chainId}. Please switch to Polygon Amoy Testnet (Chain ID: 80002)
+            <p className="text-sm">
+              You're connected to chain ID: {chainId}. Please switch to {CHAIN_NAME} (Chain ID: {EXPECTED_CHAIN_ID})
             </p>
           </div>
         </div>
