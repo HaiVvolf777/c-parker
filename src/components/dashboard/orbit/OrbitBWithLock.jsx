@@ -14,6 +14,7 @@ const OrbitBWithLock = ({ className }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [modalState, setModalState] = useState({ isOpen: false, type: 'success', message: '' });
+  const [purchaseFailed, setPurchaseFailed] = useState(false);
 
   // Fetch levels from API
   useEffect(() => {
@@ -48,11 +49,13 @@ const OrbitBWithLock = ({ className }) => {
   const orbitBLevels = levels.filter(level => level.orbit === 'ORBIT_B');
   
   // Check if user has any active levels (only ORBIT_B)
-  const hasActiveLevels = orbitBLevels.some(level => level.isActive);
+  // Only consider levels where isActive is explicitly true
+  const hasActiveLevels = orbitBLevels.some(level => level.isActive === true);
   
   // Get the highest active level number (only from ORBIT_B)
+  // Only count levels where isActive is explicitly true
   const maxActiveLevel = orbitBLevels
-    .filter(level => level.isActive)
+    .filter(level => level.isActive === true)
     .reduce((max, level) => Math.max(max, level.levelNumber || 0), 0);
 
   // Update circle opacity based on active levels
@@ -82,7 +85,7 @@ const OrbitBWithLock = ({ className }) => {
 
   return (
     <div ref={containerRef} className={`relative ${className || ''}`}>
-      <Orbitb className="w-full h-auto" unlockedLevels={maxActiveLevel || 1} />
+      <Orbitb className="w-full h-auto" unlockedLevels={maxActiveLevel > 0 ? maxActiveLevel : 0} purchaseFailed={purchaseFailed} />
       {!isLoading && !hasActiveLevels && (
         <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center rounded-[10px] px-6 text-center text-white">
           <div className="flex flex-col items-center gap-4 max-w-xs">
@@ -115,19 +118,27 @@ const OrbitBWithLock = ({ className }) => {
 
               try {
                 setIsProcessing(true);
+                setPurchaseFailed(false); // Reset failure state before new purchase
                 const result = await purchaseOrbitBLevelWithWallet(provider, nextLevel);
                 if (result.success) {
                   // Refresh only ORBIT_B levels
                   const data = await getUserLevels(user.userId, { orbit: 'ORBIT_B' });
                   const orbitBLevels = (data || []).filter(level => level.orbit === 'ORBIT_B');
                   setLevels(orbitBLevels);
+                  setPurchaseFailed(false); // Ensure it's not failed on success
                   setModalState({ isOpen: true, type: 'success', message: result.message || 'Level purchased successfully!' });
                 } else {
+                  setPurchaseFailed(true); // Set failure state
                   setModalState({ isOpen: true, type: 'error', message: result.message || 'Failed to purchase level' });
+                  // Reset failure state after 5 seconds
+                  setTimeout(() => setPurchaseFailed(false), 5000);
                 }
               } catch (err) {
                 console.error('Purchase error:', err);
+                setPurchaseFailed(true); // Set failure state
                 setModalState({ isOpen: true, type: 'error', message: err.message || 'Failed to purchase level. Please try again.' });
+                // Reset failure state after 5 seconds
+                setTimeout(() => setPurchaseFailed(false), 5000);
               } finally {
                 setIsProcessing(false);
               }

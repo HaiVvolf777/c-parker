@@ -1,8 +1,13 @@
 import React from 'react';
 import useScrollAnimation from '../../hooks/useScrollAnimation';
 
-const Orbit = ({ className, unlockedLevels = 1 }) => {
+const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false }) => {
   const [orbitRef, isOrbitVisible] = useScrollAnimation({ threshold: 0.1 });
+  
+  // Use red color if purchase failed, otherwise purple
+  const primaryColor = purchaseFailed ? '#FF0505' : '#7D40FF';
+  const secondaryColor = purchaseFailed ? '#FF0000' : '#3A126F';
+  const tertiaryColor = purchaseFailed ? '#CC0000' : '#4B158E';
   
   return (
     <div ref={orbitRef} className={`w-[100%] animate-fade-in-up ${isOrbitVisible ? 'animate' : ''} ${className}`}>
@@ -17,7 +22,7 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
       >
         <path
           d="M628.003 496.014C630.525 476.085 629.096 455.854 623.799 436.476C618.502 417.099 609.44 398.955 597.13 383.08C584.821 367.204 569.505 353.909 552.058 343.953C534.61 333.997 515.373 327.575 495.443 325.053C475.514 322.532 455.283 323.96 435.905 329.257C416.528 334.555 398.384 343.617 382.509 355.926C366.633 368.235 353.338 383.551 343.382 400.998C333.426 418.446 327.004 437.684 324.482 457.613C321.961 477.543 323.389 497.774 328.687 517.151C333.984 536.528 343.046 554.672 355.355 570.548C367.664 586.423 382.98 599.718 400.428 609.674C417.875 619.63 437.113 626.053 457.042 628.574C476.972 631.096 497.203 629.667 516.58 624.37C535.957 619.073 554.102 610.011 569.977 597.701C585.852 585.392 599.147 570.076 609.103 552.629C619.06 535.181 625.482 515.944 628.003 496.014L628.003 496.014Z"
-          stroke="#3A126F"
+          stroke={secondaryColor}
           stroke-width="14.58"
           stroke-dasharray="0.64 6.42"
           className="animate-pulse-slow"
@@ -38,7 +43,7 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
               cy="182.608"
               r="50"
               transform="rotate(-14.7534 421.591 182.608)"
-              fill="#3A126F"
+              fill={secondaryColor}
             />
             <circle
               cx="421.591"
@@ -80,7 +85,7 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
               cy="201.642"
               r="50"
               transform="rotate(-14.7534 597.519 201.642)"
-              fill="#3A126F"
+              fill={secondaryColor}
             />
             <circle
               cx="597.519"
@@ -125,7 +130,7 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
               cy="327.194"
               r="50"
               transform="rotate(-14.7534 757.938 327.194)"
-              fill="#3A126F"
+              fill={secondaryColor}
             />
             <circle
               cx="757.938"
@@ -167,7 +172,7 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
               cy="556.618"
               r="50"
               transform="rotate(-14.7534 734.694 556.618)"
-              fill="#3A126F"
+              fill={secondaryColor}
             />
             <circle
               cx="734.694"
@@ -409,7 +414,7 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
               cy="124"
               r="50"
               transform="rotate(-14.7534 128 124)"
-              fill="#FF4000"
+              fill="#191932"
             />
             <circle
               cx="128"
@@ -922,8 +927,8 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
             y2="346.7"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#7D40FF" />
-            <stop offset="1" stop-color="#3A126F" />
+            <stop stop-color={primaryColor} />
+            <stop offset="1" stop-color={secondaryColor} />
           </linearGradient>
 
           {/* level 3 Gradient  */}
@@ -961,8 +966,8 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
             y2="224.047"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#7D40FF" />
-            <stop offset="1" stop-color="#3A126F" />
+            <stop stop-color={primaryColor} />
+            <stop offset="1" stop-color={secondaryColor} />
           </linearGradient>
 
           {/* ID line Gradient  */}
@@ -1000,8 +1005,8 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
             y2="235.403"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#7D40FF" />
-            <stop offset="1" stop-color="#3A126F" />
+            <stop stop-color={primaryColor} />
+            <stop offset="1" stop-color={secondaryColor} />
           </linearGradient>
 
           {/* level 2 Gradient  */}
@@ -1039,8 +1044,8 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
             y2="423.427"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#7D40FF" />
-            <stop offset="1" stop-color="#4B158E" />
+            <stop stop-color={primaryColor} />
+            <stop offset="1" stop-color={tertiaryColor} />
           </linearGradient>
 
           {/* Root Circle 1  */}
@@ -1052,8 +1057,8 @@ const Orbit = ({ className, unlockedLevels = 1 }) => {
             y2="439.052"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#7D40FF" />
-            <stop offset="1" stop-color="#4B158E" />
+            <stop stop-color={primaryColor} />
+            <stop offset="1" stop-color={tertiaryColor} />
           </linearGradient>
 
           <image
