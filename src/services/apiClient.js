@@ -89,6 +89,9 @@ export const getUserLevels = (userId, { orbit } = {}, options = {}) => {
 export const getUserMatrix = (userId, orbit, level, options = {}) =>
   apiClient(`/users/${userId}/matrix/${orbit}/${level}`, options);
 
+export const getLevelCycles = (userId, orbit, levelNumber, options = {}) =>
+  apiClient(`/cycles/${userId}/${orbit}/${levelNumber}`, options);
+
 // ========================
 // Payment endpoints
 // ========================
