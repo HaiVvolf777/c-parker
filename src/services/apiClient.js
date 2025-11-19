@@ -160,3 +160,10 @@ export const getActivityFeed = (params = {}, options = {}) => {
   const query = buildQueryString(params);
   return apiClient(`/activity${query}`, options);
 };
+
+// ========================
+// Pricing endpoints
+// ========================
+
+export const getLevelPricing = (options = {}) =>
+  apiClient('/users/levels/pricing', options);

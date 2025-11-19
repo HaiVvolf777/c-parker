@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useUserData } from '../../../context/UserDataContext.jsx';
 import { useWallet } from '../../../context/WalletContext.jsx';
-import { getUserLevels, ApiError } from '../../../services/apiClient.js';
+import { getUserLevels, getLevelPricing, ApiError } from '../../../services/apiClient.js';
 import { purchaseOrbitALevelWithWallet } from '../../../services/levelPurchaseService.js';
 import MessageModal from '../../common/MessageModal.jsx';
 import Orbit from '../Orbit';
@@ -11,10 +11,27 @@ const OrbitWithLock = ({ className }) => {
   const { provider } = useWallet();
   const containerRef = useRef(null);
   const [levels, setLevels] = useState([]);
+  const [pricingData, setPricingData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [modalState, setModalState] = useState({ isOpen: false, type: 'success', message: '' });
   const [purchaseFailed, setPurchaseFailed] = useState(false);
+
+  // Fetch pricing data from API
+  useEffect(() => {
+    const fetchPricing = async () => {
+      try {
+        const data = await getLevelPricing();
+        console.log('OrbitWithLock - Pricing data fetched:', data);
+        console.log('OrbitWithLock - orbitA data:', data?.orbitA);
+        setPricingData(data);
+      } catch (err) {
+        console.error('Error fetching pricing:', err);
+      }
+    };
+
+    fetchPricing();
+  }, []);
 
   // Fetch levels from API
   useEffect(() => {
@@ -85,7 +102,12 @@ const OrbitWithLock = ({ className }) => {
 
   return (
     <div ref={containerRef} className={`relative ${className || ''}`}>
-      <Orbit className="w-full h-auto" unlockedLevels={maxActiveLevel > 0 ? maxActiveLevel : 0} purchaseFailed={purchaseFailed} />
+      <Orbit 
+        className="w-full h-auto" 
+        unlockedLevels={maxActiveLevel > 0 ? maxActiveLevel : 0} 
+        purchaseFailed={purchaseFailed}
+        levelsData={pricingData?.orbitA || []}
+      />
       {!isLoading && !hasActiveLevels && (
         <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center rounded-[10px] px-6 text-center text-white">
           <div className="flex flex-col items-center gap-4 max-w-xs">
