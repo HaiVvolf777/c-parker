@@ -1,9 +1,21 @@
+import { useNavigate } from 'react-router-dom';
+
 const ProgramOrbitCard = ({ data }) => {
+  const navigate = useNavigate();
+
   // Right-side decorative graphic based on orbit type
   const getRightGraphic = () => {
     if (data.title === 'Orbit A') return '/images/orbita-bg.png';
     if (data.title === 'Orbit B') return '/images/orbitb-bg.png';
     return '/images/orbitc-bg.png';
+  };
+
+  const handleButtonClick = () => {
+    if (data.title === 'Orbit A') {
+      navigate('/dashboard/orbit-level-progression');
+    } else if (data.title === 'Orbit B') {
+      navigate('/dashboard/orbit-b-level-progression');
+    }
   };
 
   return (
@@ -28,7 +40,10 @@ const ProgramOrbitCard = ({ data }) => {
             </p>
 
             <div className="">
-              <button className="text-white keep-white font-bold bg-[#7D40FF] hover:bg-[#5a1fb8] px-[67px] py-2 leading-[100%] rounded-[10px] cursor-pointer transition-colors">
+              <button 
+                onClick={handleButtonClick}
+                className="text-white keep-white font-bold bg-[#7D40FF] hover:bg-[#5a1fb8] px-[67px] py-2 leading-[100%] rounded-[10px] cursor-pointer transition-colors"
+              >
                 {data.opened ? 'View Matrix' : 'Activate'}
               </button>
             </div>
