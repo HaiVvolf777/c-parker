@@ -54,7 +54,15 @@ const JoinNowModal = ({ isOpen, onClose }) => {
         onClose();
         navigate('/dashboard');
       } else {
-        setError(result.message || 'Registration failed');
+        // Check if user is already registered - redirect to dashboard in that case
+        const message = result.message || '';
+        if (message.toLowerCase().includes('already registered')) {
+          console.log('User already registered, redirecting to dashboard');
+          onClose();
+          navigate('/dashboard');
+        } else {
+          setError(message || 'Registration failed');
+        }
       }
     } catch (err) {
       console.error('Registration error:', err);
