@@ -19,8 +19,8 @@ const JoinNowModal = ({ isOpen, onClose }) => {
       if (refParam) {
         setReferrerId(refParam);
       } else {
-        // Default to 1 if no ref parameter
-        setReferrerId('1');
+        // Leave empty if no ref parameter (optional)
+        setReferrerId('');
       }
     }
   }, [isOpen, searchParams]);
@@ -31,11 +31,15 @@ const JoinNowModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    // Validate referrer ID
-    const referrerIdNum = parseInt(referrerId, 10);
-    if (isNaN(referrerIdNum) || referrerIdNum < 1) {
-      setError('Please enter a valid referrer ID (must be 1 or greater)');
-      return;
+    // Validate referrer ID (optional - only validate if provided)
+    let referrerIdNum = 1; // Default to 1 if not provided
+    if (referrerId.trim() !== '') {
+      const parsed = parseInt(referrerId.trim(), 10);
+      if (isNaN(parsed) || parsed < 1) {
+        setError('Please enter a valid referrer ID (must be 1 or greater) or leave it empty');
+        return;
+      }
+      referrerIdNum = parsed;
     }
 
     try {
@@ -94,7 +98,7 @@ const JoinNowModal = ({ isOpen, onClose }) => {
           {/* Referrer ID Input Field */}
           <div className="mb-4">
             <label htmlFor="referrerId" className="block text-sm font-medium text-[#0a0a0a] dark:text-[#bdbdbd] mb-2">
-              Referrer ID <span className="text-xs text-gray-500">(ID of user who invited you)</span>
+              Referrer ID <span className="text-xs text-gray-500">(Optional - ID of user who invited you)</span>
             </label>
             <input
               id="referrerId"
@@ -102,7 +106,7 @@ const JoinNowModal = ({ isOpen, onClose }) => {
               min="1"
               value={referrerId}
               onChange={(e) => setReferrerId(e.target.value)}
-              placeholder="Enter referrer ID (default: 1 if not provided)"
+              placeholder="Enter referrer ID (optional - leave empty to use default)"
               className="w-full px-4 py-2 rounded-md border border-[#141429] bg-white dark:bg-[#0B0B1A] text-[#0a0a0a] dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#6F23D5] focus:border-transparent transition-colors"
             />
             {searchParams.get('ref') && (
@@ -110,9 +114,9 @@ const JoinNowModal = ({ isOpen, onClose }) => {
                 ✓ Referrer ID auto-filled from your referral link
               </p>
             )}
-            {!searchParams.get('ref') && referrerId === '1' && (
+            {!searchParams.get('ref') && referrerId.trim() === '' && (
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Using default referrer ID (1). You can change it if you were invited by someone else.
+                Leave empty to register without a referrer (will use default referrer ID: 1)
               </p>
             )}
           </div>

@@ -11,6 +11,18 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   const provider = new ethers.BrowserProvider(walletConnectProvider);
   const signer = await provider.getSigner();
   const userAddress = await signer.getAddress();
+  
+  // Get network info for debugging
+  try {
+    const network = await provider.getNetwork();
+    console.log('Network Info:', {
+      chainId: network.chainId.toString(),
+      name: network.name
+    });
+  } catch (err) {
+    console.warn('Could not get network info:', err.message);
+  }
+  
   console.log('User Address:', userAddress);
 
   const orbitA = new ethers.Contract(ORBIT_A_ADDRESS, OrbitAAbi, signer);
@@ -99,19 +111,59 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
 
   let cctBalance = 0n;
   try {
-    const balanceResult = await safeCall(cctToken, 'balanceOf', userAddress);
-    if (balanceResult !== null && balanceResult !== undefined) {
-      cctBalance = BigInt(balanceResult.toString());
-      console.log('CCT Balance:', ethers.formatEther(cctBalance));
-      if (totalCost > 0n && cctBalance < totalCost) {
-        throw new Error(`Insufficient CCT. Need ${ethers.formatEther(totalCost)}, have ${ethers.formatEther(cctBalance)}`);
+    // Direct call to balanceOf instead of safeCall to get better error messages
+    if (hasFunc(cctToken, 'balanceOf')) {
+      console.log('Checking CCT balance for address:', userAddress);
+      console.log('CCT Token contract address:', CCT_TOKEN_ADDRESS);
+      
+      try {
+        const balanceResult = await cctToken.balanceOf(userAddress);
+        if (balanceResult !== null && balanceResult !== undefined) {
+          cctBalance = BigInt(balanceResult.toString());
+          const formattedBalance = ethers.formatEther(cctBalance);
+          console.log('CCT Balance:', formattedBalance);
+          
+          // Also check the raw balance value for debugging
+          console.log('CCT Balance (raw):', balanceResult.toString());
+          
+          if (totalCost > 0n && cctBalance < totalCost) {
+            throw new Error(`Insufficient CCT. Need ${ethers.formatEther(totalCost)}, have ${formattedBalance}`);
+          }
+        } else {
+          console.warn('balanceOf returned null/undefined');
+        }
+      } catch (balanceErr) {
+        console.error('Error calling balanceOf:', balanceErr);
+        console.error('Error details:', {
+          code: balanceErr.code,
+          message: balanceErr.message,
+          reason: balanceErr.reason,
+          data: balanceErr.data
+        });
+        
+        // If it's a network/contract issue, provide helpful error message
+        if (balanceErr.code === 'CALL_EXCEPTION' || balanceErr.message?.includes('could not decode')) {
+          const errorMsg = `Could not read CCT balance from contract. This might be a network mismatch issue.\n` +
+            `Please ensure you're connected to the correct network where the CCT token is deployed.\n` +
+            `Contract address: ${CCT_TOKEN_ADDRESS}\n` +
+            `Error: ${balanceErr.message || 'Unknown error'}`;
+          console.error('⚠️', errorMsg);
+          throw new Error(errorMsg);
+        } else {
+          throw new Error(`Failed to check CCT balance: ${balanceErr.message || 'Unknown error'}`);
+        }
       }
+    } else {
+      console.warn('balanceOf function not found on CCT token contract');
     }
   } catch (err) {
     if (err.message.includes('Insufficient CCT')) {
       throw err;
     }
-    console.warn('Could not fetch balance (ignored if function missing):', err.message);
+    if (err.message.includes('Failed to check CCT balance')) {
+      throw err;
+    }
+    console.warn('Could not fetch balance:', err.message);
   }
 
   const MAX_UINT256 = ethers.MaxUint256;

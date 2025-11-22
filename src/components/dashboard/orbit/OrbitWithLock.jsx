@@ -64,11 +64,11 @@ const OrbitWithLock = ({ className }) => {
 
   // Strictly filter to only ORBIT_A levels
   const orbitALevels = levels.filter(level => level.orbit === 'ORBIT_A');
-  
+
   // Check if user has any active levels (only ORBIT_A)
   // Only consider levels where isActive is explicitly true
   const hasActiveLevels = orbitALevels.some(level => level.isActive === true);
-  
+
   // Get the highest active level number (only from ORBIT_A)
   // Only count levels where isActive is explicitly true
   const maxActiveLevel = orbitALevels
@@ -79,9 +79,9 @@ const OrbitWithLock = ({ className }) => {
   useEffect(() => {
     const svg = containerRef.current?.querySelector('svg');
     if (!svg) return;
-    
+
     const circles = Array.from(svg.querySelectorAll('circle[r="50"]'));
-    
+
     if (!hasActiveLevels) {
       // If no active levels, make all circles dim
       circles.forEach((circle) => {
@@ -102,9 +102,9 @@ const OrbitWithLock = ({ className }) => {
 
   return (
     <div ref={containerRef} className={`relative ${className || ''}`}>
-      <Orbit 
-        className="w-full h-auto" 
-        unlockedLevels={maxActiveLevel > 0 ? maxActiveLevel : 0} 
+      <Orbit
+        className="w-full h-auto"
+        unlockedLevels={maxActiveLevel > 0 ? maxActiveLevel : 0}
         purchaseFailed={purchaseFailed}
         levelsData={pricingData?.orbitA || []}
       />
@@ -113,8 +113,8 @@ const OrbitWithLock = ({ className }) => {
           <div className="flex flex-col items-center gap-4 max-w-xs">
             <div className="flex items-center gap-3">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="2"/>
+                <path d="M7 10V8a5 5 0 0 1 10 0v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="2" />
               </svg>
               <span className="font-semibold">Purchase to unlock</span>
             </div>
@@ -131,7 +131,7 @@ const OrbitWithLock = ({ className }) => {
                 setModalState({ isOpen: true, type: 'error', message: 'Please connect your wallet first' });
                 return;
               }
-              
+
               const nextLevel = Math.min(maxActiveLevel + 1, 10);
               if (nextLevel > 10) {
                 setModalState({ isOpen: true, type: 'error', message: 'Maximum level is 10' });

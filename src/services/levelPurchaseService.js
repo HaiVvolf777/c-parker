@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import OrbitAAbi from '../abis/OrbitA.json';
 import OrbitBAbi from '../abis/OrbitB.json';
 import CCTTokenAbi from '../abis/CCTToken.json';
+import { getUserLevels } from './apiClient.js';
 
 const ORBIT_A_ADDRESS = import.meta.env?.VITE_ORBIT_A_ADDRESS ?? '0xYourOrbitAContractAddress';
 const ORBIT_B_ADDRESS = import.meta.env?.VITE_ORBIT_B_ADDRESS ?? '0xYourOrbitBContractAddress';
@@ -45,11 +46,32 @@ export const purchaseOrbitALevel = async (walletConnectProvider, level) => {
       throw new Error('Contract function addressToUserID not found');
     }
 
-    // Check if level is already active
+    // Check if level is already active (blockchain check)
+    let blockchainSaysActive = false;
     if (hasFunc(orbitA, 'isLevelActive')) {
-      const isActive = await orbitA.isLevelActive(userId, level);
-      if (isActive) {
-        return { success: false, message: `Level ${level} is already active!` };
+      blockchainSaysActive = await orbitA.isLevelActive(userId, level);
+      if (blockchainSaysActive) {
+        // Also check database to see if there's a sync issue
+        try {
+          const dbLevels = await getUserLevels(Number(userId), { orbit: 'ORBIT_A' });
+          const dbLevel = dbLevels?.find(l => l.levelNumber === level && l.isActive);
+          
+          if (!dbLevel) {
+            // Blockchain says active but database doesn't - sync issue
+            console.warn(`[OrbitA] Level ${level} is active on blockchain but not in database. Database sync may be needed.`);
+            return { 
+              success: false, 
+              message: `Level ${level} is already active on the blockchain, but the database is out of sync. Please contact support or wait for the database to sync.` 
+            };
+          } else {
+            // Both blockchain and database agree - level is active
+            return { success: false, message: `Level ${level} is already active!` };
+          }
+        } catch (dbCheckErr) {
+          // If database check fails, still respect blockchain state
+          console.error('Error checking database for level status:', dbCheckErr);
+          return { success: false, message: `Level ${level} is already active on the blockchain!` };
+        }
       }
     }
 
@@ -185,11 +207,32 @@ export const purchaseOrbitBLevel = async (walletConnectProvider, level) => {
       }
     }
 
-    // Check if level is already active
+    // Check if level is already active (blockchain check)
+    let blockchainSaysActive = false;
     if (hasFunc(orbitB, 'isLevelActive')) {
-      const isActive = await orbitB.isLevelActive(userId, level);
-      if (isActive) {
-        return { success: false, message: `Level ${level} is already active!` };
+      blockchainSaysActive = await orbitB.isLevelActive(userId, level);
+      if (blockchainSaysActive) {
+        // Also check database to see if there's a sync issue
+        try {
+          const dbLevels = await getUserLevels(Number(userId), { orbit: 'ORBIT_B' });
+          const dbLevel = dbLevels?.find(l => l.levelNumber === level && l.isActive);
+          
+          if (!dbLevel) {
+            // Blockchain says active but database doesn't - sync issue
+            console.warn(`[OrbitB] Level ${level} is active on blockchain but not in database. Database sync may be needed.`);
+            return { 
+              success: false, 
+              message: `Level ${level} is already active on the blockchain, but the database is out of sync. Please contact support or wait for the database to sync.` 
+            };
+          } else {
+            // Both blockchain and database agree - level is active
+            return { success: false, message: `Level ${level} is already active!` };
+          }
+        } catch (dbCheckErr) {
+          // If database check fails, still respect blockchain state
+          console.error('Error checking database for level status:', dbCheckErr);
+          return { success: false, message: `Level ${level} is already active on the blockchain!` };
+        }
       }
     }
 
