@@ -178,7 +178,7 @@ const NodeLevelProgression = () => {
                 </div>
 
                 {/* controller bar  */}
-                <div className="w-[70%] sm:w-[80%] lg:w-[86%] mx-auto relative z-50">
+                <div className="w-[70%] sm:w-[80%] lg:w-[50%] mx-auto relative z-50">
                   <div
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="w-full mt-6 md:mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-6 md:px-11 py-3 md:py-4 border border-gray-200 dark:border-[#141429] relative cursor-pointer hover:opacity-90 transition-opacity"

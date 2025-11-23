@@ -2,12 +2,21 @@ import ProgramOrbitCard from './ProgramOrbitCard';
 import ProgramOrbitComingSoonCard from './ProgramOrbitComingSoonCard';
 import { useDashboardData } from '../../../context/DashboardDataContext.jsx';
 
-const summarizeOrbit = (levels, orbit) => {
+const summarizeOrbit = (levels, paymentsByLevel, orbit) => {
   const filtered = levels.filter((level) => level.orbit === orbit);
+
+  // Calculate total earnings for this orbit
+  const totalEarnings = (paymentsByLevel || [])
+    .filter(p => p.orbit === orbit)
+    .reduce((sum, p) => sum + (parseFloat(p.earned) || 0), 0);
+
+  const formattedEarnings = `${totalEarnings.toLocaleString(undefined, { maximumFractionDigits: 2 })} CCT`;
+
   if (filtered.length === 0) {
     return {
       title: orbit === 'ORBIT_A' ? 'Orbit A' : 'Orbit B',
-      cct: 'No levels active yet',
+      cct: formattedEarnings,
+      subText: 'No levels active yet',
       opened: false,
       levelsActive: 0,
     };
@@ -15,9 +24,11 @@ const summarizeOrbit = (levels, orbit) => {
 
   const activeLevels = filtered.filter((level) => level.isActive);
   const highestLevel = Math.max(...activeLevels.map((level) => level.levelNumber));
+
   return {
     title: orbit === 'ORBIT_A' ? 'Orbit A' : 'Orbit B',
-    cct: `${activeLevels.length} active levels • Highest L${highestLevel}`,
+    cct: formattedEarnings,
+    subText: `${activeLevels.length} active levels • Highest L${highestLevel}`,
     opened: true,
     levelsActive: activeLevels.length,
   };
@@ -26,8 +37,8 @@ const summarizeOrbit = (levels, orbit) => {
 const CParkerProgramsContainer = () => {
   const { data, isLoading } = useDashboardData();
   const programsOrbitData = [
-    summarizeOrbit(data.levels, 'ORBIT_A'),
-    summarizeOrbit(data.levels, 'ORBIT_B'),
+    summarizeOrbit(data.levels, data.payments.byLevel, 'ORBIT_A'),
+    summarizeOrbit(data.levels, data.payments.byLevel, 'ORBIT_B'),
   ];
 
   return (
