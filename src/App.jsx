@@ -20,6 +20,7 @@ import NodeLevelProgressionB from './pages/NodeLevelProgressionB';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TopLeaders from './pages/TopLeaders';
+import Partners from './pages/Partners';
 function App() {
   return (
     <AdminAuthProvider>
@@ -38,12 +39,13 @@ function App() {
                     <Route path="/admin" element={<AdminDashboard />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     {/* <Route path="/dashboard/all-nodes" element={<AllNodes />} /> */}
-                    <Route path="/dashboard/node-level-progression" element={<NodeLevelProgression />} />
-                    <Route path="/dashboard/node-level-progression-b" element={<NodeLevelProgressionB />} />
+                    <Route path="/dashboard/cycle-level-progression" element={<NodeLevelProgression />} />
+                    <Route path="/dashboard/cycle-level-progression-b" element={<NodeLevelProgressionB />} />
                     <Route path="/dashboard/all-nodes-b" element={<AllNodesB />} />
                     <Route path="/dashboard/orbit-level-progression" element={<OrbitLevelProgression />} />
                     <Route path="/dashboard/orbit-b-level-progression" element={<OrbitBLevelProgression />} />
                     <Route path="/dashboard/top-leaders" element={<TopLeaders />} />
+                    <Route path="/dashboard/partners" element={<Partners />} />
                     {/* <Route path="/dashboard/all-nodes" element={<Orbitb />} /> */}
                     <Route path="/home" element={<Navigate to="/" replace />} />
                     <Route path="*" element={<NotFound />} />

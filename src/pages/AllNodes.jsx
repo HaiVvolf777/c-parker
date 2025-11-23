@@ -67,7 +67,7 @@ const AllNodes = () => {
                   Orbit A Level Progression
                 </h2>
                 <p className="text-gray-600 dark:text-[#747474] text-[20px] font-bold mt-[10px]">
-                  <span className="text-[#01F1E3]">ID 1297</span> | 1 out of 12
+                  <span className="text-[#01F1E3]">ID 1297</span> | 1 out of 10
                   levels
                 </p>
               </div>

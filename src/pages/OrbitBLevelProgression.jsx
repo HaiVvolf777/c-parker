@@ -10,7 +10,6 @@ import useScrollAnimation from '../hooks/useScrollAnimation';
 import { useUserData } from '../context/UserDataContext.jsx';
 import { useWallet } from '../context/WalletContext.jsx';
 import { getUserLevels, ApiError } from '../services/apiClient.js';
-import { purchaseOrbitBLevelWithWallet } from '../services/levelPurchaseService.js';
 
 const OrbitBLevelProgression = () => {
   const [overviewRef, isOverviewVisible] = useScrollAnimation({ threshold: 0.1 });
@@ -18,16 +17,11 @@ const OrbitBLevelProgression = () => {
   const [statsRef, isStatsVisible] = useScrollAnimation({ threshold: 0.1 });
   const { user } = useUserData();
   const {
-    account,
-    isConnecting,
     hasProvider,
-    connectWallet,
-    provider,
     error: walletError,
   } = useWallet();
   const [levels, setLevels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [modalState, setModalState] = useState({ isOpen: false, type: 'success', message: '' });
 
   // Fetch levels from API
@@ -68,65 +62,6 @@ const OrbitBLevelProgression = () => {
     .reduce((max, level) => Math.max(max, level.levelNumber || 0), 0);
 
   const currentLevel = maxActiveLevel || 0;
-  const nextLevel = Math.min(currentLevel + 1, 10);
-  const isAtCap = currentLevel >= 10;
-
-  const handleActionClick = async () => {
-    if (!hasProvider) {
-      window.open('https://metamask.io/download.html', '_blank', 'noopener');
-      return;
-    }
-
-    if (!account) {
-      connectWallet();
-      return;
-    }
-
-    if (isAtCap) {
-      setModalState({ isOpen: true, type: 'error', message: 'Maximum level reached' });
-      return;
-    }
-
-    if (nextLevel > 10) {
-      setModalState({ isOpen: true, type: 'error', message: 'Maximum level is 10' });
-      return;
-    }
-
-    if (!provider) {
-      setModalState({ isOpen: true, type: 'error', message: 'Wallet provider not available' });
-      return;
-    }
-
-    try {
-      setIsProcessing(true);
-      const result = await purchaseOrbitBLevelWithWallet(provider, nextLevel);
-      if (result.success) {
-        // Refresh only ORBIT_B levels after successful purchase
-        const data = await getUserLevels(user.userId, { orbit: 'ORBIT_B' });
-        const orbitBLevels = (data || []).filter(level => level.orbit === 'ORBIT_B');
-        setLevels(orbitBLevels);
-        setModalState({ isOpen: true, type: 'success', message: result.message || 'Level purchased successfully!' });
-      } else {
-        setModalState({ isOpen: true, type: 'error', message: result.message || 'Failed to purchase level' });
-      }
-    } catch (err) {
-      console.error('Purchase error:', err);
-      setModalState({ isOpen: true, type: 'error', message: err.message || 'Failed to purchase level. Please try again.' });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const actionLabel = (() => {
-    if (!hasProvider) return 'Install MetaMask';
-    if (isConnecting) return 'Connecting...';
-    if (!account) return 'Connect Wallet';
-    if (isProcessing) return 'Processing...';
-    if (isAtCap) return 'Max Level Reached';
-    return `Unlock next (Lv ${nextLevel})`;
-  })();
-
-  const isActionDisabled = isConnecting || isProcessing || (account && isAtCap);
 
   return (
     <>
@@ -153,13 +88,6 @@ const OrbitBLevelProgression = () => {
                 </p>
               </div>
               <div className="flex flex-col items-end gap-2">
-                <button
-                  onClick={handleActionClick}
-                  disabled={isActionDisabled}
-                  className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300"
-                >
-                  {actionLabel}
-                </button>
                 {!hasProvider && (
                   <span className="text-sm text-[#F04438]">
                     MetaMask is required to manage orbit levels.

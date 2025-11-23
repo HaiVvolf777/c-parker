@@ -8,19 +8,15 @@ import EarningGraphCard from '../components/dashboard/orbit/EarningGraphCard';
 import TotalEarningCard from '../components/dashboard/orbit/TotalEarningCard';
 import MessageModal from '../components/common/MessageModal.jsx';
 import { useUserData } from '../context/UserDataContext.jsx';
-import { useWallet } from '../context/WalletContext.jsx';
 import { getUserLevels, ApiError } from '../services/apiClient.js';
-import { purchaseOrbitALevelWithWallet } from '../services/levelPurchaseService.js';
 
 const OrbitALevelProgression = () => {
   const [overviewRef, isOverviewVisible] = useScrollAnimation({ threshold: 0.1 });
   const [orbitRef, isOrbitVisible] = useScrollAnimation({ threshold: 0.1 });
   const [statsRef, isStatsVisible] = useScrollAnimation({ threshold: 0.1 });
   const { user } = useUserData();
-  const { provider } = useWallet();
   const [levels, setLevels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
   const [modalState, setModalState] = useState({ isOpen: false, type: 'success', message: '' });
 
   // Fetch levels from API
@@ -61,44 +57,6 @@ const OrbitALevelProgression = () => {
     .reduce((max, level) => Math.max(max, level.levelNumber || 0), 0);
 
   const currentLevel = maxActiveLevel || 0;
-  const nextLevel = Math.min(currentLevel + 1, 10);
-  const isAtCap = currentLevel >= 10;
-
-  const handleUnlockClick = async () => {
-    if (!provider) {
-      setModalState({ isOpen: true, type: 'error', message: 'Please connect your wallet first' });
-      return;
-    }
-
-    if (isAtCap) {
-      setModalState({ isOpen: true, type: 'error', message: 'Maximum level reached' });
-      return;
-    }
-
-    if (nextLevel > 10) {
-      setModalState({ isOpen: true, type: 'error', message: 'Maximum level is 10' });
-      return;
-    }
-
-    try {
-      setIsProcessing(true);
-      const result = await purchaseOrbitALevelWithWallet(provider, nextLevel);
-      if (result.success) {
-        // Refresh only ORBIT_A levels after successful purchase
-        const data = await getUserLevels(user.userId, { orbit: 'ORBIT_A' });
-        const orbitALevels = (data || []).filter(level => level.orbit === 'ORBIT_A');
-        setLevels(orbitALevels);
-        setModalState({ isOpen: true, type: 'success', message: result.message || 'Level purchased successfully!' });
-      } else {
-        setModalState({ isOpen: true, type: 'error', message: result.message || 'Failed to purchase level' });
-      }
-    } catch (err) {
-      console.error('Purchase error:', err);
-      setModalState({ isOpen: true, type: 'error', message: err.message || 'Failed to purchase level. Please try again.' });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   return (
     <>
@@ -123,15 +81,6 @@ const OrbitALevelProgression = () => {
                     </>
                   )}
                 </p>
-              </div>
-              <div className="">
-                <button
-                  onClick={handleUnlockClick}
-                  disabled={isProcessing || isAtCap}
-                  className="text-white font-bold text-[24px] bg-[#6F23D5] hover:bg-[#5a1fb8] hover:scale-105 px-6 py-2 leading-[100%] rounded-[10px] cursor-pointer transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {isProcessing ? 'Processing...' : isAtCap ? 'Max Level Reached' : `Unlock next (Lv ${nextLevel})`}
-                </button>
               </div>
             </div>
 

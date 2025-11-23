@@ -1,8 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import useScrollAnimation from '../../hooks/useScrollAnimation';
 
 const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsData = [] }) => {
+  const navigate = useNavigate();
   const [orbitRef, isOrbitVisible] = useScrollAnimation({ threshold: 0.1 });
+
+  const handleLevelClick = (level) => {
+    navigate('/dashboard/cycle-level-progression', { state: { level } });
+  };
 
   // Default data if API data is not available
   const defaultLevels = [
@@ -54,7 +60,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
 
 
         {/* Level 1  */}
-        <g opacity={unlockedLevels >= 1 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 1 ? 1 : 0.25} onClick={() => handleLevelClick(1)} className="cursor-pointer">
           <path
             d="M466.604 435.999L420.471 180.318"
             stroke="url(#paint3_linear_567_20)"
@@ -94,7 +100,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* Level 2  */}
-        <g opacity={unlockedLevels >= 2 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 2 ? 1 : 0.25} onClick={() => handleLevelClick(2)} className="cursor-pointer">
           <path
             d="M504.727 441.691L597.747 199.103"
             stroke="url(#paint6_linear_567_20)"
@@ -133,7 +139,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* level 3  */}
-        <g opacity={unlockedLevels >= 3 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 3 ? 1 : 0.25} onClick={() => handleLevelClick(3)} className="cursor-pointer">
           {/* level 3 line  */}
           <path
             d="M506.708 474.382L764.093 327.803"
@@ -175,7 +181,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* level 4  */}
-        <g opacity={unlockedLevels >= 4 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 4 ? 1 : 0.25} onClick={() => handleLevelClick(4)} className="cursor-pointer">
           <path
             d="M528.506 486.744L745.763 550.476"
             stroke="url(#paint21_linear_567_20)"
@@ -214,7 +220,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* Level 5  */}
-        <g opacity={unlockedLevels >= 5 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 5 ? 1 : 0.25} onClick={() => handleLevelClick(5)} className="cursor-pointer">
           <path
             d="M471.988 458.838L667.371 706.522"
             stroke="url(#paint16_linear_567_20)"
@@ -252,7 +258,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* Level 6  */}
-        <g opacity={unlockedLevels >= 6 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 6 ? 1 : 0.25} onClick={() => handleLevelClick(6)} className="cursor-pointer">
           <path
             d="M483.531 472.435L476.945 695.243"
             stroke="url(#paint17_linear_567_20)"
@@ -291,7 +297,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* Level 7  */}
-        <g opacity={unlockedLevels >= 7 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 7 ? 1 : 0.25} onClick={() => handleLevelClick(7)} className="cursor-pointer">
           <path
             d="M457.996 505.626L312.793 685.171"
             stroke="url(#paint18_linear_567_20)"
@@ -330,7 +336,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* Level 8  */}
-        <g opacity={unlockedLevels >= 8 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 8 ? 1 : 0.25} onClick={() => handleLevelClick(8)} className="cursor-pointer">
           <path
             d="M424.116 496.836L201.883 559.549"
             stroke="url(#paint19_linear_567_20)"
@@ -369,7 +375,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* Level 9  */}
-        <g opacity={unlockedLevels >= 9 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 9 ? 1 : 0.25} onClick={() => handleLevelClick(9)} className="cursor-pointer">
           <path
             d="M411.86 464.693L191.446 395.859"
             stroke="url(#paint20_linear_567_20)"
@@ -408,7 +414,7 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
         </g>
 
         {/* Level 10  */}
-        <g opacity={unlockedLevels >= 10 ? 1 : 0.25}>
+        <g opacity={unlockedLevels >= 10 ? 1 : 0.25} onClick={() => handleLevelClick(10)} className="cursor-pointer">
           <path d="M473.5 472.5L120 130" stroke="url(#paint22_linear_567_20)" stroke-width="3" />
           <g filter="url(#filter4_dii_567_20)">
             <circle
