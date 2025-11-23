@@ -15,6 +15,7 @@ const NodeLevelProgressionB = () => {
   const [slideIndex, setSlideIndex] = useState(0);
   const [cycles, setCycles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const level = location.state?.level || 1;
   const userId = user?.userId;
@@ -71,10 +72,10 @@ const NodeLevelProgressionB = () => {
             {/* Level Carousal  */}
             <div
               ref={carouselRef}
-              className={`w-full mt-5 animate-fade-in-up ${isCarouselVisible ? 'animate' : ''}`}
+              className={`w-full mt-5 relative z-[1000] animate-fade-in-up ${isCarouselVisible ? 'animate' : ''}`}
               style={{ transitionDelay: '200ms' }}
             >
-              <div className="w-full xl:w-[80%] mx-auto mb-12">
+              <div className="w-full xl:w-[80%] mx-auto mb-12 overflow-visible">
                 <div className="flex items-center justify-between gap-4 md:gap-8 lg:gap-12">
                   {/* controller left  */}
                   <div className="w-[15%] sm:w-[10%] lg:w-[7%]">
@@ -90,7 +91,7 @@ const NodeLevelProgressionB = () => {
                   <div className="w-[70%] sm:w-[80%] lg:w-[86%] relative">
                     <div className="flex items-center gap-5 lg:gap-8 overflow-hidden">
                       {/* slide  */}
-                      <div className="w-full lg:w-[90%] bg-gradient-to-r from-[#4B158E] to-[#150628] rounded-[10px] p-4 md:p-7">
+                      <div className="w-full bg-gradient-to-r from-[#4B158E] to-[#150628] rounded-[10px] p-4 md:p-7">
                         <div className="flex flex-col gap-0">
                           <div className="flex justify-between">
                             <div className="">
@@ -145,21 +146,63 @@ const NodeLevelProgressionB = () => {
                 </div>
 
                 {/* controller bar  */}
-                <div className="w-[70%] sm:w-[80%] lg:w-[86%] mx-auto">
-                  <div className="w-full mt-6 md:mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-6 md:px-11 py-3 md:py-4 border border-gray-200 dark:border-[#141429]">
-                    <div className="flex items-center justify-between text-gray-800 dark:text-white">
-                      <button onClick={prevSlide} type="button" aria-label="Previous" className="hover:opacity-80 p-2 touch-manipulation">
-                        <svg className="w-4 h-4 md:w-3.5 md:h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M15 19L8 12L15 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </button>
-                      <span className="text-sm md:text-base font-medium">Cycle: {(currentCycle.cycleNumber || 1)}</span>
-                      <button onClick={nextSlide} type="button" aria-label="Next" className="hover:opacity-80 p-2 touch-manipulation">
-                        <svg className="w-4 h-4 md:w-3.5 md:h-3.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9 5L16 12L9 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </button>
+                <div className="w-[70%] sm:w-[80%] lg:w-[86%] mx-auto relative z-50">
+                  <div 
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-full mt-6 md:mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-6 md:px-11 py-3 md:py-4 border border-gray-200 dark:border-[#141429] relative cursor-pointer hover:opacity-90 transition-opacity"
+                  >
+                    <div className="flex items-center justify-between text-gray-800 dark:text-white text-sm md:text-base font-medium">
+                      <span>Cycle: {(currentCycle.cycleNumber || slideIndex + 1)}</span>
+                      <svg
+                        className={`w-4 h-4 md:w-5 md:h-5 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
                     </div>
+                    
+                    {isDropdownOpen && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-[100]"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsDropdownOpen(false);
+                          }}
+                        />
+                        <div 
+                          className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#0B0B1A] border border-gray-200 dark:border-[#141429] rounded-[10px] shadow-lg z-[101] max-h-60 overflow-y-auto"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {cycles.length > 0 ? (
+                            cycles.map((cycle, index) => (
+                              <button
+                                key={index}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSlideIndex(index);
+                                  setIsDropdownOpen(false);
+                                }}
+                                type="button"
+                                className={`w-full text-left px-4 py-3 text-sm md:text-base font-medium transition-colors ${
+                                  slideIndex === index
+                                    ? 'bg-gray-100 dark:bg-[#1a1a2e] text-gray-900 dark:text-white'
+                                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#141429]'
+                                }`}
+                              >
+                                Cycle: {cycle.cycleNumber || index + 1}
+                              </button>
+                            ))
+                          ) : (
+                            <div className="px-4 py-3 text-sm md:text-base text-gray-500 dark:text-gray-400">
+                              No cycles available
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -168,7 +211,7 @@ const NodeLevelProgressionB = () => {
             {/* Platform Activity  */}
             <div
               ref={activityRef}
-              className={`animate-fade-in-up ${isActivityVisible ? 'animate' : ''}`}
+              className={`animate-fade-in-up relative z-0 ${isActivityVisible ? 'animate' : ''}`}
               style={{ transitionDelay: '400ms' }}
             >
               <h2 className="text-gray-800 dark:text-white text-[30px] font-bold mb-5">
