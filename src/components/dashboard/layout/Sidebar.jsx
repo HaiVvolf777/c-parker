@@ -125,10 +125,10 @@ const Sidebar = () => {
                   </span>
                 </div>
                 <svg
-                  width="20"
-                  height="20"
+                  width="28"
+                  height="28"
                   viewBox="0 0 24 24"
-                  fill="none"
+                  fill="#6F23D5"
                   xmlns="http://www.w3.org/2000/svg"
                   className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                 >
