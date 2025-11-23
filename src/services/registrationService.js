@@ -31,31 +31,6 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   console.log('OrbitA Contract:', orbitA.target);
   console.log('CCT Token Contract:', cctToken.target);
 
-  try {
-    const orbitACode = await provider.getCode(ORBIT_A_ADDRESS);
-    if (orbitACode === '0x' || orbitACode === '0x0') {
-      console.warn('⚠️ OrbitA contract not found at address:', ORBIT_A_ADDRESS);
-      console.warn('This might be a network issue or the contract may not be deployed. Registration will still be attempted.');
-    } else {
-      console.log('✓ OrbitA contract verified at address:', ORBIT_A_ADDRESS);
-    }
-  } catch (err) {
-    console.warn('Could not verify OrbitA contract code:', err.message);
-    console.warn('Proceeding with registration attempt anyway...');
-  }
-
-  try {
-    const cctCode = await provider.getCode(CCT_TOKEN_ADDRESS);
-    if (cctCode === '0x' || cctCode === '0x0') {
-      console.warn('⚠️ CCT Token contract not found at address:', CCT_TOKEN_ADDRESS);
-      console.warn('Token-related features may not work.');
-    } else {
-      console.log('✓ CCT Token contract verified at address:', CCT_TOKEN_ADDRESS);
-    }
-  } catch (err) {
-    console.warn('Could not verify CCT Token contract code:', err.message);
-  }
-
   const hasFunc = (contract, fnName) => {
     try {
       return contract && typeof contract[fnName] === 'function';

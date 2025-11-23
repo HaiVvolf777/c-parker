@@ -9,9 +9,13 @@ const Hero = () => {
   const [buttonRef, isButtonVisible] = useScrollAnimation({ threshold: 0.2 });
   const { account, connectWallet, isConnecting } = useWallet();
 
-  const handleJoinClick = () => {
-    if (!account) {
-      connectWallet();
+  const handleJoinClick = async () => {
+    if (!account && !isConnecting) {
+      try {
+        await connectWallet();
+      } catch (err) {
+        console.warn('Wallet connection failed:', err);
+      }
     }
   };
 

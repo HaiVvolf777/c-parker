@@ -38,6 +38,16 @@ export const ProgressProvider = ({ children }) => {
     }
   }, [state]);
 
+  // Reset progress when wallet is disconnected
+  useEffect(() => {
+    const handleWalletDisconnect = () => {
+      setState(defaultState);
+    };
+    
+    window.addEventListener('wallet-disconnected', handleWalletDisconnect);
+    return () => window.removeEventListener('wallet-disconnected', handleWalletDisconnect);
+  }, []);
+
   const purchaseAccess = () => {
     setState((prev) => ({
       ...prev,

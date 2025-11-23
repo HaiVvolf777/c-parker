@@ -1,19 +1,35 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useWallet } from "../context/WalletContext.jsx";
 import { useUserData } from "../context/UserDataContext.jsx";
 import { HomeNavbar, Hero, Stats, Verified, VideoAnnouncements, PlatformActivity, HowItWorks, ParkerPool, CTA, Footer as HomeFooter, Eclips } from "../components/home";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { account } = useWallet();
+  const [searchParams] = useSearchParams();
+  const { account, connectWallet } = useWallet();
   const { user } = useUserData();
 
+  // Auto-redirect to dashboard if already registered
   useEffect(() => {
     if (account && user?.userId) {
       navigate("/dashboard", { replace: true });
     }
   }, [account, user, navigate]);
+
+  // Auto-trigger wallet connection if ref parameter exists and wallet not connected
+  useEffect(() => {
+    const refParam = searchParams.get('ref');
+    if (refParam && !account) {
+      // Auto-connect wallet when ref parameter is present
+      const timer = setTimeout(() => {
+        connectWallet().catch((err) => {
+          console.warn('Auto-connect failed:', err);
+        });
+      }, 500); // Small delay to ensure page is loaded
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams, account, connectWallet]);
 
   useEffect(() => {
     const m = window.matchMedia('(prefers-color-scheme: dark)');

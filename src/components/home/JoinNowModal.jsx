@@ -22,8 +22,18 @@ const JoinNowModal = ({ isOpen, onClose }) => {
         // Leave empty if no ref parameter (optional)
         setReferrerId('');
       }
+      // Reset error state when modal opens
+      setError('');
+      setIsRegistering(false);
     }
   }, [isOpen, searchParams]);
+
+  const handleClose = () => {
+    // Reset state when closing
+    setError('');
+    setIsRegistering(false);
+    onClose();
+  };
 
   const handleJoinNow = async () => {
     if (!account || !provider) {
@@ -51,14 +61,14 @@ const JoinNowModal = ({ isOpen, onClose }) => {
         console.log('Registration successful:', result);
         console.log('Registered with referrer ID:', referrerIdNum);
         // Close modal and redirect to dashboard
-        onClose();
+        handleClose();
         navigate('/dashboard');
       } else {
         // Check if user is already registered - redirect to dashboard in that case
         const message = result.message || '';
         if (message.toLowerCase().includes('already registered')) {
           console.log('User already registered, redirecting to dashboard');
-          onClose();
+          handleClose();
           navigate('/dashboard');
         } else {
           setError(message || 'Registration failed');
@@ -66,7 +76,17 @@ const JoinNowModal = ({ isOpen, onClose }) => {
       }
     } catch (err) {
       console.error('Registration error:', err);
-      setError(err.message || 'Failed to register. Please try again.');
+      
+      // Simplify error messages for users
+      const errorMessage = err.message || '';
+      
+      // Check for insufficient CCT
+      if (errorMessage.toLowerCase().includes('insufficient cct')) {
+        setError(err.message);
+      } else {
+        // For all other errors, just show "Transaction reverted"
+        setError('Transaction reverted. Please try again.');
+      }
     } finally {
       setIsRegistering(false);
     }
@@ -78,7 +98,7 @@ const JoinNowModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4">
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm" 
-        onClick={onClose}
+        onClick={handleClose}
       />
       <div 
         className="relative w-full max-w-md rounded-2xl border border-[#141429] bg-white dark:bg-[#0B0B1A] p-6 shadow-xl z-10" 
@@ -88,8 +108,9 @@ const JoinNowModal = ({ isOpen, onClose }) => {
           <h2 className="text-xl font-bold text-[#0a0a0a] dark:text-white">Join Orbit</h2>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="text-[#747474] hover:text-[#0a0a0a] dark:hover:text-white text-2xl leading-none"
+            disabled={isRegistering}
             aria-label="Close"
           >
             ×
@@ -137,8 +158,9 @@ const JoinNowModal = ({ isOpen, onClose }) => {
         <div className="flex gap-3">
           <button
             type="button"
-            onClick={onClose}
-            className="flex-1 rounded-md border border-[#141429] bg-white dark:bg-[#0B0B1A] text-[#0a0a0a] dark:text-white font-semibold py-2 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+            onClick={handleClose}
+            disabled={isRegistering}
+            className="flex-1 rounded-md border border-[#141429] bg-white dark:bg-[#0B0B1A] text-[#0a0a0a] dark:text-white font-semibold py-2 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

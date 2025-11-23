@@ -30,10 +30,19 @@ const HomeNavbar = () => {
 
   // Check user after wallet connection (only on home page)
   useEffect(() => {
+    let isMounted = true;
+    
     const checkUser = async () => {
-      if (!account) return;
+      if (!account) {
+        setShowJoinModal(false);
+        setIsCheckingUser(false);
+        return;
+      }
+      
       // Only check if we're on the home page (not already on dashboard)
-      if (window.location.pathname !== '/' && window.location.pathname !== '/home') {
+      if (window.location.pathname !== '/' && 
+          window.location.pathname !== '/home' && 
+          !window.location.pathname.startsWith('/register')) {
         return;
       }
 
@@ -41,8 +50,12 @@ const HomeNavbar = () => {
         setIsCheckingUser(true);
         await getUserByWallet(account);
         // User exists, redirect to dashboard
-        navigate('/dashboard');
+        if (isMounted) {
+          navigate('/dashboard');
+        }
       } catch (err) {
+        if (!isMounted) return;
+        
         if (err instanceof ApiError && err.status === 404) {
           // User doesn't exist, show join modal
           setShowJoinModal(true);
@@ -50,11 +63,17 @@ const HomeNavbar = () => {
           console.error('Error checking user:', err);
         }
       } finally {
-        setIsCheckingUser(false);
+        if (isMounted) {
+          setIsCheckingUser(false);
+        }
       }
     };
 
     checkUser();
+    
+    return () => {
+      isMounted = false;
+    };
   }, [account, navigate]);
 
   const handleWalletClick = async () => {
@@ -93,16 +112,6 @@ const HomeNavbar = () => {
             {walletLabel}
           </div>
         </button>
-        {!hasProvider && (
-          <span className="text-xs text-[#F04438]">
-            Wallet connection unavailable.
-          </span>
-        )}
-        {error && hasProvider && (
-          <span className="text-xs text-[#F04438] text-right max-w-[220px]">
-            {error.message}
-          </span>
-        )}
       </div>
       <JoinNowModal isOpen={showJoinModal} onClose={() => setShowJoinModal(false)} />
     </div>

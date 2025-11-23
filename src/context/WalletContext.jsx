@@ -71,6 +71,22 @@ export const clearWalletSession = () => {
   }
 };
 
+// Clear all user-related data from storage (wallet + progress)
+export const clearAllUserData = () => {
+  try {
+    // Clear wallet session
+    clearWalletSession();
+    
+    // Clear progress data (user-specific)
+    localStorage.removeItem('cparker_progress_v1');
+    
+    // Note: We keep announcements and admin auth as they're not user-specific
+    console.log('All user data cleared from storage');
+  } catch (err) {
+    console.warn('Failed to clear user data:', err);
+  }
+};
+
 // Expected network chain ID from environment variable
 const EXPECTED_CHAIN_ID = import.meta.env?.VITE_CHAIN_ID ?? '80002';
 
@@ -376,7 +392,11 @@ export const WalletProvider = ({ children }) => {
       setAccount(null);
       setChainId(null);
       setError(null);
-      clearWalletSession();
+      setIsConnecting(false);
+      clearAllUserData();
+      
+      // Dispatch custom event so other contexts can reset
+      window.dispatchEvent(new CustomEvent('wallet-disconnected'));
     }
   }, []);
 
