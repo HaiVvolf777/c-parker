@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useUserData } from '../../../context/UserDataContext.jsx';
 import { useWallet } from '../../../context/WalletContext.jsx';
+import { usePreview } from '../../../context/PreviewContext.jsx';
 import { getUserLevels, getLevelPricing, ApiError } from '../../../services/apiClient.js';
 import { purchaseOrbitALevelWithWallet } from '../../../services/levelPurchaseService.js';
 import MessageModal from '../../common/MessageModal.jsx';
@@ -9,6 +10,7 @@ import Orbit from '../Orbit';
 const OrbitWithLock = ({ className }) => {
   const { user } = useUserData();
   const { provider } = useWallet();
+  const { isPreviewMode } = usePreview();
   const containerRef = useRef(null);
   const [levels, setLevels] = useState([]);
   const [pricingData, setPricingData] = useState(null);
@@ -101,6 +103,11 @@ const OrbitWithLock = ({ className }) => {
   }, [hasActiveLevels, maxActiveLevel, orbitALevels]);
 
   const handleUnlockClick = async () => {
+    if (isPreviewMode) {
+      setModalState({ isOpen: true, type: 'error', message: 'Cannot unlock levels in preview mode' });
+      return;
+    }
+
     if (!provider) {
       setModalState({ isOpen: true, type: 'error', message: 'Please connect your wallet first' });
       return;
@@ -144,7 +151,7 @@ const OrbitWithLock = ({ className }) => {
         unlockedLevels={maxActiveLevel > 0 ? maxActiveLevel : 0}
         purchaseFailed={purchaseFailed}
         levelsData={pricingData?.orbitA || []}
-        showUnlockButton={hasActiveLevels}
+        showUnlockButton={hasActiveLevels && !isPreviewMode}
         onUnlockClick={handleUnlockClick}
         isProcessing={isProcessing}
       />

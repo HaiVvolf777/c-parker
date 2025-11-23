@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useWallet } from '../../../context/WalletContext.jsx';
+import { usePreview } from '../../../context/PreviewContext.jsx';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -12,6 +13,9 @@ const Navbar = () => {
     disconnectWallet,
     error,
   } = useWallet();
+  
+  const { previewUserId, isPreviewMode, setPreviewUser, clearPreview } = usePreview();
+  const [previewInput, setPreviewInput] = useState('');
 
   const handleLogoClick = async () => {
     await disconnectWallet();
@@ -35,6 +39,19 @@ const Navbar = () => {
     }
   };
 
+  const handlePreviewSubmit = () => {
+    if (previewInput && previewInput.trim()) {
+      setPreviewUser(previewInput);
+      navigate('/dashboard');
+    }
+  };
+
+  const handlePreviewInputKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handlePreviewSubmit();
+    }
+  };
+
   return (
     <>
       <div className="w-full p-5 h-[83px] bg-white dark:bg-[#00000E] border-b border-gray-200 dark:border-[#141429]">
@@ -51,10 +68,16 @@ const Navbar = () => {
               </span>
               <input
                 type="text"
-                placeholder="Enter ID"
-                className="bg-gray-100 dark:bg-[#FFFFFF1A] px-[18px] py-3 rounded-[10px] text-gray-800 dark:text-[#D9D9D94D] placeholder-gray-500 dark:placeholder-[#D9D9D94D] border border-gray-200 dark:border-[#141429]"
+                placeholder={isPreviewMode ? `Viewing ID: ${previewUserId}` : "Enter ID"}
+                value={previewInput}
+                onChange={(e) => setPreviewInput(e.target.value)}
+                onKeyPress={handlePreviewInputKeyPress}
+                className="bg-gray-100 dark:bg-[#FFFFFF1A] px-[18px] py-3 rounded-[10px] text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-[#D9D9D94D] border border-gray-200 dark:border-[#141429]"
               />
-              <button className="bg-[#150F3E] hover:bg-[#221A65] text-white keep-white text-[20px] font-bold rounded-[12px] px-5 py-2 transition-colors">
+              <button 
+                onClick={handlePreviewSubmit}
+                className="bg-[#150F3E] hover:bg-[#221A65] text-white keep-white text-[20px] font-bold rounded-[12px] px-5 py-2 transition-colors"
+              >
                 Go
               </button>
             </div>

@@ -313,7 +313,6 @@ const RegistrationModal = ({ state, message, errorMessage, onClose, onRetry }) =
           {isError && (
             <>
               <p className="font-medium text-red-500">{errorMessage || 'Registration failed. Please try again.'}</p>
-              <p>Ensure you confirmed the transaction in MetaMask and that you have enough CCT and gas for the transaction.</p>
             </>
           )}
         </div>

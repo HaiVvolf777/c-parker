@@ -8,7 +8,8 @@ import React, {
   useState,
 } from 'react';
 import { useWallet } from './WalletContext.jsx';
-import { getUserByWallet, getUserStats, ApiError } from '../services/apiClient.js';
+import { usePreview } from './PreviewContext.jsx';
+import { getUserByWallet, getUserById, getUserStats, ApiError } from '../services/apiClient.js';
 import { registerUserWithWallet } from '../services/registrationService.js';
 
 const UserDataContext = createContext({
@@ -30,6 +31,7 @@ const INITIAL_STATE = {
 
 export const UserDataProvider = ({ children }) => {
   const { account, provider, disconnectWallet } = useWallet();
+  const { previewUserId, isPreviewMode } = usePreview();
   const [user, setUser] = useState(null);
   const [userStats, setUserStats] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,12 +53,18 @@ export const UserDataProvider = ({ children }) => {
   }, []);
 
   const fetchUserData = useCallback(async (allowAutoRegister = true) => {
-    if (!account) {
+    // In preview mode, we need the preview ID
+    // In normal mode, we need the account
+    if (!isPreviewMode && !account) {
       resetState();
       return;
     }
 
-    const normalizedAccount = account.toLowerCase();
+    if (isPreviewMode && !previewUserId) {
+      resetState();
+      return;
+    }
+
     const controller = new AbortController();
     activeRequest.current?.abort?.();
     activeRequest.current = controller;
@@ -64,9 +72,20 @@ export const UserDataProvider = ({ children }) => {
     setError(null);
 
     try {
-      const userResponse = await getUserByWallet(normalizedAccount, {
-        signal: controller.signal,
-      });
+      let userResponse;
+      
+      // If in preview mode, fetch user by ID
+      if (isPreviewMode) {
+        userResponse = await getUserById(previewUserId, {
+          signal: controller.signal,
+        });
+      } else {
+        // Normal mode: fetch by wallet
+        const normalizedAccount = account.toLowerCase();
+        userResponse = await getUserByWallet(normalizedAccount, {
+          signal: controller.signal,
+        });
+      }
 
       setUser(userResponse);
       setRegistrationMessage(null);
@@ -97,7 +116,8 @@ export const UserDataProvider = ({ children }) => {
         setUser(null);
         setUserStats(null);
 
-        if (allowAutoRegister && !autoRegisterAttempted.current) {
+        // Only auto-register in normal mode, not in preview mode
+        if (!isPreviewMode && allowAutoRegister && !autoRegisterAttempted.current) {
           autoRegisterAttempted.current = true;
           setIsRegistering(true);
           setError(null);
@@ -159,7 +179,7 @@ export const UserDataProvider = ({ children }) => {
         activeRequest.current = null;
       }
     }
-  }, [account, provider, resetState, disconnectWallet]);
+  }, [account, provider, resetState, disconnectWallet, isPreviewMode, previewUserId]);
 
   const acknowledgeRegistration = useCallback(() => {
     setRegistrationMessage(null);
@@ -175,12 +195,15 @@ export const UserDataProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // Only fetch user data if account is connected (user clicked "Connect Wallet")
-    // Auto-registration is OK here because user explicitly connected
-    if (account) {
+    // Fetch user data if:
+    // 1. In preview mode with a preview user ID, OR
+    // 2. Account is connected (user clicked "Connect Wallet")
+    if (isPreviewMode && previewUserId) {
+      fetchUserData(false); // No auto-registration in preview mode
+    } else if (account) {
       fetchUserData(true); // Allow auto-registration since user explicitly connected
     } else {
-      // Reset state when account is disconnected
+      // Reset state when account is disconnected and not in preview
       resetState();
     }
 
@@ -188,7 +211,7 @@ export const UserDataProvider = ({ children }) => {
       activeRequest.current?.abort?.();
       activeRequest.current = null;
     };
-  }, [account, fetchUserData, resetState]);
+  }, [account, fetchUserData, resetState, isPreviewMode, previewUserId]);
 
   const value = useMemo(() => ({
     user,
