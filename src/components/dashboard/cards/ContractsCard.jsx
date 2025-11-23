@@ -32,7 +32,7 @@ const ContractsCard = () => {
               <span className="text-[#0a0a0a] dark:text-[#01F1E3]">{shorten(contract.address)}</span>
             </div>
             <button type="button" onClick={() => copyToClipboard(contract.address)} className="cursor-pointer">
-              <img src="icons/copy.svg" alt="Copy contract address" />
+              <img src="icons/copy.svg" alt="Copy contract address" style={{ width: 18, height: 18 }} />
             </button>
           </div>
           {contract.label !== 'Orbit B' && <hr className="text-[#E5E7EB] dark:text-[#141429] my-[10px]" />}

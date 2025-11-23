@@ -53,94 +53,93 @@ const TopLeaders = () => {
             </p>
           </div>
 
-          <div className="bg-white/60 dark:bg-[#191932] border-2 border-[#E5E7EB] dark:border-[#141429] rounded-[10px] overflow-hidden">
-            {isLoading ? (
-              <div className="py-12 text-center">
-                <p className="text-[#6B7280] dark:text-white/60">Loading leaderboard...</p>
-              </div>
-            ) : error ? (
-              <div className="py-12 text-center">
-                <p className="text-red-500">Error: {error}</p>
-              </div>
-            ) : leaderboard.length === 0 ? (
-              <div className="py-12 text-center">
-                <p className="text-[#6B7280] dark:text-white/60">No leaderboard data available</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[800px]">
-                  <thead className="bg-white/80 dark:bg-[#0B0B1A] border-b border-[#E5E7EB] dark:border-[#141429]">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-[#6B7280] dark:text-white/60 uppercase tracking-wider">
-                        Rank
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-[#6B7280] dark:text-white/60 uppercase tracking-wider">
-                        User ID
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-[#6B7280] dark:text-white/60 uppercase tracking-wider">
-                        Wallet Address
-                      </th>
-                      <th className="px-6 py-4 text-right text-xs font-semibold text-[#6B7280] dark:text-white/60 uppercase tracking-wider">
-                        Total Earned (CCT)
-                      </th>
-                      <th className="px-6 py-4 text-right text-xs font-semibold text-[#6B7280] dark:text-white/60 uppercase tracking-wider">
-                        Partners
-                      </th>
-                      <th className="px-6 py-4 text-right text-xs font-semibold text-[#6B7280] dark:text-white/60 uppercase tracking-wider">
-                        Team Size
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E5E7EB] dark:divide-[#141429]">
-                    {leaderboard.map((entry, index) => (
-                      <tr
-                        key={entry.userId || index}
-                        className="hover:bg-gray-50 dark:hover:bg-[#0B0B1A]/50 transition-colors"
-                      >
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            {entry.rank <= 3 ? (
-                              <span className="text-[#7D40FF] dark:text-[#01F1E3] font-bold text-lg">
-                                #{entry.rank}
-                              </span>
-                            ) : (
-                              <span className="text-[#0a0a0a] dark:text-white font-semibold">
-                                #{entry.rank}
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-[#0a0a0a] dark:text-white font-medium">
-                            #{entry.userId}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-[#6B7280] dark:text-white/60 text-sm font-mono">
-                            {shortenAddress(entry.walletAddress)}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
-                          <span className="text-[#7D40FF] dark:text-[#01F1E3] font-semibold">
-                            {formatNumber(entry.totalEarned)} CCT
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
-                          <span className="text-[#0a0a0a] dark:text-white">
-                            {entry.totalPartners || 0}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
-                          <span className="text-[#0a0a0a] dark:text-white">
-                            {entry.totalTeamSize || 0}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+          <div className="border-2 border-[#E5E7EB] dark:border-[#141429] rounded-[10px] bg-white/60 dark:bg-[#0B0B1A4D] backdrop-blur-[30px] px-[44px] overflow-x-auto">
+            <table className="w-full">
+              <colgroup>
+                <col style={{ width: '100px' }} />
+                <col style={{ width: '150px' }} />
+                <col style={{ width: '200px' }} />
+                <col style={{ width: '200px' }} />
+                <col style={{ width: '120px' }} />
+                <col style={{ width: '120px' }} />
+              </colgroup>
+              <thead>
+                <tr className="*:pt-[44px] *:pb-[30px] border-b-[1px] border-[#E5E7EB] dark:border-[#141429] *:font-[400] *:text-[18px] *:text-[#6B7280] dark:*:text-[#9aa0a6]">
+                  <th className="text-left">Rank</th>
+                  <th className="text-left">User ID</th>
+                  <th className="text-left">Wallet Address</th>
+                  <th className="text-right">Total Earned</th>
+                  <th className="text-right">Partners</th>
+                  <th className="text-right">Team Size</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {isLoading && (
+                  <tr>
+                    <td colSpan={6} className="py-10 text-center text-[#6B7280] dark:text-[#9aa0a6]">
+                      Loading leaderboard...
+                    </td>
+                  </tr>
+                )}
+
+                {!isLoading && error && (
+                  <tr>
+                    <td colSpan={6} className="py-10 text-center text-red-500">
+                      Error: {error}
+                    </td>
+                  </tr>
+                )}
+
+                {!isLoading && !error && leaderboard.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="py-10 text-center text-[#6B7280] dark:text-[#9aa0a6]">
+                      No leaderboard data available
+                    </td>
+                  </tr>
+                )}
+
+                {!isLoading && !error && leaderboard.map((entry, index) => (
+                  <tr
+                    key={entry.userId || index}
+                    className="*:py-[30px] border-b-[1px] border-[#E5E7EB] dark:border-[#141429] *:text-[16px] hover:bg-[#F3F4F6] dark:hover:bg-[#0B0B1A] transition-colors"
+                  >
+                    <td className="text-left">
+                      {entry.rank <= 3 ? (
+                        <span className="text-[#7D40FF] dark:text-[#01F1E3] font-bold text-lg">
+                          #{entry.rank}
+                        </span>
+                      ) : (
+                        <span className="text-[#0a0a0a] dark:text-white font-semibold">
+                          #{entry.rank}
+                        </span>
+                      )}
+                    </td>
+                    <td className="text-left">
+                      <span className="bg-[#F3F4F6] text-[#0a0a0a] dark:bg-[#00000D] dark:text-white px-[35px] py-2 rounded-[40px]">
+                        #{entry.userId}
+                      </span>
+                    </td>
+                    <td className="text-left">
+                      <span className="text-[#6B7280] dark:text-[#9aa0a6] text-sm font-mono">
+                        {shortenAddress(entry.walletAddress)}
+                      </span>
+                    </td>
+                    <td className="text-right">
+                      <span className="text-[#7D40FF] dark:text-[#01F1E3] font-semibold">
+                        {formatNumber(entry.totalEarned)} CCT
+                      </span>
+                    </td>
+                    <td className="text-right text-[#0a0a0a] dark:text-white">
+                      {entry.totalPartners || 0}
+                    </td>
+                    <td className="text-right text-[#0a0a0a] dark:text-white">
+                      {entry.totalTeamSize || 0}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

@@ -54,14 +54,14 @@ const Navbar = () => {
                 placeholder="Enter ID"
                 className="bg-gray-100 dark:bg-[#FFFFFF1A] px-[18px] py-3 rounded-[10px] text-gray-800 dark:text-[#D9D9D94D] placeholder-gray-500 dark:placeholder-[#D9D9D94D] border border-gray-200 dark:border-[#141429]"
               />
-              <button className="bg-[#150F3E] hover:bg-[#221A65] text-white text-[20px] font-bold rounded-[12px] px-5 py-2 transition-colors">
+              <button className="bg-[#150F3E] hover:bg-[#221A65] text-white keep-white text-[20px] font-bold rounded-[12px] px-5 py-2 transition-colors">
                 Go
               </button>
             </div>
             <div className="flex flex-col items-end gap-1">
               <button
                 onClick={handleWalletClick}
-                className="bg-[#150F3E] hover:bg-[#221A65] text-white text-[16px] font-semibold rounded-[12px] px-4 py-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                className="bg-[#150F3E] hover:bg-[#221A65] text-white keep-white text-[16px] font-semibold rounded-[12px] px-4 py-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={isConnecting}
               >
                 {walletLabel}

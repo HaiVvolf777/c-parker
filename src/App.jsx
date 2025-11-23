@@ -21,6 +21,10 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TopLeaders from './pages/TopLeaders';
 import Partners from './pages/Partners';
+import Social from './pages/Social';
+import Information from './pages/Information';
+import PromoPdfs from './pages/PromoPdfs';
+import Links from './pages/Links';
 function App() {
   return (
     <AdminAuthProvider>
@@ -32,6 +36,7 @@ function App() {
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/register" element={<HomePage />} />
                     <Route path="/about" element={<AboutPage />} />
                     <Route path="/contact" element={<ContactPage />} />
                     <Route path="/support" element={<SupportPage />} />
@@ -46,6 +51,10 @@ function App() {
                     <Route path="/dashboard/orbit-b-level-progression" element={<OrbitBLevelProgression />} />
                     <Route path="/dashboard/top-leaders" element={<TopLeaders />} />
                     <Route path="/dashboard/partners" element={<Partners />} />
+                    <Route path="/dashboard/social" element={<Social />} />
+                    <Route path="/dashboard/information" element={<Information />} />
+                    <Route path="/dashboard/promo-pdfs" element={<PromoPdfs />} />
+                    <Route path="/dashboard/links" element={<Links />} />
                     {/* <Route path="/dashboard/all-nodes" element={<Orbitb />} /> */}
                     <Route path="/home" element={<Navigate to="/" replace />} />
                     <Route path="*" element={<NotFound />} />

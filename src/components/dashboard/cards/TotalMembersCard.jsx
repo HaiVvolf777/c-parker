@@ -10,7 +10,7 @@ const TotalMembersCard = () => {
   const stats = data.platform.stats;
 
   return (
-    <div className="bg-[#7D40FF] rounded-[10px] p-[18px] text-white">
+    <div className="bg-[#7D40FF] rounded-[10px] p-[18px] text-white keep-white">
       <p className="keep-white text-lg font-semibold">Members Total</p>
       <div className="flex items-baseline gap-[6px] mt-[10px]">
         <span className="keep-white text-[34px] font-extrabold">
@@ -26,10 +26,10 @@ const TotalMembersCard = () => {
           </span>
         </div>
       </div>
-      <p className="text-sm text-white/80 mt-2">
+      {/* <p className="text-sm text-white/80 mt-2">
         Orbit A: {isLoading ? '...' : formatNumber(stats?.totalUsersOrbitA)} · Orbit B:{' '}
         {isLoading ? '...' : formatNumber(stats?.totalUsersOrbitB)}
-      </p>
+      </p> */}
     </div>
   );
 };

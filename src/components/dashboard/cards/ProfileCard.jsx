@@ -14,6 +14,7 @@ const ProfileCard = () => {
     acknowledgeRegistration,
   } = useUserData();
   const [copied, setCopied] = useState(false);
+  const [copiedAddress, setCopiedAddress] = useState(false);
   const [modalState, setModalState] = useState('hidden');
 
   const shortenedWallet = useMemo(() => {
@@ -88,6 +89,18 @@ const ProfileCard = () => {
     }
   };
 
+  const handleCopyAddress = async () => {
+    if (!account) return;
+
+    try {
+      await navigator.clipboard.writeText(account);
+      setCopiedAddress(true);
+      setTimeout(() => setCopiedAddress(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy address:', err);
+    }
+  };
+
   const renderStatus = () => {
     if (isLoading) {
       return (
@@ -115,9 +128,9 @@ const ProfileCard = () => {
 
     return (
       <p className="text-gray-600 dark:text-[#747474] text-center md:text-start">
-        Joined {registeredDate || '—'} • Referrer ID{' '}
+        invited {registeredDate || '—'} by{' '}
         <span className="text-[#EE9C04] font-bold">
-          {user.referrerId ?? 'N/A'}
+          ID {user.referrerId ?? 'N/A'}
         </span>
       </p>
     );
@@ -129,8 +142,10 @@ const ProfileCard = () => {
       <div className="grid grid-col-1 lg:grid-cols-2 gap-5">
         {/* profile  */}
         <div className="flex flex-col md:flex-row gap-[28px] items-center">
-          <div className="relative h-[150px] w-[150px] border-4 border-[#6F23D5] bg-gray-100 dark:bg-white rounded-full">
-            <img src="images/profile.png" alt="" className="w-full h-full rounded-full object-cover" />
+          <div className="relative h-[150px] w-[150px]">
+            <div className="h-full w-full border-4 border-[#6F23D5] bg-gradient-to-br from-purple-400 to-purple-600 rounded-full overflow-hidden flex items-center justify-center">
+              <img src="/images/3d-illustration-human-avatar-profile.png" alt="Profile Avatar" className="w-full h-full object-cover" />
+            </div>
             <div className="rounded-full absolute bottom-0 right-2">
               <svg
                 width="34"
@@ -160,6 +175,24 @@ const ProfileCard = () => {
               <span className="text-lg text-[#6F23D5] font-semibold">
                 {shortenedWallet ?? 'No wallet connected'}
               </span>
+              {account && (
+                <button
+                  onClick={handleCopyAddress}
+                  className="text-white keep-white hover:text-gray-200 transition-colors p-1 relative"
+                  title={copiedAddress ? "Copied!" : "Copy full address"}
+                >
+                  {copiedAddress ? (
+                    <svg className="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M5 15H4C2.89543 15 2 14.1046 2 13V4C2 2.89543 2.89543 2 4 2H13C14.1046 2 15 2.89543 15 4V5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </button>
+              )}
             </div>
 
             {renderStatus()}
@@ -187,7 +220,7 @@ const ProfileCard = () => {
               >
                 <path
                   d="M5.4 9H6.6V5.4H5.4V9ZM6 0C2.685 0 0 2.685 0 6C0 9.315 2.685 12 6 12C9.315 12 12 9.315 12 6C12 2.685 9.315 0 6 0ZM6 10.8C3.354 10.8 1.2 8.646 1.2 6C1.2 3.354 3.354 1.2 6 1.2C8.646 1.2 10.8 3.354 10.8 6C10.8 8.646 8.646 10.8 6 10.8ZM5.4 4.2H6.6V3H5.4V4.2Z"
-                  fill="#6F23D5"
+                  fill="white"
                 />
               </svg>
             </div>

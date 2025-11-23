@@ -6,19 +6,19 @@ const EarningOverviewCard = ({ className }) => {
       id: 1,
       title: 'Top 300 Leaders',
       icon: 'icons/crown.svg',
-      total: 2,
+      total: 0,
     },
     {
       id: 2,
       title: 'Unconditional Passives',
       icon: 'icons/chain.svg',
-      total: 2,
+      total: 0,
     },
     {
       id: 3,
       title: 'Active users',
       icon: 'icons/user.svg',
-      total: 2,
+      total: 0,
     },
   ];
   return (
@@ -37,7 +37,7 @@ const EarningOverviewCard = ({ className }) => {
                 <p className="text-white keep-white text-lg font-semibold ">Profit</p>
                 <div className="flex items-center justify-between mt-[22px] mb-4">
                   <span className="text-white keep-white text-sm ">CCT</span>
-                  <img src="icons/profit-icon.png" alt="" />
+                  <img src="/icons/CCT.svg" alt="CCT" />
                 </div>
 
                 <p className="text-white keep-white text-[40px] font-extrabold ">2</p>
@@ -55,7 +55,7 @@ const EarningOverviewCard = ({ className }) => {
                       <span className="text-[#0a0a0a] dark:text-white text-[24px] font-bold ">
                         2
                       </span>
-                      <img src="icons/profit-icon.png" alt="" />
+                      <img src="/icons/CCT.svg" alt="CCT" />
                     </div>
 
                     <div className="">

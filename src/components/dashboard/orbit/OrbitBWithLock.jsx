@@ -98,6 +98,43 @@ const OrbitBWithLock = ({ className }) => {
     });
   }, [hasActiveLevels, maxActiveLevel, orbitBLevels]);
 
+  const handleUnlockClick = async () => {
+    if (!provider) {
+      setModalState({ isOpen: true, type: 'error', message: 'Please connect your wallet first' });
+      return;
+    }
+
+    const nextLevel = Math.min(maxActiveLevel + 1, 10);
+    if (nextLevel > 10) {
+      setModalState({ isOpen: true, type: 'error', message: 'Maximum level is 10' });
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      setPurchaseFailed(false);
+      const result = await purchaseOrbitBLevelWithWallet(provider, nextLevel);
+      if (result.success) {
+        const data = await getUserLevels(user.userId, { orbit: 'ORBIT_B' });
+        const orbitBLevels = (data || []).filter(level => level.orbit === 'ORBIT_B');
+        setLevels(orbitBLevels);
+        setPurchaseFailed(false);
+        setModalState({ isOpen: true, type: 'success', message: result.message || 'Level purchased successfully!' });
+      } else {
+        setPurchaseFailed(true);
+        setModalState({ isOpen: true, type: 'error', message: result.message || 'Failed to purchase level' });
+        setTimeout(() => setPurchaseFailed(false), 5000);
+      }
+    } catch (err) {
+      console.error('Purchase error:', err);
+      setPurchaseFailed(true);
+      setModalState({ isOpen: true, type: 'error', message: err.message || 'Failed to purchase level. Please try again.' });
+      setTimeout(() => setPurchaseFailed(false), 5000);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div ref={containerRef} className={`relative ${className || ''}`}>
       <Orbitb 
@@ -105,6 +142,9 @@ const OrbitBWithLock = ({ className }) => {
         unlockedLevels={maxActiveLevel > 0 ? maxActiveLevel : 0} 
         purchaseFailed={purchaseFailed}
         levelsData={pricingData?.orbitB || []}
+        showUnlockButton={hasActiveLevels}
+        onUnlockClick={handleUnlockClick}
+        isProcessing={isProcessing}
       />
       {!isLoading && !hasActiveLevels && (
         <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center rounded-[10px] px-6 text-center text-white">
@@ -118,56 +158,6 @@ const OrbitBWithLock = ({ className }) => {
             </div>
             <span className="text-sm text-white/80">Please complete your purchase to access level progression.</span>
           </div>
-        </div>
-      )}
-      {!isLoading && hasActiveLevels && (
-        <div className="absolute bottom-6 right-6">
-          <button
-            type="button"
-            onClick={async () => {
-              if (!provider) {
-                setModalState({ isOpen: true, type: 'error', message: 'Please connect your wallet first' });
-                return;
-              }
-              
-              const nextLevel = Math.min(maxActiveLevel + 1, 10);
-              if (nextLevel > 10) {
-                setModalState({ isOpen: true, type: 'error', message: 'Maximum level is 10' });
-                return;
-              }
-
-              try {
-                setIsProcessing(true);
-                setPurchaseFailed(false); // Reset failure state before new purchase
-                const result = await purchaseOrbitBLevelWithWallet(provider, nextLevel);
-                if (result.success) {
-                  // Refresh only ORBIT_B levels
-                  const data = await getUserLevels(user.userId, { orbit: 'ORBIT_B' });
-                  const orbitBLevels = (data || []).filter(level => level.orbit === 'ORBIT_B');
-                  setLevels(orbitBLevels);
-                  setPurchaseFailed(false); // Ensure it's not failed on success
-                  setModalState({ isOpen: true, type: 'success', message: result.message || 'Level purchased successfully!' });
-                } else {
-                  setPurchaseFailed(true); // Set failure state
-                  setModalState({ isOpen: true, type: 'error', message: result.message || 'Failed to purchase level' });
-                  // Reset failure state after 5 seconds
-                  setTimeout(() => setPurchaseFailed(false), 5000);
-                }
-              } catch (err) {
-                console.error('Purchase error:', err);
-                setPurchaseFailed(true); // Set failure state
-                setModalState({ isOpen: true, type: 'error', message: err.message || 'Failed to purchase level. Please try again.' });
-                // Reset failure state after 5 seconds
-                setTimeout(() => setPurchaseFailed(false), 5000);
-              } finally {
-                setIsProcessing(false);
-              }
-            }}
-            disabled={isProcessing}
-           className="relative rounded-lg bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F]  text-white keep-white font-bold text-center px-3 py-2"
-          >
-            {isProcessing ? 'Processing...' : 'Unlock Next Level'}
-          </button>
         </div>
       )}
       <MessageModal

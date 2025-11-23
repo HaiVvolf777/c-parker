@@ -101,7 +101,7 @@ const TotalNumbersCard = () => {
             <div className="h-full rounded-[10px] bg-gradient-to-r from-[#FF04B4] to-[#EE9C04] border-2 border-gray-200 dark:border-[#141429] p-[18px]">
               <div className="flex flex-col justify-between h-full">
                 <div className="flex items-center flex-row-reverse gap-6 justify-end">
-                  <span className="text-lg text-white font-semibold">
+                  <span className="text-lg text-white keep-white font-semibold">
                     Top Leaders
                   </span>
                   <div>
@@ -116,7 +116,7 @@ const TotalNumbersCard = () => {
                 <div className="mt-10">
                   <button
                     onClick={() => navigate('/dashboard/top-leaders')}
-                    className="text-white font-bold bg-white/20 dark:bg-[#150F3E99] px-6 py-[16px] leading-[100%] rounded-[10px] cursor-pointer hover:bg-white/30 dark:hover:bg-[#6F23D5] transition-colors"
+                    className="text-white font-bold keep-white bg-white/20 dark:bg-[#150F3E99] px-6 py-[16px] leading-[100%] rounded-[10px] cursor-pointer hover:bg-white/30 dark:hover:bg-[#6F23D5] transition-colors"
                   >
                     See Now
                   </button>
