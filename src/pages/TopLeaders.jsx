@@ -68,9 +68,9 @@ const TopLeaders = () => {
                   <th className="text-left">Rank</th>
                   <th className="text-left">User ID</th>
                   <th className="text-left">Wallet Address</th>
-                  <th className="text-right">Total Earned</th>
-                  <th className="text-right">Partners</th>
-                  <th className="text-right">Team Size</th>
+                  <th className="text-left">Total Earned</th>
+                  <th className="text-left">Partners</th>
+                  <th className="text-left">Team Size</th>
                 </tr>
               </thead>
 
@@ -125,15 +125,15 @@ const TopLeaders = () => {
                         {shortenAddress(entry.walletAddress)}
                       </span>
                     </td>
-                    <td className="text-right">
+                    <td className="text-left">
                       <span className="text-[#7D40FF] dark:text-[#01F1E3] font-semibold">
                         {formatNumber(entry.totalEarned)} CCT
                       </span>
                     </td>
-                    <td className="text-right text-[#0a0a0a] dark:text-white">
+                    <td className="text-left text-[#0a0a0a] dark:text-white">
                       {entry.totalPartners || 0}
                     </td>
-                    <td className="text-right text-[#0a0a0a] dark:text-white">
+                    <td className="text-left text-[#0a0a0a] dark:text-white">
                       {entry.totalTeamSize || 0}
                     </td>
                   </tr>
