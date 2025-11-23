@@ -166,7 +166,7 @@ const OrbitWithLock = ({ className }) => {
               }
             }}
             disabled={isProcessing}
-            className="rounded-full bg-[#6F23D5] hover:bg-[#5a1fb8] text-white text-sm font-semibold px-5 py-2 shadow-lg shadow-[#6F23D5]/40 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            className="relative rounded-lg bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F]  text-white keep-white font-bold text-center px-3 py-2"
           >
             {isProcessing ? 'Processing...' : 'Unlock Next Level'}
           </button>

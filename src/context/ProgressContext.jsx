@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { useUserData } from './UserDataContext';
+import { getUserLevels } from '../services/apiClient';
 
 const STORAGE_KEY = 'cparker_progress_v1';
 
@@ -15,12 +17,13 @@ const defaultState = {
 const ProgressContext = createContext({
   purchased: false,
   unlockedLevels: defaultState.unlockedLevels,
-  purchaseAccess: () => {},
-  unlockNextLevel: (_flow) => {},
-  resetProgress: () => {},
+  purchaseAccess: () => { },
+  unlockNextLevel: (_flow) => { },
+  resetProgress: () => { },
 });
 
 export const ProgressProvider = ({ children }) => {
+  const { user } = useUserData();
   const [state, setState] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -43,10 +46,56 @@ export const ProgressProvider = ({ children }) => {
     const handleWalletDisconnect = () => {
       setState(defaultState);
     };
-    
+
     window.addEventListener('wallet-disconnected', handleWalletDisconnect);
     return () => window.removeEventListener('wallet-disconnected', handleWalletDisconnect);
   }, []);
+
+  // Fetch user levels from backend
+  useEffect(() => {
+    const fetchLevels = async () => {
+      if (!user?.userId) return;
+
+      try {
+        // Fetch both orbits in parallel
+        const [orbitAData, orbitBData] = await Promise.all([
+          getUserLevels(user.userId, { orbit: 'ORBIT_A' }),
+          getUserLevels(user.userId, { orbit: 'ORBIT_B' })
+        ]);
+
+        console.log('Fetched Orbit A levels:', orbitAData);
+        console.log('Fetched Orbit B levels:', orbitBData);
+
+        // Helper to calculate max active level from array
+        const getMaxLevel = (data) => {
+          if (!Array.isArray(data)) return 0;
+          return data
+            .filter(l => l.isActive)
+            .reduce((max, l) => Math.max(max, l.levelNumber || 0), 0);
+        };
+
+        const maxOrbitA = getMaxLevel(orbitAData);
+        const maxOrbitB = getMaxLevel(orbitBData);
+
+        console.log('Calculated Max Levels:', { maxOrbitA, maxOrbitB });
+
+        setState(prev => ({
+          ...prev,
+          purchased: true,
+          unlockedLevels: {
+            ...prev.unlockedLevels,
+            orbitA: maxOrbitA || prev.unlockedLevels.orbitA,
+            orbitB: maxOrbitB || prev.unlockedLevels.orbitB,
+          }
+        }));
+
+      } catch (error) {
+        console.error('Failed to fetch user levels:', error);
+      }
+    };
+
+    fetchLevels();
+  }, [user?.userId]);
 
   const purchaseAccess = () => {
     setState((prev) => ({
