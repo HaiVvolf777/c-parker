@@ -217,9 +217,13 @@ const SliderLevelNode = ({ className, stage = 0, flowKey = 'nodeA', cycleData, s
           {/* ID 4  */}
           <rect x="302" y="192" width="103" height="52" rx="10" fill={isLocked ? '#322661' : (getPos(4) ? 'url(#paint5_linear_423_69)' : '#322661')} />
           {!isLocked && getPos(4) && (
-            <text x="332" y="226" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
-              ID {getPos(4).userId}
-            </text>
+            <>
+              <circle cx="318" cy="218" r="9" fill="#F0B90B" />
+              <image x="313" y="213" width="10" height="10" xlinkHref="/svgs/recycle.svg" />
+              <text x="336" y="226" fill="#FFFFFF" fontSize="14" fontFamily="Inter, sans-serif" fontWeight="700" stroke="#000000" strokeOpacity="0.35" strokeWidth="1" style={{ paintOrder: 'stroke' }} pointerEvents="none">
+                ID {getPos(4).userId}
+              </text>
+            </>
           )}
           {!isLocked && !getPos(4) && (
             <image x="339" y="204" width="29" height="28" xlinkHref="/svgs/man.svg" preserveAspectRatio="xMidYMid meet" />)}
