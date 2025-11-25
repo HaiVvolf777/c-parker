@@ -1,3 +1,8 @@
+import { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useWallet } from '../context/WalletContext.jsx';
+import { usePreview } from '../context/PreviewContext.jsx';
+import { getUserByWallet, ApiError } from '../services/apiClient.js';
 import Navbar from '../components/dashboard/layout/Navbar';
 import Sidebar from '../components/dashboard/layout/Sidebar';
 import ProfileCard from '../components/dashboard/cards/ProfileCard';
@@ -12,6 +17,60 @@ import NetworkOverview from '../components/dashboard/network/NetworkOverview';
 import MatrixExplorer from '../components/dashboard/network/MatrixExplorer';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const { account } = useWallet();
+  const { previewUserId, isPreviewMode, clearPreview } = usePreview();
+  const previousAccountRef = useRef(null);
+  const hasCheckedWalletRef = useRef(false);
+
+  // Redirect to home if no wallet connected and no preview user ID
+  useEffect(() => {
+    if (!account && !previewUserId) {
+      navigate('/', { replace: true });
+    }
+  }, [account, previewUserId, navigate]);
+
+  // Check if wallet is registered when connecting while in preview mode
+  useEffect(() => {
+    const checkWalletRegistration = async () => {
+      // Only check if:
+      // 1. We're in preview mode
+      // 2. Account just got connected (was null, now has value)
+      // 3. Haven't checked this account yet
+      if (!isPreviewMode || !account || previousAccountRef.current === account) {
+        previousAccountRef.current = account;
+        return;
+      }
+
+      // Account just connected while previewing
+      if (previousAccountRef.current === null && account) {
+        try {
+          // Check if wallet is registered
+          await getUserByWallet(account.toLowerCase());
+          // Wallet is registered, clear preview and stay on dashboard
+          clearPreview();
+          hasCheckedWalletRef.current = true;
+        } catch (err) {
+          if (err instanceof ApiError && err.status === 404) {
+            // Wallet not registered - navigate to home immediately
+            // Clear preview after navigation to prevent UserDataContext from trying to register
+            navigate('/', { replace: true });
+            // Use setTimeout to clear preview after navigation starts
+            setTimeout(() => {
+              clearPreview();
+            }, 0);
+            // The HomeNavbar will detect the account and show join modal
+          } else {
+            console.error('Error checking wallet registration:', err);
+          }
+        }
+      }
+      
+      previousAccountRef.current = account;
+    };
+
+    checkWalletRegistration();
+  }, [account, isPreviewMode, clearPreview, navigate]);
   const [profileRef, isProfileVisible] = useScrollAnimation({ threshold: 0.1 });
   const [numbersRef, isNumbersVisible] = useScrollAnimation({ threshold: 0.1 });
   const [earningRef, isEarningVisible] = useScrollAnimation({ threshold: 0.1 });

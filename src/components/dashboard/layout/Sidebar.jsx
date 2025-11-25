@@ -6,13 +6,18 @@ import { usePreview } from '../../../context/PreviewContext.jsx';
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { disconnectWallet } = useWallet();
-  const { clearPreview } = usePreview();
+  const { account, disconnectWallet } = useWallet();
+  const { isPreviewMode, clearPreview } = usePreview();
   const [isOpen, setIsOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState(null);
 
   const handleDashboardClick = () => {
-    clearPreview(); // Clear preview when navigating to dashboard
+    // Only clear preview if wallet is connected (so user can see their own dashboard)
+    // If no wallet connected and in preview mode, keep preview active
+    if (account) {
+      clearPreview(); // Clear preview when navigating to dashboard with wallet connected
+    }
+    // If no wallet connected, keep preview mode active
     navigate('/dashboard');
     setIsOpen(false);
   };

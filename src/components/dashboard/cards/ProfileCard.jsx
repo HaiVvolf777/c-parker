@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useWallet } from '../../../context/WalletContext.jsx';
 import { useUserData } from '../../../context/UserDataContext.jsx';
+import { usePreview } from '../../../context/PreviewContext.jsx';
+import UserNotFoundModal from '../../common/UserNotFoundModal.jsx';
 
 const ProfileCard = () => {
   const { account } = useWallet();
+  const { isPreviewMode } = usePreview();
   const {
     user,
     isLoading,
@@ -17,10 +20,19 @@ const ProfileCard = () => {
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [modalState, setModalState] = useState('hidden');
 
+  // In preview mode, use the preview user's wallet address
+  // Otherwise, use the connected wallet address
+  const walletAddress = useMemo(() => {
+    if (isPreviewMode && user?.walletAddress) {
+      return user.walletAddress;
+    }
+    return account;
+  }, [isPreviewMode, user?.walletAddress, account]);
+
   const shortenedWallet = useMemo(() => {
-    if (!account) return null;
-    return `${account.slice(0, 6)}...${account.slice(-4)}`;
-  }, [account]);
+    if (!walletAddress) return null;
+    return `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+  }, [walletAddress]);
 
   const referLink = useMemo(() => {
     if (!user) return '';
@@ -90,10 +102,10 @@ const ProfileCard = () => {
   };
 
   const handleCopyAddress = async () => {
-    if (!account) return;
+    if (!walletAddress) return;
 
     try {
-      await navigator.clipboard.writeText(account);
+      await navigator.clipboard.writeText(walletAddress);
       setCopiedAddress(true);
       setTimeout(() => setCopiedAddress(false), 2000);
     } catch (err) {
@@ -173,9 +185,9 @@ const ProfileCard = () => {
             </h2>
             <div className="flex gap-[10px] items-center justify-center md:justify-start mb-[10px]">
               <span className="text-lg text-[#6F23D5] font-semibold">
-                {shortenedWallet ?? 'No wallet connected'}
+                {shortenedWallet ?? (isPreviewMode ? 'No wallet address' : 'No wallet connected')}
               </span>
-              {account && (
+              {walletAddress && (
                 <button
                   onClick={handleCopyAddress}
                   className="text-white keep-white hover:text-gray-200 transition-colors p-1 relative"
@@ -250,6 +262,7 @@ const ProfileCard = () => {
         state={modalState}
         message={registrationMessage}
         errorMessage={error?.message ?? ''}
+        isPreviewMode={isPreviewMode}
         onClose={() => {
           acknowledgeRegistration();
           setModalState('hidden');
@@ -264,21 +277,31 @@ const ProfileCard = () => {
   );
 };
 
-const RegistrationModal = ({ state, message, errorMessage, onClose, onRetry }) => {
+const RegistrationModal = ({ state, message, errorMessage, isPreviewMode = false, onClose, onRetry }) => {
   const isRegistering = state === 'registering';
   const isSuccess = state === 'success';
   const isError = state === 'error';
 
+  // Simple error modal - use extracted component
+  if (isError) {
+    return <UserNotFoundModal isOpen={true} onClose={onClose} />;
+  }
+
+  const getTitle = () => {
+    if (isSuccess) return 'Registration Successful';
+    return 'Wallet Registration';
+  };
+
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center px-4">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={isRegistering ? undefined : onClose} />
       <div className="relative w-full max-w-md rounded-2xl border border-gray-200 dark:border-[#141429] bg-white dark:bg-[#0B0B1A] p-6 shadow-2xl">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Wallet Registration</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{getTitle()}</h3>
           <button
             type="button"
             onClick={isRegistering ? undefined : onClose}
-            className={`text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition ${
+            className={`text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-white transition text-xl leading-none w-6 h-6 flex items-center justify-center ${
               isRegistering ? 'cursor-not-allowed opacity-50' : ''
             }`}
             aria-label="Close registration modal"
@@ -288,50 +311,35 @@ const RegistrationModal = ({ state, message, errorMessage, onClose, onRetry }) =
           </button>
         </div>
 
-        <div className="mt-4 space-y-3 text-sm text-gray-600 dark:text-[#bdbdbd]">
+        <div className="mt-4 space-y-3">
           {isRegistering && (
             <>
               <div className="flex items-center gap-3">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#6F23D5]/10">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#6F23D5]/10 flex-shrink-0">
                   <span className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-[#6F23D5] border-t-transparent" />
                 </span>
                 <p className="font-medium text-gray-900 dark:text-white">Registering your wallet on-chain</p>
               </div>
-              <p>Please confirm the registration transaction in MetaMask. This process may take a few moments.</p>
+              <p className="text-sm text-gray-600 dark:text-[#bdbdbd] ml-[52px]">Please confirm the registration transaction in MetaMask. This process may take a few moments.</p>
             </>
           )}
 
           {isSuccess && (
             <>
-              <p className="font-medium text-emerald-500">
+              <p className="font-medium text-emerald-500 text-sm">
                 {message || 'Registration transaction confirmed. Your dashboard will refresh shortly.'}
               </p>
-              <p>You can close this window once the dashboard updates with your latest data.</p>
-            </>
-          )}
-
-          {isError && (
-            <>
-              <p className="font-medium text-red-500">{errorMessage || 'Registration failed. Please try again.'}</p>
+              <p className="text-sm text-gray-600 dark:text-[#bdbdbd]">You can close this window once the dashboard updates with your latest data.</p>
             </>
           )}
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          {isError && (
-            <button
-              type="button"
-              onClick={onRetry}
-              className="rounded-lg border border-transparent bg-[#6F23D5] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#5a1fb8]"
-            >
-              Try Again
-            </button>
-          )}
           {!isRegistering && (
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-gray-300 dark:border-[#141429] px-4 py-2 text-sm font-semibold text-gray-700 dark:text-white transition hover:bg-gray-100 dark:hover:bg-[#1a1a2e]"
+              className="rounded-lg border border-gray-300 dark:border-[#141429] px-5 py-2.5 text-sm font-semibold text-gray-700 dark:text-white transition hover:bg-gray-100 dark:hover:bg-[#1a1a2e]"
             >
               Close
             </button>

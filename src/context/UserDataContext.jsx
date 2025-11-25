@@ -162,7 +162,7 @@ export const UserDataProvider = ({ children }) => {
             setIsRegistering(false);
           }
         } else {
-          setError(new Error('Wallet not registered on C-Parker yet.'));
+          setError(new Error('User not registered yet.'));
         }
 
         return;
@@ -198,10 +198,15 @@ export const UserDataProvider = ({ children }) => {
     // Fetch user data if:
     // 1. In preview mode with a preview user ID, OR
     // 2. Account is connected (user clicked "Connect Wallet")
+    // Skip if we're on dashboard and just connected while previewing (let Dashboard handle it)
     if (isPreviewMode && previewUserId) {
       fetchUserData(false); // No auto-registration in preview mode
     } else if (account) {
-      fetchUserData(true); // Allow auto-registration since user explicitly connected
+      // Small delay to let Dashboard check wallet registration first if needed
+      const timer = setTimeout(() => {
+        fetchUserData(true); // Allow auto-registration since user explicitly connected
+      }, 100);
+      return () => clearTimeout(timer);
     } else {
       // Reset state when account is disconnected and not in preview
       resetState();

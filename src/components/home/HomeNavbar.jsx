@@ -1,8 +1,10 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWallet } from "../../context/WalletContext.jsx";
-import { getUserByWallet, ApiError } from "../../services/apiClient.js";
+import { usePreview } from "../../context/PreviewContext.jsx";
+import { getUserByWallet, getUserById, ApiError } from "../../services/apiClient.js";
 import JoinNowModal from "./JoinNowModal";
+import UserNotFoundModal from "../common/UserNotFoundModal.jsx";
 
 const HomeNavbar = () => {
   const navigate = useNavigate();
@@ -14,8 +16,12 @@ const HomeNavbar = () => {
     disconnectWallet,
     error,
   } = useWallet();
+  const { previewUserId, isPreviewMode, setPreviewUser } = usePreview();
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [isCheckingUser, setIsCheckingUser] = useState(false);
+  const [previewInput, setPreviewInput] = useState('');
+  const [isCheckingPreview, setIsCheckingPreview] = useState(false);
+  const [showUserNotFoundModal, setShowUserNotFoundModal] = useState(false);
 
   const displayAddress = useMemo(() => {
     if (!account) return null;
@@ -87,6 +93,38 @@ const HomeNavbar = () => {
     navigate('/', { replace: true });
   };
 
+  const handlePreviewSubmit = async () => {
+    if (!previewInput || !previewInput.trim() || isCheckingPreview) return;
+    
+    const userId = previewInput.trim();
+    setIsCheckingPreview(true);
+    
+    try {
+      // Check if user exists before navigating
+      await getUserById(userId);
+      // User exists, set preview and navigate
+      setPreviewUser(userId);
+      navigate('/dashboard');
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 404) {
+        // User doesn't exist, don't navigate - stay on current page
+        setPreviewInput(''); // Clear the input
+        setShowUserNotFoundModal(true);
+      } else {
+        console.error('Error checking user:', err);
+        setShowUserNotFoundModal(true);
+      }
+    } finally {
+      setIsCheckingPreview(false);
+    }
+  };
+
+  const handlePreviewInputKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handlePreviewSubmit();
+    }
+  };
+
   return (
     <div className="container mx-auto bg-transparent min-h-[70px] p-3 flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-2 border-[#21213C] rounded-xl backdrop-blur-[60px] mt-[20px] md:mt-[37px] relative z-[10]">
       <div className="flex items-center justify-between cursor-pointer" onClick={handleLogoClick}>
@@ -98,7 +136,21 @@ const HomeNavbar = () => {
           <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20.7205 19.3706L15.3032 13.9533C16.5221 12.4321 17.1849 10.5402 17.1818 8.59089C17.1818 3.84633 13.3357 0 8.59089 0C3.84633 0 0 3.84633 0 8.59089C0 13.3355 3.84633 17.1818 8.59089 17.1818C10.6193 17.1818 12.4835 16.4788 13.9533 15.303L19.3706 20.7203C19.4591 20.8091 19.5643 20.8795 19.6801 20.9275C19.7959 20.9755 19.9201 21.0001 20.0454 21C20.2342 21 20.4187 20.944 20.5757 20.8391C20.7327 20.7343 20.855 20.5852 20.9273 20.4108C20.9996 20.2364 21.0185 20.0445 20.9817 19.8593C20.9449 19.6742 20.854 19.5041 20.7205 19.3706ZM8.59089 15.2727C4.90063 15.2727 1.90909 12.2812 1.90909 8.59089C1.90909 4.90063 4.90063 1.90909 8.59089 1.90909C12.2814 1.90909 15.2727 4.90063 15.2727 8.59089C15.2727 12.2812 12.2814 15.2727 8.59089 15.2727Z" fill="#747474"/>
           </svg>
-          <input type="text" placeholder="Enter ID to check status" className="placeholder-gray-400 dark:placeholder-white text-gray-800 dark:text-[#D9D9D94D] bg-transparent outline-none w-full min-w-0" />
+          <input 
+            type="text" 
+            placeholder={isPreviewMode ? `Viewing ID: ${previewUserId}` : "Enter ID to check status"} 
+            value={previewInput}
+            onChange={(e) => setPreviewInput(e.target.value)}
+            onKeyPress={handlePreviewInputKeyPress}
+            className="placeholder-gray-400 dark:placeholder-white text-gray-800 dark:text-white bg-transparent outline-none w-full min-w-0" 
+          />
+          <button 
+            onClick={handlePreviewSubmit}
+            disabled={isCheckingPreview}
+            className="bg-[#150F3E] hover:bg-[#221A65] text-white text-base font-bold rounded-[10px] px-5 py-2 transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isCheckingPreview ? '...' : 'Go'}
+          </button>
         </div>
       </div>
       <div className="flex flex-col items-end justify-end gap-1">
@@ -114,6 +166,7 @@ const HomeNavbar = () => {
         </button>
       </div>
       <JoinNowModal isOpen={showJoinModal} onClose={() => setShowJoinModal(false)} />
+      <UserNotFoundModal isOpen={showUserNotFoundModal} onClose={() => setShowUserNotFoundModal(false)} />
     </div>
   );
 };

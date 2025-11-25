@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useWallet } from '../../../context/WalletContext.jsx';
 import { usePreview } from '../../../context/PreviewContext.jsx';
+import { getUserById, ApiError } from '../../../services/apiClient.js';
+import UserNotFoundModal from '../../common/UserNotFoundModal.jsx';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -16,6 +18,7 @@ const Navbar = () => {
   
   const { previewUserId, isPreviewMode, setPreviewUser, clearPreview } = usePreview();
   const [previewInput, setPreviewInput] = useState('');
+  const [showUserNotFoundModal, setShowUserNotFoundModal] = useState(false);
 
   const handleLogoClick = async () => {
     await disconnectWallet();
@@ -39,10 +42,27 @@ const Navbar = () => {
     }
   };
 
-  const handlePreviewSubmit = () => {
-    if (previewInput && previewInput.trim()) {
-      setPreviewUser(previewInput);
-      navigate('/dashboard');
+  const handlePreviewSubmit = async () => {
+    if (!previewInput || !previewInput.trim()) return;
+    
+    const userId = previewInput.trim();
+    
+    try {
+      // Check if user exists before setting preview
+      await getUserById(userId);
+      // User exists, set preview and refresh
+      setPreviewUser(userId);
+      // Don't navigate since we're already on dashboard
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 404) {
+        // User doesn't exist, just show modal - don't clear preview or navigate
+        // Keep the current preview user active
+        setPreviewInput(''); // Clear the input
+        setShowUserNotFoundModal(true);
+      } else {
+        console.error('Error checking user:', err);
+        setShowUserNotFoundModal(true);
+      }
     }
   };
 
@@ -103,6 +123,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      <UserNotFoundModal isOpen={showUserNotFoundModal} onClose={() => setShowUserNotFoundModal(false)} />
     </>
   );
 };
