@@ -58,11 +58,11 @@ const EarningOverviewCard = ({ className }) => {
                       <img src="/icons/CCT.svg" alt="CCT" />
                     </div>
 
-                    <div className="">
+                    {/* <div className="">
                       <button className="w-full text-white keep-white font-bold bg-[#EE9C04] py-3 leading-[100%] rounded-[10px] cursor-pointer ">
                         Claim
                       </button>
-                    </div>
+                    </div> */}
                   </div>
 
                   <hr className="text-[#E5E7EB] dark:text-[#141429] block md:hidden" />
