@@ -38,7 +38,7 @@ const ProgramOrbitCard = ({ data }) => {
             <div className="">
               <button
                 onClick={handleButtonClick}
-                className="text-white text-[16px] keep-white font-bold bg-[#7D40FF] hover:bg-[#5a1fb8] px-[67px] py-3 leading-[100%] rounded-[10px] cursor-pointer transition-colors"
+                className="text-white text-[16px] keep-white font-bold bg-[#3A126F] dark:bg-[#7D40FF] hover:bg-[#5a1fb8] px-[67px] py-3 leading-[100%] rounded-[10px] cursor-pointer transition-colors"
               >
                 {data.opened ? 'Preview' : 'Activate'}
               </button>

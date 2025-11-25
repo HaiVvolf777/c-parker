@@ -33,7 +33,7 @@ const EarningOverviewCard = ({ className }) => {
         <div className="mt-5">
           <div className="flex flex-col md:flex-row gap-5">
             <div className="w-full md:w-[25%] ">
-              <div className="bg-[#7D40FF] border-2 border-[#141429] p-4 rounded-[10px] ">
+              <div className="bg-[#7D40FF] border-2 border-transparent p-4 rounded-[10px] ">
                 <p className="text-white keep-white text-lg font-semibold ">Profit</p>
                 <div className="flex items-center justify-between mt-[22px] mb-4">
                   <span className="text-white keep-white text-sm ">CCT</span>

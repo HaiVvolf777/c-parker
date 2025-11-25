@@ -118,7 +118,7 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
                 </td>
                 <td>{formatTimeAgo(item.secondsAgo)}</td>
                 <td>
-                  <span className="bg-[#F3F4F6] text-[#0a0a0a] dark:bg-[#00000D] dark:text-white px-[35px] py-2 rounded-[40px]">
+                  <span className=" bg-[#00000D] !text-white px-[35px] py-2 rounded-[40px]">
                     #{item.userId ?? '—'}
                   </span>
                 </td>
@@ -129,7 +129,7 @@ const ActivityTableContainer = ({ className, isDashboard = false }) => {
                     <span
                       className={`relative block rounded-md px-4 py-2 font-semibold ${
                         isDashboard ? 'text-[16px]' : 'text-[20px]'
-                      } text-[#0a0a0a] dark:text-white bg-white dark:bg-gradient-to-r dark:from-[#150F3E] dark:via-[#200F46] dark:to-[#3A126F]`}
+                      }  !text-white  bg-gradient-to-r from-[#150F3E] via-[#200F46] to-[#3A126F]`}
                     >
                       {item.contract}
                     </span>
