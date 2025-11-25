@@ -126,7 +126,7 @@ const Sidebar = () => {
                 onClick={() => toggleMenu(item.name)}
                 className={`flex items-center justify-between gap-[10px] px-[16px] py-[12px] rounded-[8px] cursor-pointer transition-colors border ${isChildActive || isExpanded
                   ?  'bg-[#7D40FF26] border-[#7D40FF26] dark:bg-[#13132B] dark:border-[#13132B] text-[#0F172A] dark:text-white '
-                  : 'bg-transparent hover:bg-[#13132B]/50 border-transparent'
+                  : 'bg-transparent hover:bg-[#7D40FF26] hover:dark:bg-[#13132B]/50 border-transparent'
                   }`}
               >
                 <div className="flex items-center gap-[12px]">
@@ -157,7 +157,7 @@ const Sidebar = () => {
                       onClick={() => { navigate(sub.path); onItemClick(); }}
                       className={`flex items-center gap-[12px] px-[16px] py-[10px] rounded-[8px] cursor-pointer transition-colors ${isActive(sub.path)
                         ? 'text-[#0F172A] dark:text-white '
-                        : 'text-white hover:bg-[#13132B]/50'
+                        : 'text-white hover:bg-[#7D40FF26] hover:dark:bg-[#13132B]/50'
                         }`}
                     >
                       <span className="text-[#6F23D5]">
@@ -187,7 +187,7 @@ const Sidebar = () => {
               }}
               className={`flex items-center gap-[12px] px-[16px] py-[12px] rounded-[8px] cursor-pointer transition-colors border ${isActive(item.path)
                 ? 'bg-[#7D40FF26] border-[#7D40FF26] dark:bg-[#13132B] dark:border-[#13132B]'
-                : 'bg-transparent hover:bg-[#13132B]/50 border-transparent'
+                : 'bg-transparent hover:bg-[#7D40FF26] hover:dark:bg-[#13132B]/50 border-transparent'
                 }`}
             >
               <span className="text-[#6F23D5]">
