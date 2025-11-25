@@ -5,6 +5,7 @@ import { AnnouncementsProvider } from './context/AnnouncementsContext.jsx';
 import { WalletProvider } from './context/WalletContext.jsx';
 import { UserDataProvider } from './context/UserDataContext.jsx';
 import { DashboardDataProvider } from './context/DashboardDataContext.jsx';
+import { PreviewProvider } from './context/PreviewContext.jsx';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -29,11 +30,12 @@ function App() {
   return (
     <AdminAuthProvider>
       <WalletProvider>
-        <UserDataProvider>
-          <DashboardDataProvider>
-            <ProgressProvider>
-              <AnnouncementsProvider>
-                <BrowserRouter>
+        <PreviewProvider>
+          <UserDataProvider>
+            <DashboardDataProvider>
+              <ProgressProvider>
+                <AnnouncementsProvider>
+                  <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/register" element={<HomePage />} />
@@ -59,11 +61,12 @@ function App() {
                     <Route path="/home" element={<Navigate to="/" replace />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
-                </BrowserRouter>
-              </AnnouncementsProvider>
-            </ProgressProvider>
-          </DashboardDataProvider>
-        </UserDataProvider>
+                  </BrowserRouter>
+                </AnnouncementsProvider>
+              </ProgressProvider>
+            </DashboardDataProvider>
+          </UserDataProvider>
+        </PreviewProvider>
       </WalletProvider>
     </AdminAuthProvider>
   );

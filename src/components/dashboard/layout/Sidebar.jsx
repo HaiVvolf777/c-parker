@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useWallet } from '../../../context/WalletContext.jsx';
+import { usePreview } from '../../../context/PreviewContext.jsx';
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { disconnectWallet } = useWallet();
+  const { account, disconnectWallet } = useWallet();
+  const { isPreviewMode, clearPreview } = usePreview();
   const [isOpen, setIsOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState(null);
+
+  const handleDashboardClick = () => {
+    // Only clear preview if wallet is connected (so user can see their own dashboard)
+    // If no wallet connected and in preview mode, keep preview active
+    if (account) {
+      clearPreview(); // Clear preview when navigating to dashboard with wallet connected
+    }
+    // If no wallet connected, keep preview mode active
+    navigate('/dashboard');
+    setIsOpen(false);
+  };
 
   const navItems = [
     {
@@ -164,7 +177,14 @@ const Sidebar = () => {
         return (
           <div key={item.path} className="px-[10px]">
             <div
-              onClick={() => { navigate(item.path); onItemClick(); }}
+              onClick={() => { 
+                if (item.path === '/dashboard') {
+                  handleDashboardClick();
+                } else {
+                  navigate(item.path);
+                }
+                onItemClick();
+              }}
               className={`flex items-center gap-[12px] px-[16px] py-[12px] rounded-[8px] cursor-pointer transition-colors border ${isActive(item.path)
                 ? 'bg-[#13132B] border-[#13132B]'
                 : 'bg-transparent hover:bg-[#13132B]/50 border-transparent'
