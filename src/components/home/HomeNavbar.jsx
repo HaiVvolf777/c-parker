@@ -142,12 +142,12 @@ const HomeNavbar = () => {
             value={previewInput}
             onChange={(e) => setPreviewInput(e.target.value)}
             onKeyPress={handlePreviewInputKeyPress}
-            className="placeholder-gray-400 dark:placeholder-white text-gray-800 dark:text-white bg-transparent outline-none w-full min-w-0" 
+            className="placeholder-gray-400 dark:placeholder-[#747474] text-gray-800 dark:text-white bg-transparent outline-none w-full min-w-0" 
           />
           <button 
             onClick={handlePreviewSubmit}
             disabled={isCheckingPreview}
-            className="bg-[#150F3E] hover:bg-[#221A65] text-white text-base font-bold rounded-[10px] px-5 py-2 transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[#150F3E] hover:bg-[#221A65] !text-white  text-base font-bold rounded-[10px] px-5 py-2 transition-colors whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isCheckingPreview ? '...' : 'Go'}
           </button>
