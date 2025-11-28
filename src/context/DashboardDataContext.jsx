@@ -41,6 +41,10 @@ const INITIAL_STATE = {
     totals: {
       earned: '0',
       missed: '0',
+      profit: '0',
+      passiveIncome: '0',
+      orbitAEarnings: '0',
+      orbitBEarnings: '0',
     },
   },
   platform: {
@@ -140,6 +144,10 @@ export const DashboardDataProvider = ({ children }) => {
           totals: {
             earned: totalEarned?.total ?? '0',
             missed: totalMissed?.total ?? '0',
+            profit: totalEarned?.profit ?? '0',
+            passiveIncome: totalEarned?.passiveIncome ?? '0',
+            orbitAEarnings: totalEarned?.orbitAEarnings ?? '0',
+            orbitBEarnings: totalEarned?.orbitBEarnings ?? '0',
           },
         },
         platform: {

@@ -1,6 +1,10 @@
 import React from 'react';
+import { useDashboardData } from '../../../context/DashboardDataContext';
 
 const EarningOverviewCard = ({ className }) => {
+  const { data } = useDashboardData();
+  const { profit, passiveIncome } = data.payments.totals;
+
   const rulesData = [
     {
       id: 1,
@@ -40,7 +44,7 @@ const EarningOverviewCard = ({ className }) => {
                   <img src="/icons/CCT.svg" alt="CCT" />
                 </div>
 
-                <p className="text-white keep-white text-[40px] font-extrabold ">2</p>
+                <p className="text-white keep-white text-[40px] font-extrabold ">{profit}</p>
               </div>
             </div>
 
@@ -53,7 +57,7 @@ const EarningOverviewCard = ({ className }) => {
                     </p>
                     <div className="flex items-center justify-between mt-[22px] mb-4">
                       <span className="text-[#0a0a0a] dark:text-white text-[24px] font-bold ">
-                        2
+                        {passiveIncome}
                       </span>
                       <img src="/icons/CCT.svg" alt="CCT" />
                     </div>
