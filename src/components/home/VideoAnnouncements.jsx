@@ -31,7 +31,7 @@ const VideoAnnouncements = () => {
                     <img src="icons/play.svg" alt="Play Icon" className="w-12 h-12 sm:w-16 sm:h-16" />
                   </div>
                 </div>
-                <p className="text-white text-[20px] sm:text-[24px] md:text-[30px] leading-[32px] sm:leading-[40px] md:leading-[50px] font-bold">Watch: How to get started with Orbit A & Orbit B</p>
+                <p className="text-white text-[24px] sm:text-[24px] md:text-[34px] leading-[32px] sm:leading-[40px] md:leading-[50px] font-bold">Watch: How to get started with Orbit A & Orbit B</p>
               </>
             )}
           </div>
@@ -45,7 +45,7 @@ const VideoAnnouncements = () => {
             ))}
             <button className="relative rounded-xl p-[2px] my-[20px]">
               <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#324AB9] to-[#4B158E]"></div>
-              <div className="relative rounded-xl bg-[#00000e] px-5 sm:px-7 py-3 sm:py-4 text-white keep-white font-bold text-sm sm:text-base">View All Announcements</div>
+              <div className="relative rounded-xl bg-white dark:bg-[#00000e] px-5 sm:px-7 py-3 sm:py-4 [#4B158E] dark:text-white keep-white font-bold text-sm sm:text-base ">View All Announcements</div>
             </button>
           </div>
         </div>

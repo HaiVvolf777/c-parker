@@ -47,7 +47,7 @@ const ParkerPool = () => {
           >
             <div className="relative inline-flex rounded[12px] text-white text-center p-[1px] mt-8 mx-auto hover:scale-105 transition-transform duration-300">
               <div className="absolute inset-0 rounded-[12px] bg-gradient-to-r from-[#324AB9] to-[#4B158E] animate-pulse-slow"></div>
-              <div className="relative rounded-[12px] bg-[#00000e] px-[24px] md:px-[48px] py-[13px] text-[14px] md:text-[16px] text-white keep-white">View Pool on Explorer</div>
+              <div className="relative rounded-[12px] bg-white dark:bg-[#00000e] px-[24px] md:px-[48px] py-[13px] text-[14px] md:text-[16px]  text-[#4B158E] dark:text-white keep-white">View Pool on Explorer</div>
             </div>
           </div>
         </div>

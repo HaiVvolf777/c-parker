@@ -94,7 +94,7 @@ const NodeLevelProgression = () => {
                       disabled={currentLevel <= 1}
                       type="button"
                       aria-label="Previous Level"
-                      className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 transition-all duration-300 text-gray-800 dark:text-white touch-manipulation ${currentLevel <= 1
+                      className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-[#7D40FF1A] dark:bg-[#0B0B1A4D] border-2 border-[#7D40FF] dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 transition-all duration-300 text-gray-800 dark:text-white touch-manipulation ${currentLevel <= 1
                         ? 'opacity-50 cursor-not-allowed'
                         : 'hover:bg-gray-200 dark:hover:bg-[#1a1a2e] hover:scale-110 cursor-pointer'
                         }`}>
@@ -112,10 +112,10 @@ const NodeLevelProgression = () => {
                         <div className="flex flex-col gap-0">
                           <div className="flex justify-between">
                             <div className="">
-                              <p className="text-[#0a0a0a] dark:text-white text-[20px] lg:text-[30px] font-semibold ">
+                              <p className="!text-white text-[20px] lg:text-[30px] font-semibold ">
                                 Lvl {currentLevel}
                               </p>
-                              <p className="text-[#6B7280] dark:text-white text-sm font-semibold ">
+                              <p className="!text-white text-sm font-semibold ">
                                 ID {userId}
                               </p>
                             </div>
@@ -166,7 +166,7 @@ const NodeLevelProgression = () => {
                       disabled={currentLevel >= 10}
                       type="button"
                       aria-label="Next Level"
-                      className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-gray-100 dark:bg-[#0B0B1A4D] border-2 border-gray-200 dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 transition-all duration-300 text-gray-800 dark:text-white touch-manipulation ${currentLevel >= 10
+                      className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-[#7D40FF1A] dark:bg-[#0B0B1A4D] border-2 border-[#7D40FF] dark:border-[#141429] flex items-center justify-center p-2 sm:p-3 lg:p-4 transition-all duration-300 text-gray-800 dark:text-white touch-manipulation ${currentLevel >= 10
                         ? 'opacity-50 cursor-not-allowed'
                         : 'hover:bg-gray-200 dark:hover:bg-[#1a1a2e] hover:scale-110 cursor-pointer'
                         }`}>
@@ -181,9 +181,9 @@ const NodeLevelProgression = () => {
                 <div className="w-[70%] sm:w-[80%] lg:w-[50%] mx-auto relative z-50">
                   <div
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="w-full mt-6 md:mt-8 bg-gray-100 dark:bg-[#D9D9D90D] rounded-[10px] px-6 md:px-11 py-3 md:py-4 border border-gray-200 dark:border-[#141429] relative cursor-pointer hover:opacity-90 transition-opacity"
+                    className="w-full mt-6 md:mt-8 bg-[#7D40FF] dark:bg-[#D9D9D90D] rounded-[10px] px-6 md:px-11 py-3 md:py-4 border border-[#7D40FF] dark:border-[#141429] relative cursor-pointer hover:opacity-90 transition-opacity"
                   >
-                    <div className="flex items-center justify-between text-gray-800 dark:text-white text-sm md:text-base font-medium">
+                    <div className="flex items-center justify-between !text-white text-sm md:text-base font-medium">
                       <span>Cycle: {(currentCycle.cycleNumber || slideIndex + 1)}</span>
                       <svg
                         className={`w-4 h-4 md:w-5 md:h-5 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
@@ -205,7 +205,7 @@ const NodeLevelProgression = () => {
                           }}
                         />
                         <div
-                          className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-[#0B0B1A] border border-gray-200 dark:border-[#141429] rounded-[10px] shadow-lg z-[101] max-h-60 overflow-y-auto"
+                          className="absolute top-full left-0 right-0 mt-2 bg-[#7D40FF] dark:bg-[#0B0B1A] border border-[#7D40FF] dark:border-[#141429] rounded-[10px] shadow-lg z-[101] max-h-60 overflow-y-auto"
                           onClick={(e) => e.stopPropagation()}
                         >
                           {cycles.length > 0 ? (
@@ -219,8 +219,8 @@ const NodeLevelProgression = () => {
                                 }}
                                 type="button"
                                 className={`w-full text-left px-4 py-3 text-sm md:text-base font-medium transition-colors ${slideIndex === index
-                                  ? 'bg-gray-100 dark:bg-[#1a1a2e] text-gray-900 dark:text-white'
-                                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#141429]'
+                                  ? 'bg-[#7D40FF] dark:bg-[#1a1a2e] !text-white'
+                                  : '!text-white dark:text-gray-300 hover:bg-[#7D40FF] dark:hover:bg-[#141429]'
                                   }`}
                               >
                                 Cycle: {cycle.cycleNumber || index + 1}

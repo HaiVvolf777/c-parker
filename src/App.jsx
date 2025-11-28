@@ -28,6 +28,7 @@ import PromoPdfs from './pages/PromoPdfs';
 import Links from './pages/Links';
 function App() {
   return (
+    // Vercel deployment
     <AdminAuthProvider>
       <WalletProvider>
         <PreviewProvider>

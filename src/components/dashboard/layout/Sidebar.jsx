@@ -125,15 +125,15 @@ const Sidebar = () => {
               <div
                 onClick={() => toggleMenu(item.name)}
                 className={`flex items-center justify-between gap-[10px] px-[16px] py-[12px] rounded-[8px] cursor-pointer transition-colors border ${isChildActive || isExpanded
-                  ? 'bg-[#13132B] border-[#13132B] text-white'
-                  : 'bg-transparent hover:bg-[#13132B]/50 border-transparent'
+                  ?  'bg-[#7D40FF26] border-[#7D40FF26] dark:bg-[#13132B] dark:border-[#13132B] text-[#0F172A] dark:text-white '
+                  : 'bg-transparent hover:bg-[#7D40FF26] hover:dark:bg-[#13132B]/50 border-transparent'
                   }`}
               >
                 <div className="flex items-center gap-[12px]">
                   <span className="text-[#6F23D5]">
                     {item.icon}
                   </span>
-                  <span className="font-medium !text-white text-[15px]">
+                  <span className="font-medium text-[#0F172A] dark:text-white text-[15px]">
                     {item.name}
                   </span>
                 </div>
@@ -141,11 +141,11 @@ const Sidebar = () => {
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
-                  fill="#6F23D5"
+                  fill="transparent"
                   xmlns="http://www.w3.org/2000/svg"
-                  className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                  className={`dark:text-white transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                 >
-                  <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white" />
+                  <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="white" />
                 </svg>
               </div>
 
@@ -156,14 +156,14 @@ const Sidebar = () => {
                       key={sub.path}
                       onClick={() => { navigate(sub.path); onItemClick(); }}
                       className={`flex items-center gap-[12px] px-[16px] py-[10px] rounded-[8px] cursor-pointer transition-colors ${isActive(sub.path)
-                        ? 'text-white'
-                        : 'text-white hover:bg-[#13132B]/50'
+                        ? 'text-[#0F172A] dark:text-white '
+                        : 'text-white hover:bg-[#7D40FF26] hover:dark:bg-[#13132B]/50'
                         }`}
                     >
                       <span className="text-[#6F23D5]">
                         {React.cloneElement(sub.icon, { width: 20, height: 20 })}
                       </span>
-                      <span className="font-medium !text-white text-[14px]">
+                      <span className="font-medium text-[#0F172A] dark:text-white">
                         {sub.name}
                       </span>
                     </div>
@@ -186,14 +186,14 @@ const Sidebar = () => {
                 onItemClick();
               }}
               className={`flex items-center gap-[12px] px-[16px] py-[12px] rounded-[8px] cursor-pointer transition-colors border ${isActive(item.path)
-                ? 'bg-[#13132B] border-[#13132B]'
-                : 'bg-transparent hover:bg-[#13132B]/50 border-transparent'
+                ? 'bg-[#7D40FF26] border-[#7D40FF26] dark:bg-[#13132B] dark:border-[#13132B]'
+                : 'bg-transparent hover:bg-[#7D40FF26] hover:dark:bg-[#13132B]/50 border-transparent'
                 }`}
             >
               <span className="text-[#6F23D5]">
                 {item.icon}
               </span>
-              <span className="font-medium !text-white text-[15px]">
+              <span className="font-medium text-[#0F172A] dark:text-white">
                 {item.name}
               </span>
             </div>

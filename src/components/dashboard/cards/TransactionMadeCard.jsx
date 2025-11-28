@@ -17,7 +17,7 @@ const TransactionMadeCard = () => {
         <p className="text-[#0a0a0a] dark:text-white text-lg">Transactions Made</p>
 
         <div className="flex items-baseline gap-[6px] mt-[10px]">
-          <span className="text-[#0a0a0a] dark:text-white text-[34px] font-extrabold">
+          <span className="text-[#7D40FF] dark:text-white text-[34px] font-extrabold">
             {isLoading ? '...' : formatValue(stats?.totalTransactions)}
           </span>
 
@@ -36,7 +36,7 @@ const TransactionMadeCard = () => {
         <p className="text-[#0a0a0a] dark:text-white text-lg">Turnover (CCT)</p>
 
         <div className="flex items-baseline gap-[6px] mt-[10px]">
-          <span className="text-[#0a0a0a] dark:text-white text-[34px] font-extrabold">
+          <span className="text-[#7D40FF] dark:text-white text-[34px] font-extrabold">
             {isLoading ? '...' : `${formatValue(stats?.totalTurnover)} CCT`}
           </span>
         </div>

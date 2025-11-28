@@ -190,7 +190,7 @@ const ProfileCard = () => {
               {walletAddress && (
                 <button
                   onClick={handleCopyAddress}
-                  className="text-white keep-white hover:text-gray-200 transition-colors p-1 relative"
+                  className="text-[#4B158E] dark:text-white keep-white hover:text-gray-200 transition-colors p-1 relative"
                   title={copiedAddress ? "Copied!" : "Copy full address"}
                 >
                   {copiedAddress ? (
@@ -217,10 +217,10 @@ const ProfileCard = () => {
           </div>
         </div>
 
-        <div className="w-full bg-gradient-to-r from-[#6F23D5] to-[#F3F4F6] dark:to-[#00000E] backdrop-blur-[30px] px-5 py-[18px] rounded-[10px]">
+        <div className="w-full bg-gradient-to-r from-[#6F23D5] to-[#00000E] backdrop-blur-[30px] px-5 py-[18px] rounded-[10px]">
           <div className="w-full flex flex-col gap-[40px]">
             <div className="flex gap-[6px]">
-              <span className="text-gray-800 dark:text-white text-[20px] font-semibold">
+              <span className="!text-white text-[20px] font-semibold">
                 Refer Link
               </span>
               <svg
@@ -241,13 +241,13 @@ const ProfileCard = () => {
                 type="text"
                 value={referLink || 'Connect wallet to generate your invite link'}
                 disabled
-                className="bg-white dark:bg-[#00000066] text-[#0a0a0a] dark:text-[#4DD9E8] md:text-[20px] font-bold px-[18px] py-3 rounded-[10px] w-full overflow-x-scroll cursor-pointer border border-gray-200 dark:border-transparent shadow-sm disabled:cursor-not-allowed"
+                className="bg-[#00000066] !text-[#4DD9E8] md:text-[20px] font-bold px-[18px] py-3 rounded-[10px] w-full overflow-x-scroll cursor-pointer border border-transparent shadow-sm disabled:cursor-not-allowed"
                 onClick={referLink ? handleCopy : undefined}
                 title={referLink ? 'Click to copy' : 'Referral link unavailable'}
               />
               <button
                 onClick={handleCopy}
-                className="w-full md:w-auto bg-white dark:bg-[#6F23D5] text-[#6F23D5] dark:text-white py-[11px] px-[26px] rounded-[12px] font-bold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#5a1fb8] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full md:w-auto bg-[#6F23D5] !text-white py-[11px] px-[26px] rounded-[12px] font-bold cursor-pointer hover:bg-gray-100 dark:hover:bg-[#5a1fb8] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={!referLink}
               >
                 {copied ? 'Copied' : 'Copy'}

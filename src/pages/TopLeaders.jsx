@@ -116,7 +116,7 @@ const TopLeaders = () => {
                       )}
                     </td>
                     <td className="text-left">
-                      <span className="bg-[#F3F4F6] text-[#0a0a0a] dark:bg-[#00000D] dark:text-white px-[35px] py-2 rounded-[40px]">
+                      <span className="  bg-[#00000D] !text-white px-[35px] py-2 rounded-[40px]">
                         #{entry.userId}
                       </span>
                     </td>

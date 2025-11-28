@@ -112,10 +112,10 @@ const NodeLevelProgressionB = () => {
                         <div className="flex flex-col gap-0">
                           <div className="flex justify-between">
                             <div className="">
-                              <p className="text-[#0a0a0a] dark:text-white text-[20px] lg:text-[30px] font-semibold ">
+                              <p className="!text-white text-[20px] lg:text-[30px] font-semibold ">
                                 Lvl {currentLevel}
                               </p>
-                              <p className="text-[#6B7280] dark:text-white text-sm font-semibold ">
+                              <p className="!text-white text-sm font-semibold ">
                                 ID {userId}
                               </p>
                             </div>

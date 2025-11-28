@@ -90,7 +90,7 @@ const TotalNumbersCard = () => {
                 </div>
 
                 <div className="mt-5">
-                  <span className="text-gray-800 dark:text-white text-[40px] font-extrabold">
+                  <span className="text-[#3A126F] dark:text-white text-[40px] font-extrabold">
                     {isLoading ? '...' : item.total ?? '--'}
                   </span>
                 </div>

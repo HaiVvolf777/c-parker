@@ -37,7 +37,7 @@ const EarningOverviewCard = ({ className }) => {
         <div className="mt-5">
           <div className="flex flex-col md:flex-row gap-5">
             <div className="w-full md:w-[25%] ">
-              <div className="bg-[#7D40FF] border-2 border-[#141429] p-4 rounded-[10px] ">
+              <div className="bg-[#7D40FF] border-2 border-transparent p-4 rounded-[10px] ">
                 <p className="text-white keep-white text-lg font-semibold ">Profit</p>
                 <div className="flex items-center justify-between mt-[22px] mb-4">
                   <span className="text-white keep-white text-sm ">CCT</span>
@@ -62,11 +62,11 @@ const EarningOverviewCard = ({ className }) => {
                       <img src="/icons/CCT.svg" alt="CCT" />
                     </div>
 
-                    <div className="">
+                    {/* <div className="">
                       <button className="w-full text-white keep-white font-bold bg-[#EE9C04] py-3 leading-[100%] rounded-[10px] cursor-pointer ">
                         Claim
                       </button>
-                    </div>
+                    </div> */}
                   </div>
 
                   <hr className="text-[#E5E7EB] dark:text-[#141429] block md:hidden" />
