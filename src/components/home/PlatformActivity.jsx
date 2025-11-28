@@ -16,7 +16,7 @@ const PlatformActivity = () => {
           offset: 0,
           eventNames: 'PaymentSent,UserRegistered'
         });
-        console.log(data);        
+        // console.log(data);        
         const mappedActivity = (data || []).map((item) => {
           let timeDisplay = 'now';
           if (item.timestamp) {

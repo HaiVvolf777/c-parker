@@ -13,12 +13,12 @@ const SliderLevelNode = ({ className, stage = 0, flowKey = 'nodeA', cycleData, s
     return cycleData.positions.find(p => p.position === posIndex || p.positionIndex === posIndex);
   };
 
-  console.log('SliderLevelNode - isLocked:', isLocked);
-  console.log('SliderLevelNode - cycleData:', cycleData);
-  console.log('SliderLevelNode - getPos(1):', getPos(1));
-  console.log('SliderLevelNode - getPos(2):', getPos(2));
-  console.log('SliderLevelNode - getPos(3):', getPos(3));
-  console.log('SliderLevelNode - getPos(4):', getPos(4));
+  // console.log('SliderLevelNode - isLocked:', isLocked);
+  // console.log('SliderLevelNode - cycleData:', cycleData);
+  // console.log('SliderLevelNode - getPos(1):', getPos(1));
+  // console.log('SliderLevelNode - getPos(2):', getPos(2));
+  // console.log('SliderLevelNode - getPos(3):', getPos(3));
+  // console.log('SliderLevelNode - getPos(4):', getPos(4));
 
   useEffect(() => {
     if (stage !== prevStage) {

@@ -33,8 +33,8 @@ const NodeLevelProgression = () => {
       setIsLoading(true);
       try {
         const data = await getLevelCycles(userId, 'ORBIT_A', currentLevel);
-        console.log('Fetched cycle data:', data);
-        console.log('Cycles array:', data.cycles);
+        // console.log('Fetched cycle data:', data);
+        // console.log('Cycles array:', data.cycles);
         setCycles(data.cycles || []);
         // Reset to first cycle when level changes
         setSlideIndex(0);
@@ -57,7 +57,7 @@ const NodeLevelProgression = () => {
   const [activityRef, isActivityVisible] = useScrollAnimation({ threshold: 0.1 });
 
   const currentCycle = cycles[slideIndex] || {};
-  console.log('Current cycle data being passed to SliderLevelNode:', currentCycle);
+  // console.log('Current cycle data being passed to SliderLevelNode:', currentCycle);
 
   return (
     <>
@@ -82,7 +82,7 @@ const NodeLevelProgression = () => {
             {/* Level Carousal  */}
             <div
               ref={carouselRef}
-              className={`w-full mt-5 relative z-[1000] animate-fade-in-up ${isCarouselVisible ? 'animate' : ''}`}
+              className={`w-full mt-5 relative  animate-fade-in-up ${isCarouselVisible ? 'animate' : ''}`}
               style={{ transitionDelay: '200ms' }}
             >
               <div className="w-full xl:w-[80%] mx-auto mb-12 overflow-visible">

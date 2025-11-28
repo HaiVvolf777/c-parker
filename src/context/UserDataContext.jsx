@@ -146,7 +146,7 @@ export const UserDataProvider = ({ children }) => {
             
             if (isRejected) {
               // User cancelled/rejected - redirect to home page
-              console.log('Transaction rejected by user, redirecting to home page...');
+              // console.log('Transaction rejected by user, redirecting to home page...');
               disconnectWallet();
               // Use window.location since we're outside Router context
               window.location.href = '/';

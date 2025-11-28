@@ -15,21 +15,21 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   // Get network info for debugging
   try {
     const network = await provider.getNetwork();
-    console.log('Network Info:', {
-      chainId: network.chainId.toString(),
-      name: network.name
-    });
+    // console.log('Network Info:', {
+    //   chainId: network.chainId.toString(),
+    //   name: network.name
+    // });
   } catch (err) {
     console.warn('Could not get network info:', err.message);
   }
   
-  console.log('User Address:', userAddress);
+  // console.log('User Address:', userAddress);
 
   const orbitA = new ethers.Contract(ORBIT_A_ADDRESS, OrbitAAbi, signer);
   const cctToken = new ethers.Contract(CCT_TOKEN_ADDRESS, CCTTokenAbi, signer);
 
-  console.log('OrbitA Contract:', orbitA.target);
-  console.log('CCT Token Contract:', cctToken.target);
+  // console.log('OrbitA Contract:', orbitA.target);
+  // console.log('CCT Token Contract:', cctToken.target);
 
   const hasFunc = (contract, fnName) => {
     try {
@@ -61,7 +61,7 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
     if (userIDResult !== null && userIDResult !== undefined) {
       existingUserID = BigInt(userIDResult.toString());
       if (existingUserID > 0n) {
-        console.log('Already registered with User ID:', existingUserID.toString());
+        // console.log('Already registered with User ID:', existingUserID.toString());
         return { success: false, message: 'Already registered', userId: existingUserID.toString() };
       }
     }
@@ -76,9 +76,9 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
       orbitACost = BigInt(costResult[0].toString());
       orbitBCost = BigInt(costResult[1].toString());
       totalCost = BigInt(costResult[2].toString());
-      console.log('Registration Cost: OrbitA', ethers.formatEther(orbitACost), 'CCT');
-      console.log('Registration Cost: OrbitB', ethers.formatEther(orbitBCost), 'CCT');
-      console.log('Total Cost:', ethers.formatEther(totalCost), 'CCT');
+      // console.log('Registration Cost: OrbitA', ethers.formatEther(orbitACost), 'CCT');
+      // console.log('Registration Cost: OrbitB', ethers.formatEther(orbitBCost), 'CCT');
+      // console.log('Total Cost:', ethers.formatEther(totalCost), 'CCT');
     }
   } catch (err) {
     console.warn('Could not fetch registration cost (ignored):', err.message);
@@ -88,18 +88,18 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
   try {
     // Direct call to balanceOf instead of safeCall to get better error messages
     if (hasFunc(cctToken, 'balanceOf')) {
-      console.log('Checking CCT balance for address:', userAddress);
-      console.log('CCT Token contract address:', CCT_TOKEN_ADDRESS);
+      // console.log('Checking CCT balance for address:', userAddress);
+      // console.log('CCT Token contract address:', CCT_TOKEN_ADDRESS);
       
       try {
         const balanceResult = await cctToken.balanceOf(userAddress);
         if (balanceResult !== null && balanceResult !== undefined) {
           cctBalance = BigInt(balanceResult.toString());
           const formattedBalance = ethers.formatEther(cctBalance);
-          console.log('CCT Balance:', formattedBalance);
+          // console.log('CCT Balance:', formattedBalance);
           
           // Also check the raw balance value for debugging
-          console.log('CCT Balance (raw):', balanceResult.toString());
+          // console.log('CCT Balance (raw):', balanceResult.toString());
           
           if (totalCost > 0n && cctBalance < totalCost) {
             throw new Error(`Insufficient CCT. Need ${ethers.formatEther(totalCost)}, have ${formattedBalance}`);
@@ -148,17 +148,17 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
       
       if (currentAllowanceResult !== null && currentAllowanceResult !== undefined) {
         const currentAllowance = BigInt(currentAllowanceResult.toString());
-        console.log('Current allowance:', ethers.formatEther(currentAllowance));
+        // console.log('Current allowance:', ethers.formatEther(currentAllowance));
 
         const minRequiredAllowance = totalCost > 0n ? totalCost : ethers.parseEther('1000');
         
         if (currentAllowance < minRequiredAllowance) {
           try {
-            console.log('Approving CCT tokens...');
+            // console.log('Approving CCT tokens...');
             const approveTx = await cctToken.approve(ORBIT_A_ADDRESS, MAX_UINT256);
-            console.log('Approval transaction sent, waiting for confirmation...');
+            // console.log('Approval transaction sent, waiting for confirmation...');
             const approveReceipt = await approveTx.wait();
-            console.log('Approved CCT - TX:', approveReceipt.hash);
+            // console.log('Approved CCT - TX:', approveReceipt.hash);
           } catch (approveErr) {
             const updatedAllowanceResult = await safeCall(cctToken, 'allowance', userAddress, ORBIT_A_ADDRESS);
             if (updatedAllowanceResult !== null && updatedAllowanceResult !== undefined) {
@@ -177,21 +177,21 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
                   throw new Error(`Token approval failed: ${errorMsg}. Please try again.`);
                 }
               }
-              console.log('Allowance is now sufficient, continuing with registration...');
+              // console.log('Allowance is now sufficient, continuing with registration...');
             } else {
               console.warn('Could not verify allowance after approval attempt. Proceeding with registration...');
             }
           }
         } else {
-          console.log('Sufficient allowance already exists');
+          // console.log('Sufficient allowance already exists');
         }
       } else {
         console.warn('Could not check current allowance. Attempting to approve tokens...');
         try {
           const approveTx = await cctToken.approve(ORBIT_A_ADDRESS, MAX_UINT256);
-          console.log('Approval transaction sent, waiting for confirmation...');
+          // console.log('Approval transaction sent, waiting for confirmation...');
           const approveReceipt = await approveTx.wait();
-          console.log('Approved CCT - TX:', approveReceipt.hash);
+          // console.log('Approved CCT - TX:', approveReceipt.hash);
         } catch (approveErr) {
           const errorMsg = approveErr.reason || approveErr.message || 'Transaction failed';
           if (errorMsg.includes('user rejected') || errorMsg.includes('User denied')) {
@@ -225,13 +225,13 @@ export const registerUser = async (walletConnectProvider, referrerID = 1) => {
 
   try {
     if (hasFunc(orbitA, 'register')) {
-      console.log('Registering user with referrer ID:', referrerID);
+      // console.log('Registering user with referrer ID:', referrerID);
       try {
         const registerTx = await orbitA.register(referrerID);
         const receipt = await registerTx.wait();
-        console.log('Registration TX confirmed:', receipt.hash);
-        console.log('Gas Used:', receipt.gasUsed.toString());
-        console.log('Block:', receipt.blockNumber);
+        // console.log('Registration TX confirmed:', receipt.hash);
+        // console.log('Gas Used:', receipt.gasUsed.toString());
+        // console.log('Block:', receipt.blockNumber);
 
         return { success: true, message: 'User registered successfully!', txHash: receipt.hash };
       } catch (registerErr) {
