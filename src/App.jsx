@@ -6,6 +6,7 @@ import { WalletProvider } from './context/WalletContext.jsx';
 import { UserDataProvider } from './context/UserDataContext.jsx';
 import { DashboardDataProvider } from './context/DashboardDataContext.jsx';
 import { PreviewProvider } from './context/PreviewContext.jsx';
+import ScrollToTop from './components/common/ScrollToTop.jsx';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
@@ -37,6 +38,7 @@ function App() {
               <ProgressProvider>
                 <AnnouncementsProvider>
                   <BrowserRouter>
+                  <ScrollToTop />
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/register" element={<HomePage />} />

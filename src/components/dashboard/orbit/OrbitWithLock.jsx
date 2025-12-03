@@ -24,8 +24,8 @@ const OrbitWithLock = ({ className }) => {
     const fetchPricing = async () => {
       try {
         const data = await getLevelPricing();
-        console.log('OrbitWithLock - Pricing data fetched:', data);
-        console.log('OrbitWithLock - orbitA data:', data?.orbitA);
+        // console.log('OrbitWithLock - Pricing data fetched:', data);
+        // console.log('OrbitWithLock - orbitA data:', data?.orbitA);
         setPricingData(data);
       } catch (err) {
         console.error('Error fetching pricing:', err);

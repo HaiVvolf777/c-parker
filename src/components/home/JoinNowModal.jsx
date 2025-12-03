@@ -55,11 +55,11 @@ const JoinNowModal = ({ isOpen, onClose }) => {
     try {
       setIsRegistering(true);
       setError('');
-      console.log('Registering with referrer ID:', referrerIdNum);
+      // console.log('Registering with referrer ID:', referrerIdNum);
       const result = await registerUserWithWallet(provider, referrerIdNum);
       if (result.success) {
-        console.log('Registration successful:', result);
-        console.log('Registered with referrer ID:', referrerIdNum);
+        // console.log('Registration successful:', result);
+        // console.log('Registered with referrer ID:', referrerIdNum);
         // Close modal and redirect to dashboard
         handleClose();
         navigate('/dashboard');
@@ -67,7 +67,7 @@ const JoinNowModal = ({ isOpen, onClose }) => {
         // Check if user is already registered - redirect to dashboard in that case
         const message = result.message || '';
         if (message.toLowerCase().includes('already registered')) {
-          console.log('User already registered, redirecting to dashboard');
+          // console.log('User already registered, redirecting to dashboard');
           handleClose();
           navigate('/dashboard');
         } else {

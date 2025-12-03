@@ -26,8 +26,8 @@ const Orbit = ({ className, unlockedLevels = 1, purchaseFailed = false, levelsDa
 
   const levels = levelsData.length > 0 ? levelsData : defaultLevels;
 
-  console.log('Orbit component - levelsData received:', levelsData);
-  console.log('Orbit component - using levels:', levels);
+  // console.log('Orbit component - levelsData received:', levelsData);
+  // console.log('Orbit component - using levels:', levels);
 
   // Helper function to get level data
   const getLevelData = (levelNum) => {

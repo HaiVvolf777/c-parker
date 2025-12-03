@@ -21,7 +21,7 @@ const ProgramOrbitCard = ({ data }) => {
   return (
     <>
       <div
-        className="border-2 border-[#E5E7EB] dark:border-[#141429] px-7  rounded-[10px] relative overflow-hidden bg-gradient-to-br from-[#15123a] via-[#1b0f3f] to-[#2b155d]"
+        className="border-2 border-[#E5E7EB] dark:border-[#141429] px-7 py-3 rounded-[10px] relative overflow-hidden bg-gradient-to-br from-[#15123a] via-[#1b0f3f] to-[#2b155d]"
       >
 
         {/* Content */}

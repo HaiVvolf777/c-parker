@@ -81,7 +81,7 @@ export const clearAllUserData = () => {
     localStorage.removeItem('cparker_progress_v1');
     
     // Note: We keep announcements and admin auth as they're not user-specific
-    console.log('All user data cleared from storage');
+    // console.log('All user data cleared from storage');
   } catch (err) {
     console.warn('Failed to clear user data:', err);
   }

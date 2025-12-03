@@ -63,8 +63,8 @@ export const ProgressProvider = ({ children }) => {
           getUserLevels(user.userId, { orbit: 'ORBIT_B' })
         ]);
 
-        console.log('Fetched Orbit A levels:', orbitAData);
-        console.log('Fetched Orbit B levels:', orbitBData);
+        // console.log('Fetched Orbit A levels:', orbitAData);
+        // console.log('Fetched Orbit B levels:', orbitBData);
 
         // Helper to calculate max active level from array
         const getMaxLevel = (data) => {
@@ -77,7 +77,7 @@ export const ProgressProvider = ({ children }) => {
         const maxOrbitA = getMaxLevel(orbitAData);
         const maxOrbitB = getMaxLevel(orbitBData);
 
-        console.log('Calculated Max Levels:', { maxOrbitA, maxOrbitB });
+        // console.log('Calculated Max Levels:', { maxOrbitA, maxOrbitB });
 
         setState(prev => ({
           ...prev,

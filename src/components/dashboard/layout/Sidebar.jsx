@@ -225,7 +225,7 @@ const Sidebar = () => {
       {isOpen && (
         <div className="xl:hidden fixed inset-0 z-40">
           <div className="absolute inset-0 bg-black/40" onClick={() => setIsOpen(false)} />
-          <div className="absolute left-0 top-0 h-full w-[80%] max-w-[280px] bg-white dark:bg-[#0B0B1A] border-r border-gray-200 dark:border-[#141429] py-[18px] px-[10px]">
+          <div className="absolute z-[10000] left-0 top-0 h-full w-[80%] max-w-[280px] bg-white dark:bg-[#0B0B1A] border-r border-gray-200 dark:border-[#141429] py-[18px] px-[10px]">
 
 
             <div className='cursor-pointer' onClick={handleLogoClick}>

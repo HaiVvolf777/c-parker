@@ -34,8 +34,8 @@ const NodeLevelProgressionB = () => {
       setIsLoading(true);
       try {
         const data = await getLevelCycles(userId, 'ORBIT_B', currentLevel);
-        console.log('Fetched cycle data for ORBIT_B:', data);
-        console.log('Cycles array:', data.cycles);
+        // console.log('Fetched cycle data for ORBIT_B:', data);
+        // console.log('Cycles array:', data.cycles);
         setCycles(data.cycles || []);
         // Reset to first cycle when level changes
         setSlideIndex(0);
@@ -82,7 +82,7 @@ const NodeLevelProgressionB = () => {
             {/* Level Carousal  */}
             <div
               ref={carouselRef}
-              className={`w-full mt-5 relative z-[1000] animate-fade-in-up ${isCarouselVisible ? 'animate' : ''}`}
+              className={`w-full mt-5 relative  animate-fade-in-up ${isCarouselVisible ? 'animate' : ''}`}
               style={{ transitionDelay: '200ms' }}
             >
               <div className="w-full xl:w-[80%] mx-auto mb-12 overflow-visible">
