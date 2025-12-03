@@ -167,3 +167,12 @@ export const getActivityFeed = (params = {}, options = {}) => {
 
 export const getLevelPricing = (options = {}) =>
   apiClient('/users/levels/pricing', options);
+
+// ========================
+// Announcements endpoints
+// ========================
+
+export const getAnnouncements = (params = {}, options = {}) => {
+  const query = buildQueryString(params);
+  return apiClient(`/announcements${query}`, options);
+};
